@@ -3,25 +3,62 @@ import {
   Query,
   Mutation,
   Arg,
-  // Field,
-  // ObjectType,
+  Ctx,
+  Field,
+  ObjectType,
+  Int,
 } from "type-graphql";
 import { User } from "../entity/User";
-import { hash } from "bcryptjs";
+import { hash, compare } from "bcryptjs";
+import { getRepository, getConnection } from "typeorm";
+import { MyContext } from "../MyContext";
+import { sendRefreshToken } from "../sendRefreshToken";
+import { createRefreshToken, createAccessToken } from "../auth";
 
-// @ObjectType()
-// class LoginResponse {
-//   @Field()
-//   accessToken: string;
-//   @Field(() => User)
-//   user: User;
-// }
+@ObjectType()
+class LoginResponse {
+  @Field()
+  accessToken: string;
+  @Field(() => User)
+  user: User;
+}
 
 @Resolver()
 export class UserResolver {
   @Query(() => [User])
   users() {
     return User.find();
+  }
+
+  @Query(() => User)
+  findUser(@Arg("userId", () => Int) userId: number) {
+    return User.findOne({ id: userId });
+  }
+
+  @Mutation(() => LoginResponse)
+  async login(
+    @Arg("email", () => String) email: string,
+    @Arg("password") password: string,
+    @Ctx() { res }: MyContext
+  ): Promise<LoginResponse> {
+    const user = await User.findOne({ where: { email } });
+
+    if (!user) {
+      throw new Error("could not find user");
+    }
+
+    const valid = await compare(password, user.password);
+
+    if (!valid) {
+      throw new Error("bad password");
+    }
+
+    sendRefreshToken(res, createRefreshToken(user));
+
+    return {
+      accessToken: createAccessToken(user),
+      user,
+    };
   }
 
   @Mutation(() => User)
@@ -31,6 +68,12 @@ export class UserResolver {
     @Arg("email") email: string,
     @Arg("password") password: string
   ) {
+    const duplicate = await User.findOne({ email: email });
+
+    if (duplicate !== undefined) {
+      throw new Error("Email already exists.");
+    }
+
     const hashedPassword = await hash(password, 12);
     const newUser = {
       firstName,
@@ -46,5 +89,33 @@ export class UserResolver {
       console.log(err);
       throw new Error("Unable to create user.");
     }
+  }
+
+  // don't use this route unless absolutely needed!
+  @Mutation(() => Boolean)
+  async deleteAllUsers() {
+    const { max } = await getRepository(User)
+      .createQueryBuilder("users")
+      .select("MAX(users.id)", "max")
+      .getRawOne();
+
+    const { min } = await getRepository(User)
+      .createQueryBuilder("users")
+      .select("MIN(users.id)", "min")
+      .getRawOne();
+
+    for (let i = min; i <= max; i++) {
+      try {
+        await getConnection()
+          .createQueryBuilder()
+          .delete()
+          .from(User)
+          .where("id = :id", { id: i })
+          .execute();
+      } catch {
+        // skip over this one
+      }
+    }
+    return true;
   }
 }
