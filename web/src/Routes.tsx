@@ -2,9 +2,9 @@ import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { Header } from "./Header";
 import { Home } from "./Home";
-import { Login } from "./Login";
-import { SignupForm } from "./SignupForm";
-import { Signup } from "./Signup";
+import { Login } from "./Auth/Login";
+import { Signup } from "./Auth/Signup";
+import { LandingPage } from "./LandingPage";
 
 export const Routes: React.FC = () => {
   return (
@@ -13,7 +13,8 @@ export const Routes: React.FC = () => {
         <Header />
       </div>
       <Switch>
-        <Route exact path="/" component={Home} />
+        <Route exact path="/" component={LandingPage} />
+        <Route path="/home" component={Home} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
       </Switch>

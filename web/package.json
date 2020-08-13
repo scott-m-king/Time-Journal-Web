@@ -52,7 +52,7 @@
     "@graphql-codegen/cli": "1.17.8",
     "@graphql-codegen/typescript": "1.17.8",
     "@graphql-codegen/typescript-operations": "1.17.8",
-    "@graphql-codegen/typescript-react-apollo": "2.0.6",
+    "@graphql-codegen/typescript-react-apollo": "1.17.8",
     "@material-ui/types": "^5.1.0",
     "@types/graphql": "^14.5.0",
     "@types/jwt-decode": "^2.2.1",

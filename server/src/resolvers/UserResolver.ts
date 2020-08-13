@@ -14,6 +14,7 @@ import { getRepository, getConnection } from "typeorm";
 import { MyContext } from "../MyContext";
 import { sendRefreshToken } from "../sendRefreshToken";
 import { createRefreshToken, createAccessToken } from "../auth";
+import { verify } from "jsonwebtoken";
 
 @ObjectType()
 class LoginResponse {
@@ -33,6 +34,24 @@ export class UserResolver {
   @Query(() => User)
   findUser(@Arg("userId", () => Int) userId: number) {
     return User.findOne({ id: userId });
+  }
+
+  @Query(() => User, { nullable: true })
+  me(@Ctx() context: MyContext) {
+    const authorization = context.req.headers["authorization"];
+
+    if (!authorization) {
+      throw new Error("not authenticated");
+    }
+
+    try {
+      const token = authorization.split(" ")[1];
+      const payload: any = verify(token, process.env.ACCESS_TOKEN_SECRET!);
+      return User.findOne(payload.userId);
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
   }
 
   @Mutation(() => LoginResponse)
@@ -59,6 +78,12 @@ export class UserResolver {
       accessToken: createAccessToken(user),
       user,
     };
+  }
+
+  @Mutation(() => Boolean)
+  async logout(@Ctx() { res }: MyContext) {
+    sendRefreshToken(res, "");
+    return true;
   }
 
   @Mutation(() => User)

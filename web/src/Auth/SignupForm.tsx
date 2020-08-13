@@ -87,7 +87,6 @@ export const SignupForm: React.FC<Props> = ({ onSubmit }) => {
           setSubmitting(true);
           onSubmit(data);
           setSubmitting(false);
-          window.location.href = "/";
         }}
       >
         {({ values, errors, isSubmitting }) => (

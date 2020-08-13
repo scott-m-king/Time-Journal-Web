@@ -5,6 +5,8 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
+import { useMeQuery, useLogoutMutation } from "./generated/graphql";
+import { setAccessToken } from "./accessToken";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -21,7 +23,15 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const Header: React.FC = () => {
+  const { data, loading } = useMeQuery();
+  const [logout, { client }] = useLogoutMutation();
   const classes = useStyles();
+
+  let body: any = undefined;
+
+  if (!loading && data && data.me) {
+    body = data.me;
+  }
 
   return (
     <AppBar position="static">
@@ -31,11 +41,28 @@ export const Header: React.FC = () => {
             Time Journal
           </Link>
         </Typography>
-        <Button variant="contained">
-          <Link to="/login" style={{ textDecoration: "none", color: "black" }}>
-            Login
-          </Link>
-        </Button>
+        {body !== undefined ? (
+          <Button
+            variant="contained"
+            onClick={async () => {
+              await logout();
+              await client!.resetStore();
+              setAccessToken("");
+              window.location.href = "/";
+            }}
+          >
+            Logout
+          </Button>
+        ) : (
+          <Button variant="contained">
+            <Link
+              to="/login"
+              style={{ textDecoration: "none", color: "black" }}
+            >
+              Login
+            </Link>
+          </Button>
+        )}
       </Toolbar>
     </AppBar>
   );

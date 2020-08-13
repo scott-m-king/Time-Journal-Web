@@ -13,7 +13,7 @@ import { getAccessToken, setAccessToken } from "./accessToken";
 import { onError } from "@apollo/client/link/error";
 import { TokenRefreshLink } from "apollo-link-token-refresh";
 import jwtDecode from "jwt-decode";
-import { Routes } from "./Routes";
+import { App } from './App';
 
 const cache = new InMemoryCache({});
 
@@ -98,7 +98,7 @@ const client = new ApolloClient({
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <Routes />
+    <App />
   </ApolloProvider>,
   document.getElementById("root")
 );

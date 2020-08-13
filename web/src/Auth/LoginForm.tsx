@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import * as yup from "yup";
 import { Link } from "react-router-dom";
+import { User } from "../generated/graphql";
 
 interface Values {
   email: string;
@@ -75,11 +76,10 @@ export const LoginForm: React.FC<Props> = ({ onSubmit }) => {
         password: "",
       }}
       validationSchema={validationSchema}
-      onSubmit={async (data, { setSubmitting }) => {
+      onSubmit={async (data, { setSubmitting, resetForm }) => {
         setSubmitting(true);
         onSubmit(data);
         setSubmitting(false);
-        window.location.href = "/";
       }}
     >
       {({ values, errors, isSubmitting }) => (
