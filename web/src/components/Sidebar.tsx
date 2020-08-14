@@ -79,8 +79,9 @@ export const Sidebar = () => {
                   <Link
                     to={routes1[index]}
                     style={{ textDecoration: "none", color: "black" }}
+                    key={index}
                   >
-                    <ListItem button key={text}>
+                    <ListItem button key={index}>
                       <ListItemIcon>
                         {index % 2 === 0 ? <DashboardIcon /> : <CreateIcon />}
                       </ListItemIcon>
@@ -96,8 +97,9 @@ export const Sidebar = () => {
                     <Link
                       to={routes2[index]}
                       style={{ textDecoration: "none", color: "black" }}
+                      key={index}
                     >
-                      <ListItem button key={text}>
+                      <ListItem button key={index}>
                         <ListItemIcon>{icons(index)}</ListItemIcon>
                         <ListItemText primary={text} />
                       </ListItem>

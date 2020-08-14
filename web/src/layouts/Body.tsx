@@ -5,8 +5,9 @@ import { Sidebar } from "../components/Sidebar";
 import { Header } from "../components/Header";
 
 const Root = styled.div`
-  padding-top: 65px;
-  padding-left: 245px;
+  padding-top: 90px;
+  padding-left: 265px;
+  padding-right: 25px;
   display: flex;
   min-height: 100%;
 `;

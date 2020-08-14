@@ -41,9 +41,6 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const Layout = styled.div`
-  padding-top: 25px;
-  padding-left: 15px;
-  padding-right: 20px;
   display: flex;
   min-height: 100%;
   min-width: 100%;
