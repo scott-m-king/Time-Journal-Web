@@ -1,11 +1,12 @@
 import React from "react";
+import Typography from "@material-ui/core/Typography";
 
 interface JournalLogProps {}
 
 export const JournalLog = () => {
   return (
     <div>
-      This is the <b>Journal Log</b> component.
+      <Typography variant="h4">Journal Log</Typography>
     </div>
   );
 };

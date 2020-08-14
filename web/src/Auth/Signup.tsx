@@ -29,12 +29,7 @@ export const Signup: React.FC<RouteComponentProps> = ({ history }) => {
           password: data.password,
         },
       });
-    } catch (err) {
-      alert(err);
-      return;
-    }
 
-    try {
       const loginResponse = await login({
         variables: {
           email: data.email,
@@ -59,11 +54,10 @@ export const Signup: React.FC<RouteComponentProps> = ({ history }) => {
       }
 
       history.push("/ok/dashboard");
-    } catch {
-      alert("Invalid credentials.");
+    } catch (err) {
+      alert(err);
     }
   };
-
   return (
     <Auth>
       <SignupForm onSubmit={handleRegister} />

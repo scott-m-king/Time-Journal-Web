@@ -10,6 +10,7 @@ import {
   Theme,
 } from "@material-ui/core";
 import * as yup from "yup";
+import { Link } from "react-router-dom";
 
 interface Values {
   firstName: string;
@@ -27,7 +28,10 @@ const validationSchema = yup.object({
   firstName: yup.string().required("First name must be filled out."),
   email: yup.string().email().required("Email must be filled out."),
   password: yup.string().required("Password must be filled out."),
-  passwordRepeat: yup.string().required("Please re-enter password."),
+  passwordRepeat: yup
+    .string()
+    .required("Please re-enter password.")
+    .oneOf([yup.ref("password"), ""], "Passwords must match"),
 });
 
 const MyTextField: React.FC<FieldAttributes<{}>> = ({
@@ -133,6 +137,13 @@ export const SignupForm: React.FC<Props> = ({ onSubmit }) => {
                     >
                       Submit
                     </Button>
+                  </Grid>
+                </Grid>
+                <Grid container spacing={3} justify="center">
+                  <Grid item>
+                    <Link to="/login" style={{ textDecoration: "none" }}>
+                      Back to Log In
+                    </Link>
                   </Grid>
                 </Grid>
               </Paper>

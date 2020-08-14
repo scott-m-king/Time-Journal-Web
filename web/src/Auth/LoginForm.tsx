@@ -11,7 +11,6 @@ import {
 } from "@material-ui/core";
 import * as yup from "yup";
 import { Link } from "react-router-dom";
-import { User } from "../generated/graphql";
 
 interface Values {
   email: string;
@@ -40,7 +39,7 @@ const MyTextField: React.FC<FieldAttributes<{}>> = ({
       label={placeholder}
       variant="outlined"
       fullWidth
-      type={type}
+      type={type ? type : "text"}
       {...field}
       error={errorText !== ""}
       helperText={errorText}

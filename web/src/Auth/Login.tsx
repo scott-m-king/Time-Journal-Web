@@ -41,7 +41,7 @@ export const Login: React.FC<RouteComponentProps> = ({ history }) => {
 
   return (
     <Auth>
-      <LoginForm onSubmit={handleLogin} />
+        <LoginForm onSubmit={handleLogin} />
     </Auth>
   );
 };
