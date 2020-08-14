@@ -2,9 +2,10 @@ import React from "react";
 import { LoginForm } from "./LoginForm";
 import { useLoginMutation, MeQuery, MeDocument } from "../generated/graphql";
 import { setAccessToken } from "../accessToken";
-import { Home } from "../Home";
+import { RouteComponentProps } from "react-router-dom";
+import { Auth } from "../layouts/Auth";
 
-export const Login = () => {
+export const Login: React.FC<RouteComponentProps> = ({ history }) => {
   const [login] = useLoginMutation();
 
   const handleLogin = async (data: { email: string; password: string }) => {
@@ -27,20 +28,20 @@ export const Login = () => {
           });
         },
       });
-      
+
       if (response && response.data) {
         setAccessToken(response.data.login.accessToken);
       }
 
-      window.location.href = "/home";
+      history.push("/home");
     } catch {
       alert("Invalid credentials.");
     }
   };
 
   return (
-    <div>
+    <Auth>
       <LoginForm onSubmit={handleLogin} />
-    </div>
+    </Auth>
   );
 };

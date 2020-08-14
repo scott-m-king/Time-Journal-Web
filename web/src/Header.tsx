@@ -11,7 +11,11 @@ import { setAccessToken } from "./accessToken";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
+      display: "flex",
       flexGrow: 1,
+    },
+    appBar: {
+      zIndex: theme.zIndex.drawer + 1,
     },
     menuButton: {
       marginRight: theme.spacing(2),
@@ -34,36 +38,47 @@ export const Header: React.FC = () => {
   }
 
   return (
-    <AppBar position="static">
-      <Toolbar>
-        <Typography variant="h6" className={classes.title}>
-          <Link to="/" style={{ textDecoration: "none", color: "white" }}>
-            Time Journal
-          </Link>
-        </Typography>
-        {body !== undefined ? (
-          <Button
-            variant="contained"
-            onClick={async () => {
-              await logout();
-              await client!.resetStore();
-              setAccessToken("");
-              window.location.href = "/";
-            }}
-          >
-            Logout
-          </Button>
-        ) : (
-          <Button variant="contained">
-            <Link
-              to="/login"
-              style={{ textDecoration: "none", color: "black" }}
+    <div className={classes.root}>
+      <AppBar position="fixed" className={classes.appBar}>
+        <Toolbar>
+          <Typography variant="h6" className={classes.title}>
+            {body !== undefined ? (
+              <Link to="/home" style={{ textDecoration: "none", color: "white" }}>
+                Time Journal
+              </Link>
+            ) : (
+              <Link
+                to="/"
+                style={{ textDecoration: "none", color: "white" }}
+              >
+                Time Journal
+              </Link>
+            )}
+          </Typography>
+          {body !== undefined ? (
+            <Button
+              variant="contained"
+              onClick={async () => {
+                await logout();
+                await client!.resetStore();
+                setAccessToken("");
+                window.location.href = "/";
+              }}
             >
-              Login
-            </Link>
-          </Button>
-        )}
-      </Toolbar>
-    </AppBar>
+              Logout
+            </Button>
+          ) : (
+            <Button variant="contained">
+              <Link
+                to="/login"
+                style={{ textDecoration: "none", color: "black" }}
+              >
+                Login
+              </Link>
+            </Button>
+          )}
+        </Toolbar>
+      </AppBar>
+    </div>
   );
 };

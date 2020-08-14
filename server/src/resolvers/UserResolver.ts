@@ -38,14 +38,14 @@ export class UserResolver {
 
   @Query(() => User, { nullable: true })
   me(@Ctx() context: MyContext) {
-    const authorization = context.req.headers["authorization"];
+    const authentication = context.req.headers["authorization"];
 
-    if (!authorization) {
+    if (!authentication) {
       throw new Error("not authenticated");
     }
 
     try {
-      const token = authorization.split(" ")[1];
+      const token = authentication.split(" ")[1];
       const payload: any = verify(token, process.env.ACCESS_TOKEN_SECRET!);
       return User.findOne(payload.userId);
     } catch (err) {

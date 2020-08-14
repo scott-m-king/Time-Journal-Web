@@ -82,7 +82,7 @@ export const LoginForm: React.FC<Props> = ({ onSubmit }) => {
         setSubmitting(false);
       }}
     >
-      {({ values, errors, isSubmitting }) => (
+      {({ isSubmitting }) => (
         <Form>
           <div className={classes.root}>
             <Paper className={classes.paper}>

@@ -8,8 +8,9 @@ import {
 } from "../generated/graphql";
 import { setAccessToken } from "../accessToken";
 import { RouteComponentProps } from "react-router-dom";
+import { Auth } from "../layouts/Auth";
 
-export const Signup: React.FC<RouteComponentProps> = ({history}) => {
+export const Signup: React.FC<RouteComponentProps> = ({ history }) => {
   const [login] = useLoginMutation();
   const [register] = useRegisterUserMutation();
 
@@ -28,8 +29,9 @@ export const Signup: React.FC<RouteComponentProps> = ({history}) => {
           password: data.password,
         },
       });
-    } catch {
-      throw new Error("Something went wrong with registration.");
+    } catch (err) {
+      alert(err);
+      return;
     }
 
     try {
@@ -63,8 +65,8 @@ export const Signup: React.FC<RouteComponentProps> = ({history}) => {
   };
 
   return (
-    <div>
+    <Auth>
       <SignupForm onSubmit={handleRegister} />
-    </div>
+    </Auth>
   );
 };
