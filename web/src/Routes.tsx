@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import { Home } from "./Home";
+import { Dashboard } from "./App/Dashboard";
 import { Login } from "./Auth/Login";
 import { Signup } from "./Auth/Signup";
 import { LandingPage } from "./LandingPage";
@@ -21,10 +21,10 @@ export const Routes: React.FC = () => {
           )}
         />
         <Route
-          path="/home"
+          path="/ok/dashboard"
           render={() => (
             <Body>
-              <Home />
+              <Dashboard />
             </Body>
           )}
         />

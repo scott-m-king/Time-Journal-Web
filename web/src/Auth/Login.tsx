@@ -33,7 +33,7 @@ export const Login: React.FC<RouteComponentProps> = ({ history }) => {
         setAccessToken(response.data.login.accessToken);
       }
 
-      history.push("/home");
+      history.push("/ok/dashboard");
     } catch {
       alert("Invalid credentials.");
     }

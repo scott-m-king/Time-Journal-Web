@@ -8,9 +8,13 @@ import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
-import { useMeQuery } from "./generated/graphql";
+import DashboardIcon from "@material-ui/icons/Dashboard";
+import CreateIcon from "@material-ui/icons/Create";
+import MenuBookIcon from "@material-ui/icons/MenuBook";
+import ListIcon from "@material-ui/icons/List";
+import TimelineIcon from "@material-ui/icons/Timeline";
+import { useMeQuery } from "../generated/graphql";
+import { Link } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -42,6 +46,20 @@ export const Sidebar = () => {
     body = data.me;
   }
 
+  const routes1 = ["/ok/dashboard", "/ok/create_entry"];
+  const routes2 = ["/ok/entry_log", "/ok/category_list", "/ok/analytics"];
+
+  const icons = (index: number) => {
+    switch (index) {
+      case 0:
+        return <MenuBookIcon />;
+      case 1:
+        return <ListIcon />;
+      default:
+        return <TimelineIcon />;
+    }
+  };
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -57,27 +75,35 @@ export const Sidebar = () => {
             <Toolbar />
             <div className={classes.drawerContainer}>
               <List>
-                {["Dashboard", "Create Journal Entry"].map(
-                  (text, index) => (
+                {["Dashboard", "Create Journal Entry"].map((text, index) => (
+                  <Link
+                    to={routes1[index]}
+                    style={{ textDecoration: "none", color: "black" }}
+                  >
                     <ListItem button key={text}>
                       <ListItemIcon>
-                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                        {index % 2 === 0 ? <DashboardIcon /> : <CreateIcon />}
                       </ListItemIcon>
                       <ListItemText primary={text} />
                     </ListItem>
-                  )
-                )}
+                  </Link>
+                ))}
               </List>
               <Divider />
               <List>
-                {["Journal Entry Log", "Category List", "Analytics"].map((text, index) => (
-                  <ListItem button key={text}>
-                    <ListItemIcon>
-                      {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                    </ListItemIcon>
-                    <ListItemText primary={text} />
-                  </ListItem>
-                ))}
+                {["Journal Entry Log", "Category List", "Analytics"].map(
+                  (text, index) => (
+                    <Link
+                      to={routes2[index]}
+                      style={{ textDecoration: "none", color: "black" }}
+                    >
+                      <ListItem button key={text}>
+                        <ListItemIcon>{icons(index)}</ListItemIcon>
+                        <ListItemText primary={text} />
+                      </ListItem>
+                    </Link>
+                  )
+                )}
               </List>
             </div>
           </Drawer>

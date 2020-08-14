@@ -58,7 +58,7 @@ export const Signup: React.FC<RouteComponentProps> = ({ history }) => {
         setAccessToken(loginResponse.data.login.accessToken);
       }
 
-      history.push("/home");
+      history.push("/ok/dashboard");
     } catch {
       alert("Invalid credentials.");
     }

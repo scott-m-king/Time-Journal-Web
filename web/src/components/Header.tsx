@@ -5,8 +5,8 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
-import { useMeQuery, useLogoutMutation } from "./generated/graphql";
-import { setAccessToken } from "./accessToken";
+import { useMeQuery, useLogoutMutation } from "../generated/graphql";
+import { setAccessToken } from "../accessToken";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -43,7 +43,7 @@ export const Header: React.FC = () => {
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
             {body !== undefined ? (
-              <Link to="/home" style={{ textDecoration: "none", color: "white" }}>
+              <Link to="/ok/dashboard" style={{ textDecoration: "none", color: "white" }}>
                 Time Journal
               </Link>
             ) : (

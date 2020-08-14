@@ -1,8 +1,8 @@
 import React from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import { CssBaseline } from "@material-ui/core";
-import { Sidebar } from "../Sidebar";
-import { Header } from "../Header";
+import { Sidebar } from "../components/Sidebar";
+import { Header } from "../components/Header";
 
 const Root = styled.div`
   padding-top: 65px;

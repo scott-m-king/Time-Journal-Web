@@ -1,5 +1,5 @@
 import React from "react";
-import { useMeQuery } from "./generated/graphql";
+import { useMeQuery } from "../generated/graphql";
 import {
   makeStyles,
   Theme,
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const Layout = styled.div`
-  padding-top: 20px;
+  padding-top: 25px;
   padding-left: 15px;
   padding-right: 20px;
   display: flex;
@@ -49,18 +49,17 @@ const Layout = styled.div`
   min-width: 100%;
 `;
 
-export const Home = () => {
+export const Dashboard = () => {
   const { data, loading } = useMeQuery();
   let body: any = null;
   const classes = useStyles();
-  const bull = <span className={classes.bullet}>•</span>;
 
   if (loading) {
     body = "loading...";
   } else if (data && data.me) {
     body = data.me.firstName;
   } else {
-    body = "undefined";
+    body = "";
   }
   return (
     <Layout>
@@ -80,7 +79,7 @@ export const Home = () => {
                   Word of the Day
                 </Typography>
                 <Typography variant="h5" component="h2">
-                  be{bull}nev{bull}o{bull}lent
+                  Categories
                 </Typography>
                 <Typography className={classes.pos} color="textSecondary">
                   adjective
@@ -107,7 +106,7 @@ export const Home = () => {
                   Word of the Day
                 </Typography>
                 <Typography variant="h5" component="h2">
-                  be{bull}nev{bull}o{bull}lent
+                  Entries
                 </Typography>
                 <Typography className={classes.pos} color="textSecondary">
                   adjective
@@ -134,7 +133,7 @@ export const Home = () => {
                   Word of the Day
                 </Typography>
                 <Typography variant="h5" component="h2">
-                  be{bull}nev{bull}o{bull}lent
+                  Overview
                 </Typography>
                 <Typography className={classes.pos} color="textSecondary">
                   adjective
