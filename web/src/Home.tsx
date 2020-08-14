@@ -10,13 +10,16 @@ import {
   CardActions,
   Button,
   Grid,
-  Paper,
 } from "@material-ui/core";
+import styled from "styled-components";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      minWidth: 540,
+      flexGrow: 1,
+    },
+    cards: {
+      minWidth: 275,
     },
     bullet: {
       display: "inline-block",
@@ -37,6 +40,15 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+const Layout = styled.div`
+  padding-top: 20px;
+  padding-left: 15px;
+  padding-right: 20px;
+  display: flex;
+  min-height: 100%;
+  min-width: 100%;
+`;
+
 export const Home = () => {
   const { data, loading } = useMeQuery();
   let body: any = null;
@@ -51,18 +63,14 @@ export const Home = () => {
     body = "undefined";
   }
   return (
-    <>
+    <Layout>
       <div className={classes.root}>
         <Grid container spacing={3}>
-          <Grid item xs>
-            <Paper className={classes.paper}>
-              <Typography variant="h4">Welcome back, {body}</Typography>
-            </Paper>
+          <Grid item xs={12}>
+            <Typography variant="h4">Welcome back, {body}</Typography>
           </Grid>
-        </Grid>
-        <Grid container spacing={3}>
-          <Grid item xs>
-            <Card className={classes.root}>
+          <Grid item xs={12} sm={6}>
+            <Card className={classes.cards}>
               <CardContent>
                 <Typography
                   className={classes.title}
@@ -88,8 +96,8 @@ export const Home = () => {
               </CardActions>
             </Card>
           </Grid>
-          <Grid item xs={6}>
-            <Card className={classes.root}>
+          <Grid item xs={12} sm={6}>
+            <Card className={classes.cards}>
               <CardContent>
                 <Typography
                   className={classes.title}
@@ -115,8 +123,8 @@ export const Home = () => {
               </CardActions>
             </Card>
           </Grid>
-          <Grid item xs>
-            <Card className={classes.root}>
+          <Grid item xs={12}>
+            <Card className={classes.cards}>
               <CardContent>
                 <Typography
                   className={classes.title}
@@ -144,6 +152,6 @@ export const Home = () => {
           </Grid>
         </Grid>
       </div>
-    </>
+    </Layout>
   );
 };
