@@ -1,5 +1,5 @@
 import React from "react";
-import { LoginForm } from "./LoginForm";
+import { LoginForm } from "../Forms/LoginForm";
 import { useLoginMutation, MeQuery, MeDocument } from "../generated/graphql";
 import { setAccessToken } from "../accessToken";
 import { RouteComponentProps } from "react-router-dom";
