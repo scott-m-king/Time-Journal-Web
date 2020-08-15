@@ -1,5 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  BaseEntity,
+  ManyToOne,
+  JoinColumn,
+} from "typeorm";
 import { Field, Int, ObjectType } from "type-graphql";
+import { Category } from "./Category";
+import { User } from "./User";
 @ObjectType()
 @Entity("entries")
 export class JournalEntry extends BaseEntity {
@@ -7,9 +16,9 @@ export class JournalEntry extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Field()
-  @Column()
-  date: string;
+  @Field(() => Date, { nullable: true })
+  @Column("date", { nullable: true })
+  date: Date;
 
   @Field()
   @Column()
@@ -17,13 +26,19 @@ export class JournalEntry extends BaseEntity {
 
   @Field(() => Int)
   @Column()
+  duration: number;
+
+  @Field(() => Int)
+  @Column()
   categoryId: number;
+  @ManyToOne(() => Category, (category) => category.entries)
+  @JoinColumn({ name: "categoryId" })
+  category: Category;
 
   @Field(() => Int)
   @Column()
   userId: number;
-
-  @Field(() => Int)
-  @Column()
-  duration: number;
+  @ManyToOne(() => User, (user) => user.entries)
+  @JoinColumn({ name: "userId" })
+  user: User;
 }
