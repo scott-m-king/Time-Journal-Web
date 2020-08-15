@@ -121,18 +121,13 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
                     <FormControl variant="outlined" fullWidth>
                       <InputLabel>Category</InputLabel>
                       <Field name="category" label="Category" as={Select}>
-                        {categories.map(
-                          (
-                            category: { id: number; description: string },
-                            index: number
-                          ) => {
-                            return (
-                              <MenuItem key={index} value={category.id}>
-                                {category.description}
-                              </MenuItem>
-                            );
-                          }
-                        )}
+                        {categories.map((category, index) => {
+                          return (
+                            <MenuItem key={index} value={category.id}>
+                              {category.description}
+                            </MenuItem>
+                          );
+                        })}
                       </Field>
                     </FormControl>
                   </Grid>
