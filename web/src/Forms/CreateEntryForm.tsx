@@ -1,7 +1,6 @@
 import "date-fns";
-import clsx from "clsx";
 import Button from "@material-ui/core/Button";
-import { Form, Formik, useField, FieldAttributes } from "formik";
+import { Form, Formik, Field } from "formik";
 import * as React from "react";
 import {
   TextField,
@@ -17,7 +16,6 @@ import {
   InputAdornment,
 } from "@material-ui/core";
 import * as yup from "yup";
-import { Link } from "react-router-dom";
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
@@ -25,11 +23,10 @@ import {
 import DateFnsUtils from "@date-io/date-fns";
 
 interface Values {
-  firstName: string;
-  lastName: string;
-  password: string;
-  passwordRepeat: string;
-  email: string;
+  date: Date;
+  category: number;
+  duration: number;
+  description: string;
 }
 
 interface Props {
@@ -37,35 +34,9 @@ interface Props {
 }
 
 const validationSchema = yup.object({
-  firstName: yup.string().required("First name must be filled out."),
-  email: yup.string().email().required("Email must be filled out."),
-  password: yup.string().required("Password must be filled out."),
-  passwordRepeat: yup
-    .string()
-    .required("Please re-enter password.")
-    .oneOf([yup.ref("password"), ""], "Passwords must match"),
+  duration: yup.number().required("Duration must be filled out."),
+  description: yup.string().required("Description must be filled out."),
 });
-
-const MyTextField: React.FC<FieldAttributes<{}>> = ({
-  placeholder,
-  type,
-  ...props
-}) => {
-  const [field, meta] = useField<{}>(props);
-  const errorText = meta.error && meta.touched ? meta.error : "";
-
-  return (
-    <TextField
-      label={placeholder}
-      variant="outlined"
-      fullWidth
-      type={type}
-      {...field}
-      error={errorText !== ""}
-      helperText={errorText}
-    />
-  );
-};
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -87,19 +58,19 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+const categories = [
+  { id: 0, description: "Uncategorized" },
+  { id: 12, description: "Sleep" },
+  { id: 15, description: "School" },
+  { id: 1, description: "Nevermind" },
+];
+
 export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
   const classes = useStyles();
-  const [category, setCategory] = React.useState("Uncategorized");
 
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setCategory(event.target.value as string);
-  };
+  const [selectedDate, setSelectedDate] = React.useState<Date>(new Date());
 
-  const [selectedDate, setSelectedDate] = React.useState<Date | null>(
-    new Date()
-  );
-
-  const handleDateChange = (date: Date | null) => {
+  const handleDateChange = (date: Date) => {
     setSelectedDate(date);
   };
 
@@ -107,11 +78,10 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
     <div>
       <Formik
         initialValues={{
-          firstName: "",
-          lastName: "",
-          password: "",
-          passwordRepeat: "",
-          email: "",
+          date: selectedDate,
+          category: 0,
+          duration: 0,
+          description: "",
         }}
         validationSchema={validationSchema}
         onSubmit={async (data, { setSubmitting }) => {
@@ -127,8 +97,9 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
                 <Grid container spacing={3}>
                   <Grid item xs>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                      <KeyboardDatePicker
+                      <Field
                         disableToolbar
+                        name="date"
                         fullWidth
                         inputVariant="outlined"
                         format="MM/dd/yyyy"
@@ -139,50 +110,60 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
                         KeyboardButtonProps={{
                           "aria-label": "change date",
                         }}
+                        as={KeyboardDatePicker}
                       />
                     </MuiPickersUtilsProvider>
-                  </Grid>
-                </Grid>
-                <Grid container spacing={3}>
-                  <Grid item xs>
-                    <TextField
-                      label="Duration"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">Kg</InputAdornment>
-                        ),
-                      }}
-                      fullWidth
-                      variant="outlined"
-                    />
-                  </Grid>
-                </Grid>
-                <Grid container spacing={3}>
-                  <Grid item xs>
-                    <FormControl variant="outlined" fullWidth>
-                      <InputLabel>Category</InputLabel>
-                      <Select
-                        value={category}
-                        onChange={handleChange}
-                        label="Category"
-                      >
-                        <MenuItem value="Uncategorized">Uncategorized</MenuItem>
-                        <MenuItem value={10}>Ten</MenuItem>
-                        <MenuItem value={20}>Twenty</MenuItem>
-                        <MenuItem value={30}>Thirty</MenuItem>
-                      </Select>
-                    </FormControl>
                   </Grid>
                 </Grid>
 
                 <Grid container spacing={3}>
                   <Grid item xs>
-                    <TextField
+                    <FormControl variant="outlined" fullWidth>
+                      <InputLabel>Category</InputLabel>
+                      <Field name="category" label="Category" as={Select}>
+                        {categories.map(
+                          (
+                            category: { id: number; description: string },
+                            index: number
+                          ) => {
+                            return (
+                              <MenuItem key={index} value={category.id}>
+                                {category.description}
+                              </MenuItem>
+                            );
+                          }
+                        )}
+                      </Field>
+                    </FormControl>
+                  </Grid>
+                </Grid>
+                <Grid container spacing={3}>
+                  <Grid item xs>
+                    <Field
+                      type="input"
+                      label="Duration"
+                      name="duration"
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="start">mins</InputAdornment>
+                        ),
+                      }}
+                      fullWidth
+                      variant="outlined"
+                      as={TextField}
+                    />
+                  </Grid>
+                </Grid>
+                <Grid container spacing={3}>
+                  <Grid item xs>
+                    <Field
                       label="Description"
+                      name="description"
                       multiline
                       fullWidth
                       rows={4}
                       variant="outlined"
+                      as={TextField}
                     />
                   </Grid>
                 </Grid>

@@ -5,7 +5,7 @@ import { CreateEntryForm } from "../Forms/CreateEntryForm";
 interface CreateEntryProps {}
 
 export const CreateEntry = () => {
-  const handleSubmit = (data: {}) => {
+  const handleSubmit = (data: any) => {
     console.log(data);
   };
 

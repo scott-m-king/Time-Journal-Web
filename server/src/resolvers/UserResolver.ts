@@ -15,6 +15,7 @@ import { MyContext } from "../MyContext";
 import { sendRefreshToken } from "../sendRefreshToken";
 import { createRefreshToken, createAccessToken } from "../auth";
 import { verify } from "jsonwebtoken";
+import { Category } from "../entity/Category";
 
 @ObjectType()
 class LoginResponse {
@@ -109,6 +110,13 @@ export class UserResolver {
 
     try {
       const user = await User.create(newUser).save();
+
+      await Category.create({
+        description: "Uncategorized",
+        user: user,
+        userId: user.id,
+      }).save();
+
       return user;
     } catch (err) {
       console.log(err);

@@ -1,5 +1,6 @@
 import { Resolver, Query, Arg, Int, Mutation } from "type-graphql";
 import { JournalEntry } from "../entity/JournalEntry";
+import { Category } from "../entity/Category";
 
 @Resolver()
 export class JournalEntryResolver {
@@ -30,7 +31,7 @@ export class JournalEntryResolver {
     }
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => String)
   async createEntry(
     @Arg("userId", () => Int) userId: number,
     @Arg("categoryId", () => Int) categoryId: number,
@@ -46,10 +47,35 @@ export class JournalEntryResolver {
         duration: duration,
         date: date,
       }).save();
-      return true;
+
+      const cat = await Category.findOne({ id: categoryId });
+
+      await Category.update(
+        { id: categoryId },
+        { duration: cat!.duration + duration }
+      );
+
+      return "Journal entry successfully added";
     } catch (err) {
       console.log(err);
-      return false;
+      return "There was a problem adding the journal entry. Please try again.";
+    }
+  }
+
+  @Mutation(() => String)
+  async deleteEntry(@Arg("id", () => Int) id: number) {
+    try {
+      const toDelete = await JournalEntry.findOne({ id: id });
+      const category = await Category.findOne({ id: toDelete?.categoryId });
+      await Category.update(
+        { id: category!.id },
+        { duration: category!.duration - toDelete!.duration }
+      );
+      await JournalEntry.delete({ id: id });
+      return `Journal entry successfully deleted`;
+    } catch (err) {
+      console.log(err);
+      return `Unable to delete journal entry`;
     }
   }
 }
