@@ -37,11 +37,11 @@ export const CreateEntry = () => {
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Typography variant="h4">Create Journal Entry</Typography>
-          </Grid>
-          <Grid item xs sm={12} lg={3}>
+          </Grid> 
+          <Grid item xs sm={12} md={12} lg={3} xl={3}>
             <CreateEntryForm onSubmit={handleSubmit} />
           </Grid>
-          <Grid item xs sm={12} lg={9}>
+          <Grid item xs sm={12} md={12} lg={9} xl={9}>
             <Root>
               <EntryTable />
             </Root>
