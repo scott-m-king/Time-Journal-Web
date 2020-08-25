@@ -106,7 +106,7 @@ export const LoginForm: React.FC<Props> = ({ onSubmit }) => {
                     type="submit"
                     variant="outlined"
                   >
-                    Submit
+                    Login
                   </Button>
                 </Grid>
               </Grid>

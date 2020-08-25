@@ -135,7 +135,7 @@ export const SignupForm: React.FC<Props> = ({ onSubmit }) => {
                       type="submit"
                       variant="outlined"
                     >
-                      Submit
+                      Sign up
                     </Button>
                   </Grid>
                 </Grid>

@@ -26,6 +26,7 @@ interface Values {
   date: Date;
   category: number;
   duration: number;
+  title: string;
   description: string;
 }
 
@@ -35,19 +36,20 @@ interface Props {
 
 const validationSchema = yup.object({
   duration: yup.number().required("Duration must be filled out."),
-  description: yup.string().required("Description must be filled out."),
+  title: yup.string().required("Entry must have a title."),
 });
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       paddingTop: "20px",
+      textAlign: "center",
     },
     paper: {
       padding: theme.spacing(2),
       textAlign: "center",
+      width: "100%",
       color: theme.palette.text.secondary,
-      width: "140%",
     },
     margin: {
       margin: theme.spacing(1),
@@ -81,6 +83,7 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
           date: selectedDate,
           category: 0,
           duration: 0,
+          title: "",
           description: "",
         }}
         validationSchema={validationSchema}
@@ -135,7 +138,7 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
                 <Grid container spacing={3}>
                   <Grid item xs>
                     <Field
-                      type="input"
+                      type="number"
                       label="Duration"
                       name="duration"
                       InputProps={{
@@ -152,11 +155,22 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
                 <Grid container spacing={3}>
                   <Grid item xs>
                     <Field
-                      label="Description"
+                      label="Title"
+                      name="title"
+                      fullWidth
+                      variant="outlined"
+                      as={TextField}
+                    />
+                  </Grid>
+                </Grid>
+                <Grid container spacing={3}>
+                  <Grid item xs>
+                    <Field
+                      label="Description (optional)"
                       name="description"
                       multiline
                       fullWidth
-                      rows={4}
+                      rows={7}
                       variant="outlined"
                       as={TextField}
                     />
