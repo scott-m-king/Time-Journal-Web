@@ -21,6 +21,7 @@ import {
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
+import { useGetUserCategoriesQuery } from "../generated/graphql";
 
 interface Values {
   date: Date;
@@ -28,6 +29,13 @@ interface Values {
   duration: number;
   title: string;
   description: string;
+}
+
+interface Category {
+  id: number;
+  userId: number;
+  description: string;
+  duration: number;
 }
 
 interface Props {
@@ -60,17 +68,33 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const categories = [
-  { id: 0, description: "Uncategorized" },
-  { id: 12, description: "Sleep" },
-  { id: 15, description: "School" },
-  { id: 1, description: "Nevermind" },
-];
-
 export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
   const classes = useStyles();
 
   const [selectedDate, setSelectedDate] = React.useState<Date>(new Date());
+  const [categories, setCategories] = React.useState<Array<Category>>([]);
+  const [vals, setVals] = React.useState<Values>({
+    date: selectedDate,
+    category: 0,
+    duration: 0,
+    title: "",
+    description: "",
+  });
+
+  const { data, loading } = useGetUserCategoriesQuery();
+
+  React.useEffect(() => {
+    if (!loading && data && data.getUserCategories) {
+      setCategories(data.getUserCategories);
+      setVals({
+        date: selectedDate,
+        category: data.getUserCategories[0].id,
+        duration: 0,
+        title: "",
+        description: "",
+      });
+    }
+  }, [data]);
 
   const handleDateChange = (date: Date) => {
     setSelectedDate(date);
@@ -79,14 +103,9 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
   return (
     <div>
       <Formik
-        initialValues={{
-          date: selectedDate,
-          category: 0,
-          duration: 0,
-          title: "",
-          description: "",
-        }}
+        initialValues={vals}
         validationSchema={validationSchema}
+        enableReinitialize
         onSubmit={async (data, { setSubmitting }) => {
           setSubmitting(true);
           onSubmit(data);
@@ -127,7 +146,8 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
                         {categories.map((category, index) => {
                           return (
                             <MenuItem key={index} value={category.id}>
-                              {category.description}
+                              {category.description} - {category.duration} mins
+                              spent
                             </MenuItem>
                           );
                         })}
@@ -166,8 +186,8 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
                 <Grid container spacing={3}>
                   <Grid item xs>
                     <Field
-                      label="Description (optional)"
-                      name="description"
+                      label="Additional notes (optional)"
+                      name="notes"
                       multiline
                       fullWidth
                       rows={7}
@@ -183,7 +203,7 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
                       type="submit"
                       variant="outlined"
                     >
-                      Submit
+                      Add Entry
                     </Button>
                   </Grid>
                 </Grid>

@@ -6,7 +6,7 @@ interface CategoryListProps {}
 export const CategoryList = () => {
   return (
     <div>
-      <Typography variant="h4">Category List</Typography>
+      <Typography variant="h4">Categories</Typography>
     </div>
   );
 };

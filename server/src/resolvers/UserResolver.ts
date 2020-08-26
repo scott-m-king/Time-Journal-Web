@@ -13,8 +13,7 @@ import { hash, compare } from "bcryptjs";
 import { getRepository, getConnection } from "typeorm";
 import { MyContext } from "../MyContext";
 import { sendRefreshToken } from "../sendRefreshToken";
-import { createRefreshToken, createAccessToken } from "../auth";
-import { verify } from "jsonwebtoken";
+import { createRefreshToken, createAccessToken, getUserInfo } from "../auth";
 import { Category } from "../entity/Category";
 
 @ObjectType()
@@ -38,17 +37,10 @@ export class UserResolver {
   }
 
   @Query(() => User, { nullable: true })
-  me(@Ctx() context: MyContext) {
-    const authentication = context.req.headers["authorization"];
-
-    if (!authentication) {
-      throw new Error("not authenticated");
-    }
-
+  async me(@Ctx() context: MyContext) {
     try {
-      const token = authentication.split(" ")[1];
-      const payload: any = verify(token, process.env.ACCESS_TOKEN_SECRET!);
-      return User.findOne(payload.userId);
+      const user = await getUserInfo(context);
+      return user;
     } catch (err) {
       console.log(err);
       return null;

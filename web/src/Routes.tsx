@@ -6,8 +6,7 @@ import { Signup } from "./Auth/Signup";
 import { LandingPage } from "./LandingPage";
 import { Body } from "./layouts/Body";
 import { Auth } from "./layouts/Auth";
-import { CreateEntry } from "./App/CreateEntry";
-import { JournalLog } from "./App/JournalLog";
+import { CreateEntry } from "./App/JournalEntries";
 import { CategoryList } from "./App/CategoryList";
 import { Analytics } from "./App/Analytics";
 
@@ -39,14 +38,6 @@ export const Routes: React.FC = () => {
           render={() => (
             <Body>
               <CreateEntry />
-            </Body>
-          )}
-        />
-        <Route
-          path="/ok/entry_log"
-          render={() => (
-            <Body>
-              <JournalLog />
             </Body>
           )}
         />

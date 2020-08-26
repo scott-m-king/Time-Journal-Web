@@ -30,7 +30,7 @@ export const CreateEntry = () => {
     <div className={classes.root}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Typography variant="h4">Create Journal Entry</Typography>
+          <Typography variant="h4">Journal Entries</Typography>
         </Grid>
         <Grid item xs sm={12} md={12} lg={3} xl={3}>
           <CreateEntryForm onSubmit={handleSubmit} />

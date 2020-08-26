@@ -30,11 +30,6 @@ export type QueryFindUserArgs = {
 };
 
 
-export type QueryGetUserCategoriesArgs = {
-  userId: Scalars['Int'];
-};
-
-
 export type QueryGetSingleCategoryArgs = {
   categoryId: Scalars['Int'];
 };
@@ -138,9 +133,7 @@ export type LoginResponse = {
   user: User;
 };
 
-export type GetUserCategoriesQueryVariables = Exact<{
-  userId: Scalars['Int'];
-}>;
+export type GetUserCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetUserCategoriesQuery = (
@@ -217,8 +210,8 @@ export type UsersQuery = (
 
 
 export const GetUserCategoriesDocument = gql`
-    query getUserCategories($userId: Int!) {
-  getUserCategories(userId: $userId) {
+    query getUserCategories {
+  getUserCategories {
     id
     userId
     description
@@ -239,7 +232,6 @@ export const GetUserCategoriesDocument = gql`
  * @example
  * const { data, loading, error } = useGetUserCategoriesQuery({
  *   variables: {
- *      userId: // value for 'userId'
  *   },
  * });
  */

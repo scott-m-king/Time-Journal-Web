@@ -9,7 +9,6 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import DashboardIcon from "@material-ui/icons/Dashboard";
-import CreateIcon from "@material-ui/icons/Create";
 import MenuBookIcon from "@material-ui/icons/MenuBook";
 import ListIcon from "@material-ui/icons/List";
 import TimelineIcon from "@material-ui/icons/Timeline";
@@ -46,8 +45,8 @@ export const Sidebar = () => {
     body = data.me;
   }
 
-  const routes1 = ["/ok/dashboard", "/ok/create_entry"];
-  const routes2 = ["/ok/entry_log", "/ok/category_list", "/ok/analytics"];
+  const routes1 = ["/ok/dashboard"];
+  const routes2 = ["/ok/create_entry", "/ok/category_list", "/ok/analytics"];
 
   const icons = (index: number) => {
     switch (index) {
@@ -75,7 +74,7 @@ export const Sidebar = () => {
             <Toolbar />
             <div className={classes.drawerContainer}>
               <List>
-                {["Dashboard", "Create Journal Entry"].map((text, index) => (
+                {["Dashboard"].map((text, index) => (
                   <Link
                     to={routes1[index]}
                     style={{ textDecoration: "none", color: "black" }}
@@ -83,7 +82,7 @@ export const Sidebar = () => {
                   >
                     <ListItem button key={index}>
                       <ListItemIcon>
-                        {index % 2 === 0 ? <DashboardIcon /> : <CreateIcon />}
+                        <DashboardIcon />
                       </ListItemIcon>
                       <ListItemText primary={text} />
                     </ListItem>
@@ -92,7 +91,7 @@ export const Sidebar = () => {
               </List>
               <Divider />
               <List>
-                {["Journal Entry Log", "Category List", "Analytics"].map(
+                {["Journal Entries", "Categories", "Analytics"].map(
                   (text, index) => (
                     <Link
                       to={routes2[index]}

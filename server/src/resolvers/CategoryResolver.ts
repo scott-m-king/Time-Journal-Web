@@ -1,13 +1,21 @@
-import { Resolver, Query, Arg, Int, Mutation } from "type-graphql";
+import { Resolver, Query, Arg, Int, Mutation, Ctx } from "type-graphql";
 import { Category } from "../entity/Category";
 import { JournalEntry } from "../entity/JournalEntry";
+import { MyContext } from "../MyContext";
+import { getUserInfo } from "../auth";
 
 @Resolver()
 export class CategoryResolver {
   @Query(() => [Category])
-  async getUserCategories(@Arg("userId", () => Int) userId: number) {
-    const categories = await Category.find({ where: { userId: userId } });
-    return categories;
+  async getUserCategories(@Ctx() context: MyContext) {
+    try {
+      const user = await getUserInfo(context);
+      const categories = await Category.find({where: { userId: user?.id }});
+      return categories;
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
   }
 
   @Query(() => Category)

@@ -1,8 +1,0 @@
-query getUserCategories($userId:Int!) {
-  getUserCategories(userId:$userId) {
-    id
-    userId
-    description
-    duration
-  }
-}
