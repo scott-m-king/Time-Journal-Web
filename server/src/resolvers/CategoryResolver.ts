@@ -6,8 +6,14 @@ import { JournalEntry } from "../entity/JournalEntry";
 export class CategoryResolver {
   @Query(() => [Category])
   async getUserCategories(@Arg("userId", () => Int) userId: number) {
-    const users = await Category.find({ where: { userId: userId } });
-    return users;
+    const categories = await Category.find({ where: { userId: userId } });
+    return categories;
+  }
+
+  @Query(() => Category)
+  async getSingleCategory(@Arg("categoryId", () => Int) categoryId: number) {
+    const category = await Category.findOne({ where: { id: categoryId } });
+    return category;
   }
 
   @Mutation(() => Boolean)

@@ -1,14 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Typography from "@material-ui/core/Typography";
 import { CreateEntryForm } from "../Forms/CreateEntryForm";
 import { EntryTable } from "../components/EntryTable";
-import {
-  Grid,
-  makeStyles,
-  Theme,
-  createStyles,
-  Paper,
-} from "@material-ui/core";
+import { Grid, makeStyles, Theme, createStyles } from "@material-ui/core";
 import styled from "styled-components";
 
 const Root = styled.div`
@@ -33,20 +27,20 @@ export const CreateEntry = () => {
   };
 
   return (
-      <div className={classes.root}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Typography variant="h4">Create Journal Entry</Typography>
-          </Grid> 
-          <Grid item xs sm={12} md={12} lg={3} xl={3}>
-            <CreateEntryForm onSubmit={handleSubmit} />
-          </Grid>
-          <Grid item xs sm={12} md={12} lg={9} xl={9}>
-            <Root>
-              <EntryTable />
-            </Root>
-          </Grid>
+    <div className={classes.root}>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Typography variant="h4">Create Journal Entry</Typography>
         </Grid>
-      </div>
+        <Grid item xs sm={12} md={12} lg={3} xl={3}>
+          <CreateEntryForm onSubmit={handleSubmit} />
+        </Grid>
+        <Grid item xs sm={12} md={12} lg={9} xl={9}>
+          <Root>
+            <EntryTable />
+          </Root>
+        </Grid>
+      </Grid>
+    </div>
   );
 };

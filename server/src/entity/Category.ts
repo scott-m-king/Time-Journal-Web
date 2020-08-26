@@ -33,7 +33,7 @@ export class Category extends BaseEntity {
   @JoinColumn({ name: "userId" })
   user: User;
 
-  @Field(() => [JournalEntry])
+  @Field(() => [JournalEntry], { nullable: true })
   @OneToMany(() => JournalEntry, (entry) => entry.category)
   entries: JournalEntry[];
 }

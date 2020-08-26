@@ -9,6 +9,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
+  DateTime: any;
 };
 
 export type Query = {
@@ -16,10 +18,35 @@ export type Query = {
   users: Array<User>;
   findUser: User;
   me?: Maybe<User>;
+  getUserCategories: Array<Category>;
+  getSingleCategory: Category;
+  getAllUserEntries: Array<JournalEntry>;
+  getEntriesByCategory: Array<JournalEntry>;
 };
 
 
 export type QueryFindUserArgs = {
+  userId: Scalars['Int'];
+};
+
+
+export type QueryGetUserCategoriesArgs = {
+  userId: Scalars['Int'];
+};
+
+
+export type QueryGetSingleCategoryArgs = {
+  categoryId: Scalars['Int'];
+};
+
+
+export type QueryGetAllUserEntriesArgs = {
+  userId: Scalars['Int'];
+};
+
+
+export type QueryGetEntriesByCategoryArgs = {
+  categoryId: Scalars['Int'];
   userId: Scalars['Int'];
 };
 
@@ -29,7 +56,29 @@ export type User = {
   firstName: Scalars['String'];
   lastName: Scalars['String'];
   email: Scalars['String'];
+  categories: Array<Category>;
+  entries: Array<JournalEntry>;
 };
+
+export type Category = {
+  __typename?: 'Category';
+  id: Scalars['Int'];
+  description: Scalars['String'];
+  duration: Scalars['Int'];
+  userId: Scalars['Int'];
+  entries?: Maybe<Array<JournalEntry>>;
+};
+
+export type JournalEntry = {
+  __typename?: 'JournalEntry';
+  id: Scalars['Int'];
+  date?: Maybe<Scalars['DateTime']>;
+  description: Scalars['String'];
+  duration: Scalars['Int'];
+  categoryId: Scalars['Int'];
+  userId: Scalars['Int'];
+};
+
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -37,6 +86,10 @@ export type Mutation = {
   logout: Scalars['Boolean'];
   registerUser: User;
   deleteAllUsers: Scalars['Boolean'];
+  createCategory: Scalars['Boolean'];
+  deleteCategory: Scalars['Boolean'];
+  createEntry: Scalars['String'];
+  deleteEntry: Scalars['String'];
 };
 
 
@@ -53,11 +106,50 @@ export type MutationRegisterUserArgs = {
   firstName: Scalars['String'];
 };
 
+
+export type MutationCreateCategoryArgs = {
+  description: Scalars['String'];
+  userId: Scalars['Int'];
+};
+
+
+export type MutationDeleteCategoryArgs = {
+  categoryId: Scalars['Int'];
+  userId: Scalars['Int'];
+};
+
+
+export type MutationCreateEntryArgs = {
+  date?: Maybe<Scalars['DateTime']>;
+  duration: Scalars['Int'];
+  description: Scalars['String'];
+  categoryId: Scalars['Int'];
+  userId: Scalars['Int'];
+};
+
+
+export type MutationDeleteEntryArgs = {
+  id: Scalars['Int'];
+};
+
 export type LoginResponse = {
   __typename?: 'LoginResponse';
   accessToken: Scalars['String'];
   user: User;
 };
+
+export type GetUserCategoriesQueryVariables = Exact<{
+  userId: Scalars['Int'];
+}>;
+
+
+export type GetUserCategoriesQuery = (
+  { __typename?: 'Query' }
+  & { getUserCategories: Array<(
+    { __typename?: 'Category' }
+    & Pick<Category, 'id' | 'userId' | 'description' | 'duration'>
+  )> }
+);
 
 export type LoginMutationVariables = Exact<{
   email: Scalars['String'];
@@ -124,6 +216,42 @@ export type UsersQuery = (
 );
 
 
+export const GetUserCategoriesDocument = gql`
+    query getUserCategories($userId: Int!) {
+  getUserCategories(userId: $userId) {
+    id
+    userId
+    description
+    duration
+  }
+}
+    `;
+
+/**
+ * __useGetUserCategoriesQuery__
+ *
+ * To run a query within a React component, call `useGetUserCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserCategoriesQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useGetUserCategoriesQuery(baseOptions?: Apollo.QueryHookOptions<GetUserCategoriesQuery, GetUserCategoriesQueryVariables>) {
+        return Apollo.useQuery<GetUserCategoriesQuery, GetUserCategoriesQueryVariables>(GetUserCategoriesDocument, baseOptions);
+      }
+export function useGetUserCategoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserCategoriesQuery, GetUserCategoriesQueryVariables>) {
+          return Apollo.useLazyQuery<GetUserCategoriesQuery, GetUserCategoriesQueryVariables>(GetUserCategoriesDocument, baseOptions);
+        }
+export type GetUserCategoriesQueryHookResult = ReturnType<typeof useGetUserCategoriesQuery>;
+export type GetUserCategoriesLazyQueryHookResult = ReturnType<typeof useGetUserCategoriesLazyQuery>;
+export type GetUserCategoriesQueryResult = Apollo.QueryResult<GetUserCategoriesQuery, GetUserCategoriesQueryVariables>;
 export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!) {
   login(email: $email, password: $password) {
