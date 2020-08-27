@@ -1977,7 +1977,7 @@
     react-motion "^0.5.2"
     recompose "^0.30.0"
 
-"@nivo/calendar@0.62.0":
+"@nivo/calendar@0.62.0", "@nivo/calendar@^0.62.0":
   version "0.62.0"
   resolved "https://registry.yarnpkg.com/@nivo/calendar/-/calendar-0.62.0.tgz#a60869cac6723229fef0842ea710e38a550e3eea"
   integrity sha512-fxzGjYwWmhCpFcyncs7ShGZYp2USzjFIafOKpuY1PzGQgZ6nsRHUWNRj9fXngLXA/sDZ9RGWAGJybjkETaC5Cw==
