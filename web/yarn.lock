@@ -2051,7 +2051,7 @@
     react-motion "^0.5.2"
     recompose "^0.30.0"
 
-"@nivo/core@0.62.0":
+"@nivo/core@0.62.0", "@nivo/core@^0.62.0":
   version "0.62.0"
   resolved "https://registry.yarnpkg.com/@nivo/core/-/core-0.62.0.tgz#8237ffbab1f3a2a7dc877efba25158c705130582"
   integrity sha512-0MdLAy4NgwL/QRJQN9oVFL8aF6H0qd0iHG3Ewy3asvgh/Dmz4boXKsTX5+V9puTeJHJtnlBdSgWqimqeeiXD8w==
