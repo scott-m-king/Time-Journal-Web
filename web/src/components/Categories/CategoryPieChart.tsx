@@ -159,7 +159,6 @@ export const CategoryPieChart: React.FC<CategoryDataProps> = ({}) => {
             type: "linearGradient",
             colors: [
               { offset: 100, color: "#d6d6d6" },
-              { offset: 100, color: "#d6d6d6" },
             ],
           },
         ]}
