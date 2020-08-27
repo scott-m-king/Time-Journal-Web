@@ -1,17 +1,30 @@
 import React from "react";
 import Typography from "@material-ui/core/Typography";
-import { Grid, makeStyles, FormControlLabel, Switch } from "@material-ui/core";
-import AddCircleRoundedIcon from "@material-ui/icons/AddCircleRounded";
+import {
+  Grid,
+  makeStyles,
+  FormControlLabel,
+  Switch,
+  Button,
+  Theme,
+  createStyles,
+} from "@material-ui/core";
 import { CategoryLane } from "../components/Categories/CategoryLane";
 import { CategoryData } from "../components/Categories/CategoryData";
 import { CategoryTable } from "../components/Categories/CategoryTable";
 import { CategoryCalendar } from "../components/Categories/CategoryCalendar";
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 
-const useStyles = makeStyles({
-  root: {
-    flexGrow: 1,
-  },
-});
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      flexGrow: 1,
+    },
+    button: {
+      margin: theme.spacing(1),
+    },
+  })
+);
 
 export const CategoryList = () => {
   const classes = useStyles();
@@ -24,11 +37,18 @@ export const CategoryList = () => {
   return (
     <div className={classes.root}>
       <Grid container spacing={3}>
-        <Grid item xs={11}>
+        <Grid item xs={7}>
           <Typography variant="h4">Categories</Typography>
         </Grid>
-        <Grid item xs={1} style={{ textAlign: "right" }}>
-          <AddCircleRoundedIcon />
+        <Grid item xs={5} style={{ textAlign: "right" }}>
+          <Button
+            variant="outlined"
+            color="default"
+            className={classes.button}
+            startIcon={<CloudUploadIcon />}
+          >
+            Create New Category
+          </Button>
         </Grid>
       </Grid>
       <Grid container spacing={3}>

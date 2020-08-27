@@ -46,9 +46,12 @@ export const CategoryTable = () => {
   };
 
   return (
-    <div >
-      <TableContainer component={Paper} style={{ minHeight: MAX_HEIGHT, maxHeight: MAX_HEIGHT }}>
-        <Table aria-label="simple table">
+    <div>
+      <TableContainer
+        component={Paper}
+        style={{ minHeight: MAX_HEIGHT, maxHeight: MAX_HEIGHT }}
+      >
+        <Table stickyHeader aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell>Dessert (100g serving)</TableCell>
