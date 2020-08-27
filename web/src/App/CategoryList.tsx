@@ -10,10 +10,10 @@ import {
   createStyles,
 } from "@material-ui/core";
 import { CategoryLane } from "../components/Categories/CategoryLane";
-import { CategoryData } from "../components/Categories/CategoryData";
+import { CategoryPieChart } from "../components/Categories/CategoryPieChart";
 import { CategoryTable } from "../components/Categories/CategoryTable";
 import { CategoryCalendar } from "../components/Categories/CategoryCalendar";
-import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+import AddCircleIcon from "@material-ui/icons/AddCircle";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -37,15 +37,15 @@ export const CategoryList = () => {
   return (
     <div className={classes.root}>
       <Grid container spacing={3}>
-        <Grid item xs={7}>
+        <Grid item xs={3}>
           <Typography variant="h4">Categories</Typography>
         </Grid>
-        <Grid item xs={5} style={{ textAlign: "right" }}>
+        <Grid item xs={9} style={{ textAlign: "right" }}>
           <Button
             variant="outlined"
             color="default"
             className={classes.button}
-            startIcon={<CloudUploadIcon />}
+            startIcon={<AddCircleIcon />}
           >
             Create New Category
           </Button>
@@ -60,7 +60,7 @@ export const CategoryList = () => {
             control={<Switch checked={checked} onChange={handleChange} />}
             label={checked ? "Switch to Pie Chart" : "Switch to Calendar"}
           />
-          {checked ? <CategoryCalendar /> : <CategoryData />}
+          {checked ? <CategoryCalendar /> : <CategoryPieChart />}
           <br />
           <CategoryTable />
         </Grid>

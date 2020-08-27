@@ -27,8 +27,8 @@ export const CategoryLane: React.FC<LaneProps> = ({}) => {
     >
       {array.map((num, index) => {
         return (
-          <Grid item xs={12}>
-            <CategoryCard />
+          <Grid item xs={12} key={index}>
+            <CategoryCard id={num} description={`Category ${num}`} duration={5} />
           </Grid>
         );
       })}
