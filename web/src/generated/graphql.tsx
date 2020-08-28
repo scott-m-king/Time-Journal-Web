@@ -172,7 +172,7 @@ export type GetAllUserEntriesQuery = (
   { __typename?: 'Query' }
   & { getAllUserEntries: Array<(
     { __typename?: 'JournalEntry' }
-    & Pick<JournalEntry, 'id' | 'title' | 'notes' | 'duration' | 'categoryId'>
+    & Pick<JournalEntry, 'id' | 'title' | 'notes' | 'duration' | 'date' | 'categoryId'>
   )> }
 );
 
@@ -332,6 +332,7 @@ export const GetAllUserEntriesDocument = gql`
     title
     notes
     duration
+    date
     categoryId
   }
 }

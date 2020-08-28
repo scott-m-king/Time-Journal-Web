@@ -25,41 +25,15 @@ import Switch from "@material-ui/core/Switch";
 import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import CheckBoxIcon from "@material-ui/icons/CheckBox";
-import { useGetAllUserEntriesQuery, JournalEntry } from "../generated/graphql";
+import { useGetAllUserEntriesQuery } from "../generated/graphql";
 
-interface Data {
-  calories: number;
-  carbs: number;
-  fat: number;
-  name: string;
-  protein: number;
+interface JournalEntry {
+  date: string;
+  categoryId: number;
+  duration: number;
+  title: string;
+  notes: string | undefined | null;
 }
-
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number
-): Data {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Donut", 452, 25.0, 51, 4.9),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-  createData("Honeycomb", 408, 3.2, 87, 6.5),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Jelly Bean", 375, 0.0, 94, 0.0),
-  createData("KitKat", 518, 26.0, 65, 7.0),
-  createData("Lollipop", 392, 0.2, 98, 0.0),
-  createData("Marshmallow", 318, 0, 81, 2.0),
-  createData("Nougat", 360, 19.0, 9, 37.0),
-  createData("Oreo", 437, 18.0, 63, 4.0),
-];
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -76,10 +50,7 @@ type Order = "asc" | "desc";
 function getComparator<Key extends keyof any>(
   order: Order,
   orderBy: Key
-): (
-  a: { [key in Key]: number | string },
-  b: { [key in Key]: number | string }
-) => number {
+): (a: { [key in Key]: any }, b: { [key in Key]: any }) => number {
   return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
@@ -97,22 +68,32 @@ function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
 
 interface HeadCell {
   disablePadding: boolean;
-  id: keyof Data;
+  id: keyof JournalEntry;
   label: string;
   numeric: boolean;
 }
 
 const headCells: HeadCell[] = [
   {
-    id: "name",
+    id: "title",
     numeric: false,
     disablePadding: true,
-    label: "Dessert (100g serving)",
+    label: "Title",
   },
-  { id: "calories", numeric: true, disablePadding: false, label: "Calories" },
-  { id: "fat", numeric: true, disablePadding: false, label: "Fat (g)" },
-  { id: "carbs", numeric: true, disablePadding: false, label: "Carbs (g)" },
-  { id: "protein", numeric: true, disablePadding: false, label: "Protein (g)" },
+  {
+    id: "duration",
+    numeric: true,
+    disablePadding: false,
+    label: "Duration (mins)",
+  },
+  { id: "date", numeric: false, disablePadding: false, label: "Date" },
+  { id: "categoryId", numeric: true, disablePadding: false, label: "Category" },
+  {
+    id: "notes",
+    numeric: false,
+    disablePadding: false,
+    label: "Additional Notes",
+  },
 ];
 
 interface EnhancedTableProps {
@@ -120,7 +101,7 @@ interface EnhancedTableProps {
   numSelected: number;
   onRequestSort: (
     event: React.MouseEvent<unknown>,
-    property: keyof Data
+    property: keyof JournalEntry
   ) => void;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
@@ -138,7 +119,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     rowCount,
     onRequestSort,
   } = props;
-  const createSortHandler = (property: keyof Data) => (
+  const createSortHandler = (property: keyof JournalEntry) => (
     event: React.MouseEvent<unknown>
   ) => {
     onRequestSort(event, property);
@@ -152,7 +133,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
-            inputProps={{ "aria-label": "select all desserts" }}
+            inputProps={{ "aria-label": "select all entries" }}
           />
         </TableCell>
         {headCells.map((headCell) => (
@@ -286,42 +267,38 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const Entries = () => {
-  const [entries, setEntries] = React.useState<Array<JournalEntry>>([]);
-  const { loading, data } = useGetAllUserEntriesQuery();
-
-  useEffect(() => {
-    if (!loading && data && data.getAllUserEntries) {
-      setEntries(data.getAllUserEntries);
-    }
-  }, [data]);
-
-  return (
-    <ul>
-      {entries.map((element, index) => {
-        return (
-          <li key={index}>
-            Title: {element.title}, Duration: {element.duration}, Date:{" "}
-            {element.date}, Category: {element.categoryId}
-          </li>
-        );
-      })}
-    </ul>
-  );
-};
-
 export const EntryTable = () => {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof Data>("calories");
+  const [orderBy, setOrderBy] = React.useState<keyof JournalEntry>("date");
   const [selected, setSelected] = React.useState<string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
+  const [entries, setEntries] = React.useState<Array<JournalEntry>>([]);
+  const { loading, data } = useGetAllUserEntriesQuery();
+
+  useEffect(() => {
+    if (!loading && data && data.getAllUserEntries) {
+      let array: JournalEntry[] = [];
+      data.getAllUserEntries.map((element, index) => {
+        array.push({
+          date: element.date!,
+          categoryId: element.categoryId,
+          duration: element.duration,
+          title: element.title,
+          notes: element.notes,
+        });
+      });
+
+      setEntries(array);
+    }
+  }, [data]);
+
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof Data
+    property: keyof JournalEntry
   ) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -330,7 +307,7 @@ export const EntryTable = () => {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
+      const newSelecteds = entries.map((n) => n.title);
       setSelected(newSelecteds);
       return;
     }
@@ -375,7 +352,7 @@ export const EntryTable = () => {
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
   const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+    rowsPerPage - Math.min(rowsPerPage, entries.length - page * rowsPerPage);
 
   return (
     <div className={classes.root}>
@@ -395,23 +372,25 @@ export const EntryTable = () => {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={entries.length}
             />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(entries, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+                .map((entry, index) => {
+                  const isItemSelected = isSelected(entry.title as string);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      onClick={(event) =>
+                        handleClick(event, entry.title as string)
+                      }
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={entry.title}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -423,15 +402,15 @@ export const EntryTable = () => {
                       <TableCell
                         component="th"
                         id={labelId}
-                        scope="row"
+                        scope="entry"
                         padding="none"
                       >
-                        {row.name}
+                        {entry.title}
                       </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
-                      <TableCell align="right">{row.protein}</TableCell>
+                      <TableCell align="right">{entry.duration}</TableCell>
+                      <TableCell align="right">{entry.date}</TableCell>
+                      <TableCell align="right">{entry.categoryId}</TableCell>
+                      <TableCell align="right">{entry.notes}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -446,7 +425,7 @@ export const EntryTable = () => {
         <TablePagination
           rowsPerPageOptions={[5, 10, 15]}
           component="div"
-          count={rows.length}
+          count={entries.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={handleChangePage}
@@ -457,7 +436,6 @@ export const EntryTable = () => {
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
       />
-      <Entries />
     </div>
   );
 };

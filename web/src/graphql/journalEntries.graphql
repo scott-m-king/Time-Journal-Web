@@ -4,6 +4,7 @@ query getAllUserEntries {
     title
     notes
     duration
+    date
     categoryId
   }
 }
