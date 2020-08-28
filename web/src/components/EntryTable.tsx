@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import clsx from "clsx";
 import {
   createStyles,
@@ -25,6 +25,7 @@ import Switch from "@material-ui/core/Switch";
 import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import CheckBoxIcon from "@material-ui/icons/CheckBox";
+import { useGetAllUserEntriesQuery, JournalEntry } from "../generated/graphql";
 
 interface Data {
   calories: number;
@@ -285,6 +286,30 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+const Entries = () => {
+  const [entries, setEntries] = React.useState<Array<JournalEntry>>([]);
+  const { loading, data } = useGetAllUserEntriesQuery();
+
+  useEffect(() => {
+    if (!loading && data && data.getAllUserEntries) {
+      setEntries(data.getAllUserEntries);
+    }
+  }, [data]);
+
+  return (
+    <ul>
+      {entries.map((element, index) => {
+        return (
+          <li key={index}>
+            Title: {element.title}, Duration: {element.duration}, Date:{" "}
+            {element.date}, Category: {element.categoryId}
+          </li>
+        );
+      })}
+    </ul>
+  );
+};
+
 export const EntryTable = () => {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>("asc");
@@ -432,6 +457,7 @@ export const EntryTable = () => {
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
       />
+      <Entries />
     </div>
   );
 };

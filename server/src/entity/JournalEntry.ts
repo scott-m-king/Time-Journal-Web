@@ -39,7 +39,6 @@ export class JournalEntry extends BaseEntity {
   @JoinColumn({ name: "categoryId" })
   category: Category;
 
-  @Field(() => Int)
   @Column()
   userId: number;
   @ManyToOne(() => User, (user) => user.entries)

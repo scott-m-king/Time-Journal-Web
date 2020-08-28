@@ -65,7 +65,6 @@ export type JournalEntry = {
   duration: Scalars['Int'];
   notes?: Maybe<Scalars['String']>;
   categoryId: Scalars['Int'];
-  userId: Scalars['Int'];
 };
 
 export type Mutation = {
