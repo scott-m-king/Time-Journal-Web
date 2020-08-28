@@ -54,8 +54,9 @@ export const CategoryPieChart: React.FC<CategoryDataProps> = ({}) => {
   const handleClick = (event: PieDatum) => {
     if (activeId !== event.id) {
       const category = data.find((e) => e.description === event.id);
-      dispatch(setSelectedCategory(category!));
+      dispatch(setSelectedCategory(category));
     } else {
+      dispatch(setSelectedCategory(undefined));
       setActiveId("");
       setFill([]);
     }

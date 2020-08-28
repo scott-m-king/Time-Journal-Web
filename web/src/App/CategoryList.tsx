@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Typography from "@material-ui/core/Typography";
 import {
   Grid,
@@ -13,15 +13,14 @@ import { CategoryLane } from "../components/Categories/CategoryLane";
 import { CategoryPieChart } from "../components/Categories/CategoryPieChart";
 import { CategoryTable } from "../components/Categories/CategoryTable";
 import { CategoryCalendar } from "../components/Categories/CategoryCalendar";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
+import { useDispatch } from "react-redux";
+import { setSelectedCategory } from "../redux/actions";
+import { NewCategoryDialog } from "../components/Categories/NewCategoryDialog";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-    },
-    button: {
-      margin: theme.spacing(1),
     },
   })
 );
@@ -34,6 +33,11 @@ export const CategoryList = () => {
     setChecked((prev) => !prev);
   };
 
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setSelectedCategory(undefined));
+  }, []);
+
   return (
     <div className={classes.root}>
       <Grid container spacing={3}>
@@ -41,14 +45,7 @@ export const CategoryList = () => {
           <Typography variant="h4">Categories</Typography>
         </Grid>
         <Grid item xs={9} style={{ textAlign: "right" }}>
-          <Button
-            variant="outlined"
-            color="default"
-            className={classes.button}
-            startIcon={<AddCircleIcon />}
-          >
-            Create New Category
-          </Button>
+          <NewCategoryDialog />
         </Grid>
       </Grid>
       <Grid container spacing={3}>

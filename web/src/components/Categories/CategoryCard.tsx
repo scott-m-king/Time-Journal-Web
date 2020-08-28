@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -49,6 +49,7 @@ interface CategoryCardProps {
   totalDuration: number;
   barDuration: number;
   setActiveCategory(category: Category): void;
+  activeCategory: Category | undefined;
 }
 
 export const CategoryCard = (category: CategoryCardProps) => {
@@ -56,8 +57,15 @@ export const CategoryCard = (category: CategoryCardProps) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [expanded, setExpanded] = React.useState(false);
 
+  useEffect(() => {
+    if (category.id === category.activeCategory?.id) {
+      setExpanded(true);
+    } else {
+      setExpanded(false);
+    }
+  }, [category.activeCategory]);
+
   const selectCategory = () => {
-    setExpanded(!expanded);
     category.setActiveCategory({
       id: category.id,
       description: category.description,

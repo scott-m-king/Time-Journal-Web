@@ -2,13 +2,18 @@ import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import { CategoryCard } from "./CategoryCard";
 import { Category } from "../../redux/types";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setSelectedCategory } from "../../redux/actions";
-import { data } from './piechartData';
+import { data } from "./piechartData";
+import { CategoryState } from "../../redux/reducers/categoriesReducer";
 
 export const CategoryLane = () => {
   const [windowHeight, setWindowHeight] = useState(0);
   const MAX_HEIGHT = windowHeight - 165;
+  const activeCategory = useSelector<
+    CategoryState,
+    CategoryState["selectedCategory"]
+  >((state) => state.selectedCategory);
 
   const totalDuration = data
     .map((e) => e.duration)
@@ -31,7 +36,14 @@ export const CategoryLane = () => {
   const dispatch = useDispatch();
 
   const onSelectCategory = (category: Category) => {
-    dispatch(setSelectedCategory(category));
+    if (
+      (activeCategory && category.description !== activeCategory.description) ||
+      !activeCategory
+    ) {
+      dispatch(setSelectedCategory(category));
+    } else {
+      dispatch(setSelectedCategory(undefined));
+    }
   };
 
   return (
@@ -50,6 +62,7 @@ export const CategoryLane = () => {
               totalDuration={totalDuration}
               barDuration={barDuration}
               setActiveCategory={onSelectCategory}
+              activeCategory={activeCategory}
             />
           </Grid>
         );
