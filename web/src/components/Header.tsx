@@ -7,6 +7,7 @@ import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
 import { useMeQuery, useLogoutMutation } from "../generated/graphql";
 import { setAccessToken } from "../accessToken";
+import { Colours } from "../styles/Colours";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,7 +40,7 @@ export const Header: React.FC = () => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="fixed" className={classes.appBar} style={{background: "#0a80cc"}}>
+      <AppBar position="fixed" className={classes.appBar} style={{background: Colours.primary}}>
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
             {body !== undefined ? (

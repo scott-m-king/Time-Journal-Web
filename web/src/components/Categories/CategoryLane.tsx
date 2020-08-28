@@ -8,52 +8,52 @@ const array = [
   {
     id: 1,
     description: "Uncategorized",
-    duration: 42,
+    duration: 42 * 100,
   },
   {
     id: 2,
     description: "Sleep",
-    duration: 350,
+    duration: 350 * 100,
   },
   {
     id: 3,
     description: "Homework",
-    duration: 90,
+    duration: 90 * 100,
   },
   {
     id: 4,
     description: "Chill",
-    duration: 100,
+    duration: 100 * 100,
   },
   {
     id: 5,
     description: "Chores",
-    duration: 70,
+    duration: 70 * 100,
   },
   {
     id: 6,
     description: "Dishes",
-    duration: 25,
+    duration: 25 * 100,
   },
   {
     id: 7,
     description: "Exercise",
-    duration: 5,
+    duration: 5 * 100,
   },
   {
     id: 8,
     description: "Coding",
-    duration: 200,
+    duration: 200 * 100,
   },
   {
     id: 9,
     description: "Social",
-    duration: 60,
+    duration: 60 * 100,
   },
   {
     id: 10,
     description: "Family",
-    duration: 70,
+    duration: 70 * 100,
   },
 ];
 
@@ -62,6 +62,10 @@ export const CategoryLane: React.FC<LaneProps> = ({}) => {
   const MAX_HEIGHT = windowHeight - 165;
 
   const totalDuration = array
+    .map((e) => e.duration)
+    .reduce((rsf, currentValue) => rsf + currentValue);
+
+  const barDuration = array
     .map((e) => e.duration)
     .reduce((rsf, currentValue) => Math.max(rsf, currentValue));
 
@@ -89,6 +93,7 @@ export const CategoryLane: React.FC<LaneProps> = ({}) => {
               description={element.description}
               duration={element.duration}
               totalDuration={totalDuration}
+              barDuration={barDuration}
             />
           </Grid>
         );

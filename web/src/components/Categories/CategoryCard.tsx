@@ -12,7 +12,7 @@ import {
   Collapse,
 } from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import { red } from "@material-ui/core/colors";
+import { Colours } from "../../styles/Colours";
 import clsx from "clsx";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -27,9 +27,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     pos: {
       marginBottom: 12,
-    },
-    avatar: {
-      backgroundColor: red[500],
     },
     expand: {
       transform: "rotate(0deg)",
@@ -49,6 +46,7 @@ interface CategoryCardProps {
   description: string;
   duration: number;
   totalDuration: number;
+  barDuration: number;
 }
 
 export const CategoryCard = (category: CategoryCardProps) => {
@@ -78,24 +76,29 @@ export const CategoryCard = (category: CategoryCardProps) => {
     setWidth(document.getElementById("card")?.offsetWidth);
   };
 
-  const percentageFill = (category.duration / category.totalDuration) * 100;
+  const percentageFill = (category.duration / category.barDuration) * 100;
 
   return (
     <>
       <Card
-        variant={expanded ? "elevation" : "outlined"}
+        variant={expanded ? undefined : "outlined"}
         elevation={4}
         className={classes.root}
         id="card"
-        style={{
-          background: `linear-gradient(90deg, #d1edff ${Math.round(
-            percentageFill
-          )}%, #FFFFFF ${Math.round(percentageFill)}%)`,
-        }}
       >
         <CardHeader
+          style={{
+            background: `linear-gradient(90deg, ${
+              Colours.primaryLight
+            } ${Math.round(percentageFill)}%, #FFFFFF ${Math.round(
+              percentageFill
+            )}%)`,
+          }}
           avatar={
-            <Avatar aria-label="recipe" style={{ backgroundColor: red[500] }}>
+            <Avatar
+              aria-label="recipe"
+              style={{ backgroundColor: Colours.secondary }}
+            >
               {category.description.charAt(0).toUpperCase()}
             </Avatar>
           }
@@ -125,7 +128,6 @@ export const CategoryCard = (category: CategoryCardProps) => {
             <div>
               <Typography
                 variant="h5"
-                component="p"
                 className={clsx(classes.expand, {
                   [classes.expandOpen]: expanded,
                 })}
@@ -143,10 +145,23 @@ export const CategoryCard = (category: CategoryCardProps) => {
               <b>{category.duration} mins</b> spent in total
             </Typography>
             <Typography variant="body1" component="p">
-              <b>{(category.duration / 60).toFixed(2)} hours</b> spent in total
+              <b>
+                {category.duration >= 24 * 60
+                  ? `${Math.floor(category.duration / (24 * 60))} days, `
+                  : ""}
+                {Math.floor((category.duration % (24 * 60)) / 60)} hours and{" "}
+                {category.duration % 60} mins
+              </b>{" "}
+              spent in total
             </Typography>
             <Typography variant="body1" component="p">
-              <b>56%</b> of total time spent in this category
+              <b>
+                {((category.duration / category.totalDuration) * 100).toFixed(
+                  2
+                )}
+                %
+              </b>{" "}
+              of total time spent in this category
             </Typography>
           </CardContent>
         </Collapse>

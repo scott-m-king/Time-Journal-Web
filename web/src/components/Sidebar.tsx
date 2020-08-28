@@ -14,6 +14,7 @@ import ListIcon from "@material-ui/icons/List";
 import TimelineIcon from "@material-ui/icons/Timeline";
 import { useMeQuery } from "../generated/graphql";
 import { Link } from "react-router-dom";
+import { Colours } from '../styles/Colours';
 
 const drawerWidth = 240;
 
@@ -81,7 +82,7 @@ export const Sidebar = () => {
                     key={index}
                   >
                     <ListItem button key={index}>
-                      <ListItemIcon>
+                      <ListItemIcon style={{ color: Colours.secondary }}>
                         <DashboardIcon />
                       </ListItemIcon>
                       <ListItemText primary={text} />
@@ -99,7 +100,9 @@ export const Sidebar = () => {
                       key={index}
                     >
                       <ListItem button key={index}>
-                        <ListItemIcon>{icons(index)}</ListItemIcon>
+                        <ListItemIcon style={{ color: Colours.secondary }}>
+                          {icons(index)}
+                        </ListItemIcon>
                         <ListItemText primary={text} />
                       </ListItem>
                     </Link>
