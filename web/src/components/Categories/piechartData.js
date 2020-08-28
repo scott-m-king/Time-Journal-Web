@@ -1,0 +1,92 @@
+export const data = [
+  {
+    id: "sass",
+    label: "sass",
+    value: 120,
+    color: "",
+  },
+  {
+    id: "go",
+    label: "go",
+    value: 326,
+    color: "",
+  },
+  {
+    id: "python",
+    label: "python",
+    value: 561,
+    color: "",
+  },
+  {
+    id: "c",
+    label: "c",
+    value: 146,
+    color: "",
+  },
+  {
+    id: "scala",
+    label: "scala",
+    value: 1500,
+    color: "",
+  },
+  {
+    id: "sass1",
+    label: "sass",
+    value: 120,
+    color: "",
+  },
+  {
+    id: "go2",
+    label: "go",
+    value: 326,
+    color: "",
+  },
+  {
+    id: "python3",
+    label: "python",
+    value: 561,
+    color: "",
+  },
+  {
+    id: "c4",
+    label: "c",
+    value: 146,
+    color: "",
+  },
+  {
+    id: "scala5",
+    label: "scala",
+    value: 365,
+    color: "",
+  },
+  {
+    id: "sass6",
+    label: "sass",
+    value: 120,
+    color: "",
+  },
+  {
+    id: "go7",
+    label: "go",
+    value: 326,
+    color: "",
+  },
+  {
+    id: "python8",
+    label: "python",
+    value: 561,
+    color: "",
+  },
+  {
+    id: "c9",
+    label: "c",
+    value: 146,
+    color: "",
+  },
+  {
+    id: "scala10",
+    label: "scala",
+    value: 365,
+    color: "rgba(255, 255, 255, 0.1)",
+  },
+];

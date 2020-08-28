@@ -39,7 +39,7 @@ export const Header: React.FC = () => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="fixed" className={classes.appBar}>
+      <AppBar position="fixed" className={classes.appBar} style={{background: "#0a80cc"}}>
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
             {body !== undefined ? (
