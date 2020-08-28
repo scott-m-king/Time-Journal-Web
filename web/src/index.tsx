@@ -13,7 +13,9 @@ import { getAccessToken, setAccessToken } from "./accessToken";
 import { onError } from "@apollo/client/link/error";
 import { TokenRefreshLink } from "apollo-link-token-refresh";
 import jwtDecode from "jwt-decode";
-import { App } from './App';
+import { App } from "./App";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
 
 const cache = new InMemoryCache({});
 
@@ -96,11 +98,11 @@ const client = new ApolloClient({
   cache,
 });
 
-
-
 ReactDOM.render(
-  <ApolloProvider client={client}>
-    <App />
-  </ApolloProvider>,
+  <Provider store={store}>
+    <ApolloProvider client={client}>
+      <App />
+    </ApolloProvider>
+  </Provider>,
   document.getElementById("root")
 );

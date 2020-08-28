@@ -1,5 +1,58 @@
 export const data = [
   {
+    id: 1,
+    description: "Uncategorized",
+    duration: 42 * 100,
+  },
+  {
+    id: 2,
+    description: "Sleep",
+    duration: 350 * 100,
+  },
+  {
+    id: 3,
+    description: "Homework",
+    duration: 90 * 100,
+  },
+  {
+    id: 4,
+    description: "Chill",
+    duration: 100 * 100,
+  },
+  {
+    id: 5,
+    description: "Chores",
+    duration: 70 * 100,
+  },
+  {
+    id: 6,
+    description: "Dishes",
+    duration: 25 * 100,
+  },
+  {
+    id: 7,
+    description: "Exercise",
+    duration: 5 * 100,
+  },
+  {
+    id: 8,
+    description: "Coding",
+    duration: 200 * 100,
+  },
+  {
+    id: 9,
+    description: "Social",
+    duration: 60 * 100,
+  },
+  {
+    id: 10,
+    description: "Family",
+    duration: 70 * 100,
+  },
+]
+
+export const data2 = [
+  {
     id: "sass",
     label: "sass",
     value: 120,

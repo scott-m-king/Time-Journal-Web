@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import { CategoryCard } from "./CategoryCard";
+import { Category } from "../../redux/types";
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedCategory } from "../../redux/actions";
+import { CategoryState } from "../../redux/reducers/categoriesReducer";
 
 interface LaneProps {}
 
@@ -79,6 +83,12 @@ export const CategoryLane: React.FC<LaneProps> = ({}) => {
     setWindowHeight(window.innerHeight);
   };
 
+  const dispatch = useDispatch();
+
+  const onSelectCategory = (category: Category) => {
+    dispatch(setSelectedCategory(category));
+  };
+
   return (
     <Grid
       container
@@ -94,6 +104,7 @@ export const CategoryLane: React.FC<LaneProps> = ({}) => {
               duration={element.duration}
               totalDuration={totalDuration}
               barDuration={barDuration}
+              setActiveCategory={onSelectCategory}
             />
           </Grid>
         );

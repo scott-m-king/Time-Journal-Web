@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -14,6 +14,7 @@ import {
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { Colours } from "../../styles/Colours";
 import clsx from "clsx";
+import { Category } from "../../redux/types";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -47,16 +48,21 @@ interface CategoryCardProps {
   duration: number;
   totalDuration: number;
   barDuration: number;
+  setActiveCategory(category: Category): void;
 }
 
 export const CategoryCard = (category: CategoryCardProps) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [expanded, setExpanded] = React.useState(false);
-  const [width, setWidth] = React.useState<undefined | number>(0);
 
-  const handleExpandClick = () => {
+  const selectCategory = () => {
     setExpanded(!expanded);
+    category.setActiveCategory({
+      id: category.id,
+      description: category.description,
+      duration: category.duration,
+    });
   };
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -65,15 +71,6 @@ export const CategoryCard = (category: CategoryCardProps) => {
 
   const handleClose = () => {
     setAnchorEl(null);
-  };
-
-  useEffect(() => {
-    window.addEventListener("resize", updateWindowDimensions);
-    updateWindowDimensions();
-  }, []);
-
-  const updateWindowDimensions = () => {
-    setWidth(document.getElementById("card")?.offsetWidth);
   };
 
   const percentageFill = (category.duration / category.barDuration) * 100;
@@ -131,7 +128,7 @@ export const CategoryCard = (category: CategoryCardProps) => {
                 className={clsx(classes.expand, {
                   [classes.expandOpen]: expanded,
                 })}
-                onClick={handleExpandClick}
+                onClick={selectCategory}
                 aria-expanded={expanded}
               >
                 {category.description}
