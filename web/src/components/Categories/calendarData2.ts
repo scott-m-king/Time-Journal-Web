@@ -1,6 +1,6 @@
 export const data2 = () => {
   let arr = [];
-  for (let i = 0; i < 500; i++) {
+  for (let i = 0; i < 200; i++) {
     arr.push({
       day: randomDate(new Date(2014, 12, 1), new Date(2016, 12, 31)),
       value: i,

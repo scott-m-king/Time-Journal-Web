@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { ResponsiveCalendar } from "@nivo/calendar";
 import { data2 } from "./calendarData2";
 

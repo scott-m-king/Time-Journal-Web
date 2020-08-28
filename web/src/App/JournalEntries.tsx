@@ -4,6 +4,14 @@ import { CreateEntryForm } from "../Forms/CreateEntryForm";
 import { EntryTable } from "../components/EntryTable";
 import { Grid, makeStyles, Theme, createStyles } from "@material-ui/core";
 import styled from "styled-components";
+import {
+  useCreateEntryMutation,
+  GetUserCategoriesDocument,
+  GetUserCategoriesQuery,
+  GetAllUserEntriesQuery,
+  GetAllUserEntriesDocument,
+} from "../generated/graphql";
+import { JournalEntry } from "../redux/types";
 
 const Root = styled.div`
   padding-top: 20px;
@@ -22,8 +30,42 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const CreateEntry = () => {
   const classes = useStyles();
-  const handleSubmit = (data: any) => {
-    console.log(data);
+  const [createEntry] = useCreateEntryMutation();
+
+  const handleSubmit = async (data: JournalEntry) => {
+    try {
+      const response = await createEntry({
+        variables: {
+          categoryId: data.categoryId,
+          title: data.title,
+          notes: data.notes,
+          duration: data.duration,
+          date: data.date.toDateString(),
+        },
+        update: (store, { data }) => {
+          if (!data) {
+            return null;
+          }
+          store.writeQuery<GetUserCategoriesQuery>({
+            query: GetUserCategoriesDocument,
+            data: {
+              getUserCategories: data.createEntry.categories,
+            },
+          });
+          store.writeQuery<GetAllUserEntriesQuery>({
+            query: GetAllUserEntriesDocument,
+            data: {
+              getAllUserEntries: data.createEntry.entries,
+            },
+          });
+        },
+      });
+      if (!response) {
+        alert("Failed to add.");
+      }
+    } catch (err) {
+      alert(err);
+    }
   };
 
   return (

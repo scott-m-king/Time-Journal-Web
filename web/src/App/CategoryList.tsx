@@ -16,6 +16,7 @@ import { CategoryCalendar } from "../components/Categories/CategoryCalendar";
 import { useDispatch } from "react-redux";
 import { setSelectedCategory } from "../redux/actions";
 import { NewCategoryDialog } from "../components/Categories/NewCategoryDialog";
+import { CategoryLineChart } from "../components/Categories/CategoryLineChart";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

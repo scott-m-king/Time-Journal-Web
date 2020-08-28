@@ -9,8 +9,6 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
-  DateTime: any;
 };
 
 export type Query = {
@@ -32,11 +30,6 @@ export type QueryFindUserArgs = {
 
 export type QueryGetSingleCategoryArgs = {
   categoryId: Scalars['Int'];
-};
-
-
-export type QueryGetAllUserEntriesArgs = {
-  userId: Scalars['Int'];
 };
 
 
@@ -67,13 +60,13 @@ export type Category = {
 export type JournalEntry = {
   __typename?: 'JournalEntry';
   id: Scalars['Int'];
-  date?: Maybe<Scalars['DateTime']>;
-  description: Scalars['String'];
+  date?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
   duration: Scalars['Int'];
+  notes?: Maybe<Scalars['String']>;
   categoryId: Scalars['Int'];
   userId: Scalars['Int'];
 };
-
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -83,7 +76,7 @@ export type Mutation = {
   deleteAllUsers: Scalars['Boolean'];
   createCategory: Scalars['Boolean'];
   deleteCategory: Scalars['Boolean'];
-  createEntry: Scalars['String'];
+  createEntry: CreateEntryResponse;
   deleteEntry: Scalars['String'];
 };
 
@@ -115,11 +108,11 @@ export type MutationDeleteCategoryArgs = {
 
 
 export type MutationCreateEntryArgs = {
-  date?: Maybe<Scalars['DateTime']>;
+  date?: Maybe<Scalars['String']>;
   duration: Scalars['Int'];
-  description: Scalars['String'];
+  notes?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
   categoryId: Scalars['Int'];
-  userId: Scalars['Int'];
 };
 
 
@@ -133,6 +126,12 @@ export type LoginResponse = {
   user: User;
 };
 
+export type CreateEntryResponse = {
+  __typename?: 'CreateEntryResponse';
+  entries: Array<JournalEntry>;
+  categories: Array<Category>;
+};
+
 export type GetUserCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -141,6 +140,40 @@ export type GetUserCategoriesQuery = (
   & { getUserCategories: Array<(
     { __typename?: 'Category' }
     & Pick<Category, 'id' | 'userId' | 'description' | 'duration'>
+  )> }
+);
+
+export type CreateEntryMutationVariables = Exact<{
+  categoryId: Scalars['Int'];
+  title: Scalars['String'];
+  notes?: Maybe<Scalars['String']>;
+  duration: Scalars['Int'];
+  date?: Maybe<Scalars['String']>;
+}>;
+
+
+export type CreateEntryMutation = (
+  { __typename?: 'Mutation' }
+  & { createEntry: (
+    { __typename?: 'CreateEntryResponse' }
+    & { entries: Array<(
+      { __typename?: 'JournalEntry' }
+      & Pick<JournalEntry, 'id' | 'title' | 'notes' | 'duration' | 'date' | 'categoryId'>
+    )>, categories: Array<(
+      { __typename?: 'Category' }
+      & Pick<Category, 'id' | 'description' | 'duration' | 'userId'>
+    )> }
+  ) }
+);
+
+export type GetAllUserEntriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllUserEntriesQuery = (
+  { __typename?: 'Query' }
+  & { getAllUserEntries: Array<(
+    { __typename?: 'JournalEntry' }
+    & Pick<JournalEntry, 'id' | 'title' | 'notes' | 'duration' | 'categoryId'>
   )> }
 );
 
@@ -244,6 +277,91 @@ export function useGetUserCategoriesLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type GetUserCategoriesQueryHookResult = ReturnType<typeof useGetUserCategoriesQuery>;
 export type GetUserCategoriesLazyQueryHookResult = ReturnType<typeof useGetUserCategoriesLazyQuery>;
 export type GetUserCategoriesQueryResult = Apollo.QueryResult<GetUserCategoriesQuery, GetUserCategoriesQueryVariables>;
+export const CreateEntryDocument = gql`
+    mutation createEntry($categoryId: Int!, $title: String!, $notes: String, $duration: Int!, $date: String) {
+  createEntry(categoryId: $categoryId, title: $title, notes: $notes, duration: $duration, date: $date) {
+    entries {
+      id
+      title
+      notes
+      duration
+      date
+      categoryId
+    }
+    categories {
+      id
+      description
+      duration
+      userId
+    }
+  }
+}
+    `;
+export type CreateEntryMutationFn = Apollo.MutationFunction<CreateEntryMutation, CreateEntryMutationVariables>;
+
+/**
+ * __useCreateEntryMutation__
+ *
+ * To run a mutation, you first call `useCreateEntryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateEntryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createEntryMutation, { data, loading, error }] = useCreateEntryMutation({
+ *   variables: {
+ *      categoryId: // value for 'categoryId'
+ *      title: // value for 'title'
+ *      notes: // value for 'notes'
+ *      duration: // value for 'duration'
+ *      date: // value for 'date'
+ *   },
+ * });
+ */
+export function useCreateEntryMutation(baseOptions?: Apollo.MutationHookOptions<CreateEntryMutation, CreateEntryMutationVariables>) {
+        return Apollo.useMutation<CreateEntryMutation, CreateEntryMutationVariables>(CreateEntryDocument, baseOptions);
+      }
+export type CreateEntryMutationHookResult = ReturnType<typeof useCreateEntryMutation>;
+export type CreateEntryMutationResult = Apollo.MutationResult<CreateEntryMutation>;
+export type CreateEntryMutationOptions = Apollo.BaseMutationOptions<CreateEntryMutation, CreateEntryMutationVariables>;
+export const GetAllUserEntriesDocument = gql`
+    query getAllUserEntries {
+  getAllUserEntries {
+    id
+    title
+    notes
+    duration
+    categoryId
+  }
+}
+    `;
+
+/**
+ * __useGetAllUserEntriesQuery__
+ *
+ * To run a query within a React component, call `useGetAllUserEntriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllUserEntriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllUserEntriesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAllUserEntriesQuery(baseOptions?: Apollo.QueryHookOptions<GetAllUserEntriesQuery, GetAllUserEntriesQueryVariables>) {
+        return Apollo.useQuery<GetAllUserEntriesQuery, GetAllUserEntriesQueryVariables>(GetAllUserEntriesDocument, baseOptions);
+      }
+export function useGetAllUserEntriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllUserEntriesQuery, GetAllUserEntriesQueryVariables>) {
+          return Apollo.useLazyQuery<GetAllUserEntriesQuery, GetAllUserEntriesQueryVariables>(GetAllUserEntriesDocument, baseOptions);
+        }
+export type GetAllUserEntriesQueryHookResult = ReturnType<typeof useGetAllUserEntriesQuery>;
+export type GetAllUserEntriesLazyQueryHookResult = ReturnType<typeof useGetAllUserEntriesLazyQuery>;
+export type GetAllUserEntriesQueryResult = Apollo.QueryResult<GetAllUserEntriesQuery, GetAllUserEntriesQueryVariables>;
 export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!) {
   login(email: $email, password: $password) {

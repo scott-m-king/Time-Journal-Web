@@ -16,17 +16,21 @@ export class JournalEntry extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Field(() => Date, { nullable: true })
-  @Column("date", { nullable: true })
-  date: Date;
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true })
+  date: String;
 
   @Field()
   @Column()
-  description: string;
+  title: string;
 
   @Field(() => Int)
   @Column()
   duration: number;
+
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true })
+  notes: String;
 
   @Field(() => Int)
   @Column()

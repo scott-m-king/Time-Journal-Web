@@ -21,15 +21,11 @@ import {
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import { useGetUserCategoriesQuery } from "../generated/graphql";
-
-interface Values {
-  date: Date;
-  category: number;
-  duration: number;
-  title: string;
-  description: string;
-}
+import {
+  useGetUserCategoriesQuery,
+  useGetUserCategoriesLazyQuery,
+} from "../generated/graphql";
+import { JournalEntry } from "../redux/types";
 
 interface Category {
   id: number;
@@ -39,7 +35,7 @@ interface Category {
 }
 
 interface Props {
-  onSubmit: (values: Values) => void;
+  onSubmit: (values: JournalEntry) => Promise<void>;
 }
 
 const validationSchema = yup.object({
@@ -73,12 +69,12 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
 
   const [selectedDate, setSelectedDate] = React.useState<Date>(new Date());
   const [categories, setCategories] = React.useState<Array<Category>>([]);
-  const [vals, setVals] = React.useState<Values>({
+  const [vals, setVals] = React.useState<JournalEntry>({
     date: selectedDate,
-    category: 0,
+    categoryId: 0,
     duration: 0,
     title: "",
-    description: "",
+    notes: "",
   });
 
   const { data, loading } = useGetUserCategoriesQuery();
@@ -88,13 +84,34 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
       setCategories(data.getUserCategories);
       setVals({
         date: selectedDate,
-        category: data.getUserCategories[0].id,
+        categoryId: data.getUserCategories[0].id,
         duration: 0,
         title: "",
-        description: "",
+        notes: "",
       });
     }
+    console.log(data?.getUserCategories)
   }, [data]);
+
+  // const [getCategories, { loading, data }] = useGetUserCategoriesLazyQuery();
+
+  // React.useEffect(() => {
+  //   reloadCategories();
+  // }, [data]);
+
+  // const reloadCategories = () => {
+  //   getCategories();
+  //   if (!loading && data && data.getUserCategories) {
+  //     setCategories(data.getUserCategories);
+  //     setVals({
+  //       date: selectedDate,
+  //       categoryId: data.getUserCategories[0].id,
+  //       duration: 0,
+  //       title: "",
+  //       notes: "",
+  //     });
+  //   }
+  // };
 
   const handleDateChange = (date: Date) => {
     setSelectedDate(date);
@@ -106,10 +123,12 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
         initialValues={vals}
         validationSchema={validationSchema}
         enableReinitialize
-        onSubmit={async (data, { setSubmitting }) => {
+        onSubmit={async (data, { setSubmitting, resetForm }) => {
           setSubmitting(true);
           onSubmit(data);
           setSubmitting(false);
+          // reloadCategories();
+          resetForm();
         }}
       >
         {({ isSubmitting }) => (
@@ -142,7 +161,7 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
                   <Grid item xs>
                     <FormControl variant="outlined" fullWidth>
                       <InputLabel>Category</InputLabel>
-                      <Field name="category" label="Category" as={Select}>
+                      <Field name="categoryId" label="Category" as={Select}>
                         {categories.map((category, index) => {
                           return (
                             <MenuItem key={index} value={category.id}>

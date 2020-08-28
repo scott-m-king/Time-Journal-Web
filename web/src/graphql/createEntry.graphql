@@ -1,0 +1,30 @@
+mutation createEntry(
+  $categoryId: Int!
+  $title: String!
+  $notes: String
+  $duration: Int!
+  $date: String
+) {
+  createEntry(
+    categoryId: $categoryId
+    title: $title
+    notes: $notes
+    duration: $duration
+    date: $date
+  ) {
+    entries {
+      id
+      title
+      notes
+      duration
+      date
+      categoryId
+    }
+    categories {
+      id
+      description
+      duration
+      userId
+    }
+  }
+}

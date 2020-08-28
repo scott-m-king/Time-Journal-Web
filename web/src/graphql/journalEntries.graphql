@@ -1,0 +1,9 @@
+query getAllUserEntries {
+  getAllUserEntries {
+    id
+    title
+    notes
+    duration
+    categoryId
+  }
+}
