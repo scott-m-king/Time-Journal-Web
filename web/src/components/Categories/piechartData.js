@@ -37,7 +37,7 @@ export const data = [
   {
     id: 8,
     description: "Coding",
-    duration: 200 * 100,
+    duration: 250 * 100,
   },
   {
     id: 9,

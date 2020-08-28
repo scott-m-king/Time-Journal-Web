@@ -2,81 +2,26 @@ import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import { CategoryCard } from "./CategoryCard";
 import { Category } from "../../redux/types";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setSelectedCategory } from "../../redux/actions";
-import { CategoryState } from "../../redux/reducers/categoriesReducer";
+import { data } from './piechartData';
 
-interface LaneProps {}
-
-const array = [
-  {
-    id: 1,
-    description: "Uncategorized",
-    duration: 42 * 100,
-  },
-  {
-    id: 2,
-    description: "Sleep",
-    duration: 350 * 100,
-  },
-  {
-    id: 3,
-    description: "Homework",
-    duration: 90 * 100,
-  },
-  {
-    id: 4,
-    description: "Chill",
-    duration: 100 * 100,
-  },
-  {
-    id: 5,
-    description: "Chores",
-    duration: 70 * 100,
-  },
-  {
-    id: 6,
-    description: "Dishes",
-    duration: 25 * 100,
-  },
-  {
-    id: 7,
-    description: "Exercise",
-    duration: 5 * 100,
-  },
-  {
-    id: 8,
-    description: "Coding",
-    duration: 200 * 100,
-  },
-  {
-    id: 9,
-    description: "Social",
-    duration: 60 * 100,
-  },
-  {
-    id: 10,
-    description: "Family",
-    duration: 70 * 100,
-  },
-];
-
-export const CategoryLane: React.FC<LaneProps> = ({}) => {
+export const CategoryLane = () => {
   const [windowHeight, setWindowHeight] = useState(0);
   const MAX_HEIGHT = windowHeight - 165;
 
-  const totalDuration = array
+  const totalDuration = data
     .map((e) => e.duration)
     .reduce((rsf, currentValue) => rsf + currentValue);
 
-  const barDuration = array
+  const barDuration = data
     .map((e) => e.duration)
     .reduce((rsf, currentValue) => Math.max(rsf, currentValue));
 
   useEffect(() => {
     window.addEventListener("resize", updateWindowDimensions);
     updateWindowDimensions();
-    array.sort((a, b) => (a.duration > b.duration ? -1 : 1));
+    data.sort((a, b) => (a.duration > b.duration ? -1 : 1));
   }, []);
 
   const updateWindowDimensions = () => {
@@ -95,7 +40,7 @@ export const CategoryLane: React.FC<LaneProps> = ({}) => {
       spacing={1}
       style={{ maxHeight: MAX_HEIGHT, overflow: "auto" }}
     >
-      {array.map((element) => {
+      {data.map((element) => {
         return (
           <Grid item xs={12} key={element.id}>
             <CategoryCard

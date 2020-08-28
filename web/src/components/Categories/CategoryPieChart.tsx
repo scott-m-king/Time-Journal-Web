@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { ResponsivePie, PieDatum } from "@nivo/pie";
 import { data } from "./piechartData";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { CategoryState } from "../../redux/reducers/categoriesReducer";
-import { Category } from "../../redux/types";
+import { setSelectedCategory } from "../../redux/actions";
 
 interface CategoryDataProps {}
 
@@ -24,22 +24,7 @@ export const CategoryPieChart: React.FC<CategoryDataProps> = ({}) => {
   >((state) => state.selectedCategory);
 
   useEffect(() => {
-    updateActiveCategory(
-      activeCategory
-        ? {
-            id: activeCategory.description,
-            label: activeCategory.description,
-            value: activeCategory.duration,
-            color: "",
-          }
-        : {
-            id: "",
-            label: "",
-            value: 0,
-            color: "",
-          }
-    );
-    let updatedData: any = [];
+    let updatedData: PieDatum[] = [];
     data.forEach((element) => {
       updatedData.push({
         id: element.description,
@@ -49,13 +34,34 @@ export const CategoryPieChart: React.FC<CategoryDataProps> = ({}) => {
       });
     });
     setChartData(updatedData);
+  }, []);
+
+  useEffect(() => {
+    updateActiveCategory(
+      activeCategory
+        ? {
+            id: activeCategory.description,
+            label: activeCategory.description,
+            value: activeCategory.duration,
+            color: "",
+          }
+        : undefined
+    );
   }, [activeCategory]);
 
+  const dispatch = useDispatch();
+
   const handleClick = (event: PieDatum) => {
-    updateActiveCategory(event);
+    if (activeId !== event.id) {
+      const category = data.find((e) => e.description === event.id);
+      dispatch(setSelectedCategory(category!));
+    } else {
+      setActiveId("");
+      setFill([]);
+    }
   };
 
-  const updateActiveCategory = (selectedCategory: PieDatum) => {
+  const updateActiveCategory = (selectedCategory: PieDatum | undefined) => {
     if (selectedCategory && activeId !== selectedCategory.id) {
       let fillArray: DefProps[] = [];
 
@@ -86,10 +92,10 @@ export const CategoryPieChart: React.FC<CategoryDataProps> = ({}) => {
         innerRadius={0.5}
         padAngle={0.7}
         cornerRadius={3}
-        colors={{ scheme: "set3" }}
+        colors={{ scheme: "set2" }}
         borderWidth={0}
         borderColor={{ from: "color", modifiers: [["darker", 0.2]] }}
-        radialLabelsSkipAngle={10}
+        radialLabelsSkipAngle={5}
         radialLabelsTextXOffset={6}
         radialLabelsTextColor="#333333"
         radialLabelsLinkOffset={0}
