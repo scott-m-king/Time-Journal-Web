@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ResponsiveCalendar } from "@nivo/calendar";
-import { data } from "./calendarData";
+import { data2 } from "./calendarData2";
 
 interface CategoryCalendarProps {}
 
@@ -8,7 +8,7 @@ export const CategoryCalendar: React.FC<CategoryCalendarProps> = ({}) => {
   return (
     <div style={{ height: 450 }}>
       <ResponsiveCalendar
-        data={data}
+        data={data2()}
         from="2015-03-01"
         to="2016-07-12"
         emptyColor="#eeeeee"
