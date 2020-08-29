@@ -16,13 +16,9 @@ import {
   InputAdornment,
 } from "@material-ui/core";
 import * as yup from "yup";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
-import DateFnsUtils from "@date-io/date-fns";
 import { useGetUserCategoriesQuery } from "../generated/graphql";
 import { JournalEntry } from "../redux/types";
+import { CalendarComponent } from "./CalendarComponent";
 
 interface Category {
   id: number;
@@ -63,10 +59,9 @@ const useStyles = makeStyles((theme: Theme) =>
 export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
   const classes = useStyles();
 
-  const [selectedDate, setSelectedDate] = React.useState<Date>(new Date());
   const [categories, setCategories] = React.useState<Array<Category>>([]);
   const [vals, setVals] = React.useState<JournalEntry>({
-    date: selectedDate,
+    date: new Date(),
     categoryId: 0,
     duration: 0,
     title: "",
@@ -80,7 +75,7 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
       setCategories(data.getUserCategories);
 
       setVals({
-        date: selectedDate,
+        date: new Date(),
         categoryId: data.getUserCategories[0].id,
         duration: 0,
         title: "",
@@ -88,10 +83,6 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
       });
     }
   }, [data]);
-
-  const handleDateChange = (date: Date) => {
-    setSelectedDate(date);
-  };
 
   return (
     <div>
@@ -112,26 +103,9 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
               <Paper className={classes.paper}>
                 <Grid container spacing={3}>
                   <Grid item xs>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                      <Field
-                        disableToolbar
-                        name="date"
-                        fullWidth
-                        inputVariant="outlined"
-                        format="MM/dd/yyyy"
-                        label="Date"
-                        margin="normal"
-                        value={selectedDate}
-                        onChange={handleDateChange}
-                        KeyboardButtonProps={{
-                          "aria-label": "change date",
-                        }}
-                        as={KeyboardDatePicker}
-                      />
-                    </MuiPickersUtilsProvider>
+                    <CalendarComponent name="date" />
                   </Grid>
                 </Grid>
-
                 <Grid container spacing={3}>
                   <Grid item xs>
                     <FormControl variant="outlined" fullWidth>
