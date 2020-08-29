@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Typography from "@material-ui/core/Typography";
 import {
   Grid,
   makeStyles,
   FormControlLabel,
   Switch,
-  Button,
   Theme,
   createStyles,
 } from "@material-ui/core";
@@ -13,9 +12,13 @@ import { CategoryLane } from "../components/Categories/CategoryLane";
 import { CategoryPieChart } from "../components/Categories/CategoryPieChart";
 import { CategoryTable } from "../components/Categories/CategoryTable";
 import { CategoryCalendar } from "../components/Categories/CategoryCalendar";
-// import { useDispatch } from "react-redux";
-// import { setSelectedCategory } from "../redux/actions";
 import { NewCategoryDialog } from "../components/Categories/NewCategoryDialog";
+import { useSelector } from "react-redux";
+import { CategoryState } from "../redux/reducers/categoriesReducer";
+import {
+  useGetAllUserEntriesQuery,
+  useGetUserCategoriesQuery,
+} from "../generated/graphql";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -28,6 +31,18 @@ const useStyles = makeStyles((theme: Theme) =>
 export const CategoryList = () => {
   const classes = useStyles();
   const [checked, setChecked] = React.useState(false);
+  const activeCategory = useSelector<
+    CategoryState,
+    CategoryState["selectedCategory"]
+  >((state) => state.selectedCategory);
+  const {
+    loading: entryLoading,
+    data: entryData,
+  } = useGetAllUserEntriesQuery();
+  const {
+    loading: categoryLoading,
+    data: categoryData,
+  } = useGetUserCategoriesQuery();
 
   const handleChange = () => {
     setChecked((prev) => !prev);
@@ -45,16 +60,30 @@ export const CategoryList = () => {
       </Grid>
       <Grid container spacing={3}>
         <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
-          <CategoryLane />
+          <CategoryLane
+            activeCategory={activeCategory}
+            categoryList={categoryData?.getUserCategories}
+          />
         </Grid>
         <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
           <FormControlLabel
             control={<Switch checked={checked} onChange={handleChange} />}
             label={checked ? "Switch to Pie Chart" : "Switch to Calendar"}
           />
-          {checked ? <CategoryCalendar /> : <CategoryPieChart />}
+          {checked ? (
+            <CategoryCalendar />
+          ) : (
+            <CategoryPieChart
+              activeCategory={activeCategory}
+              categoryList={categoryData?.getUserCategories}
+            />
+          )}
           <br />
-          <CategoryTable />
+          <CategoryTable
+            activeCategory={activeCategory}
+            categories={categoryData?.getUserCategories}
+            entries={entryData?.getAllUserEntries}
+          />
         </Grid>
       </Grid>
     </div>

@@ -6,29 +6,23 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import {
-  useGetUserCategoriesQuery,
-  useGetAllUserEntriesQuery,
-} from "../../generated/graphql";
-import { useSelector } from "react-redux";
-import { CategoryState } from "../../redux/reducers/categoriesReducer";
+import { Category } from "../../redux/types";
+import { JournalEntry } from "../../generated/graphql";
 
-export const CategoryTable = () => {
+interface CategoryTableProps {
+  activeCategory: Category | undefined;
+  categories: Category[] | undefined;
+  entries: JournalEntry[] | undefined;
+}
+
+export const CategoryTable: React.FC<CategoryTableProps> = ({
+  activeCategory,
+  categories,
+  entries,
+}) => {
   const [windowHeight, setWindowHeight] = useState(0);
   const MAX_HEIGHT = windowHeight - 675;
-  const {
-    loading: entryLoading,
-    data: entryData,
-  } = useGetAllUserEntriesQuery();
-  const {
-    loading: categoryLoading,
-    data: categoryData,
-  } = useGetUserCategoriesQuery();
   const [rows, setRows] = useState<Array<any>>([]);
-  const activeCategory = useSelector<
-    CategoryState,
-    CategoryState["selectedCategory"]
-  >((state) => state.selectedCategory);
 
   useEffect(() => {
     window.addEventListener("resize", updateWindowDimensions);
@@ -38,27 +32,26 @@ export const CategoryTable = () => {
 
   useEffect(() => {
     loadData();
-  }, [activeCategory, entryLoading, entryData, categoryLoading, categoryData]);
+  }, [activeCategory, categories, entries]);
 
   const loadData = () => {
-    if (!categoryLoading && categoryData && !entryLoading && entryData) {
+    if (categories && entries) {
       if (activeCategory === undefined) {
         let allRows: any[] = [];
-        entryData.getAllUserEntries.map((entry) => {
+        entries.map((entry) => {
           allRows.push({
             title: entry.title,
             date: entry.date,
             duration: entry.duration,
-            category: categoryData.getUserCategories.find(
-              (elem) => elem.id === entry.categoryId
-            )?.description,
+            category: categories.find((elem) => elem.id === entry.categoryId)
+              ?.description,
           });
         });
         setRows(allRows);
       } else {
         let filteredRows: any[] = [];
 
-        entryData.getAllUserEntries
+        entries
           .filter((entry) => {
             return entry.categoryId === activeCategory.id;
           })

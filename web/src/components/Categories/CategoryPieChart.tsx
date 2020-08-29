@@ -6,7 +6,10 @@ import { setSelectedCategory } from "../../redux/actions";
 import { useGetUserCategoriesQuery } from "../../generated/graphql";
 import { Category } from "../../redux/types";
 
-interface CategoryDataProps {}
+interface CategoryDataProps {
+  activeCategory: Category | undefined;
+  categoryList: Category[] | undefined;
+}
 
 interface DefProps {
   match: {
@@ -15,21 +18,19 @@ interface DefProps {
   id: string;
 }
 
-export const CategoryPieChart: React.FC<CategoryDataProps> = ({}) => {
+export const CategoryPieChart: React.FC<CategoryDataProps> = ({
+  activeCategory,
+  categoryList,
+}) => {
   const [fill, setFill] = useState<Array<DefProps>>([]);
   const [activeId, setActiveId] = useState<string>("");
   const [chartData, setChartData] = useState<Array<PieDatum>>([]);
-  const activeCategory = useSelector<
-    CategoryState,
-    CategoryState["selectedCategory"]
-  >((state) => state.selectedCategory);
-  const { loading, data: categoryData } = useGetUserCategoriesQuery();
   const [categories, setCategories] = useState<Array<Category>>([]);
 
   useEffect(() => {
-    if (!loading && categoryData && categoryData.getUserCategories) {
+    if (categoryList) {
       let updatedData: PieDatum[] = [];
-      categoryData.getUserCategories.forEach((element) => {
+      categoryList.forEach((element) => {
         updatedData.push({
           id: element.description,
           label: element.description,
@@ -37,10 +38,10 @@ export const CategoryPieChart: React.FC<CategoryDataProps> = ({}) => {
           color: "",
         });
       });
-      setCategories(categoryData.getUserCategories);
+      setCategories(categoryList);
       setChartData(updatedData);
     }
-  }, [categoryData, loading]);
+  }, [categoryList]);
 
   useEffect(() => {
     updateActiveCategory(

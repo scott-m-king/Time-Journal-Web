@@ -2,22 +2,24 @@ import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import { CategoryCard } from "./CategoryCard";
 import { Category } from "../../redux/types";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setSelectedCategory } from "../../redux/actions";
-import { CategoryState } from "../../redux/reducers/categoriesReducer";
 import { useGetUserCategoriesQuery } from "../../generated/graphql";
 
-export const CategoryLane = () => {
+interface CategoryLaneProps {
+  activeCategory: Category | undefined;
+  categoryList: Category[] | undefined;
+}
+
+export const CategoryLane: React.FC<CategoryLaneProps> = ({
+  activeCategory,
+  categoryList,
+}) => {
   const [windowHeight, setWindowHeight] = useState(0);
   const MAX_HEIGHT = windowHeight - 165;
-  const activeCategory = useSelector<
-    CategoryState,
-    CategoryState["selectedCategory"]
-  >((state) => state.selectedCategory);
-  const { loading, data: categoryData } = useGetUserCategoriesQuery();
-  const [categories, setCategories] = useState<Array<Category>>([]);
   const [totalDuration, setTotalDuration] = useState(0);
   const [barDuration, setBarDuration] = useState(0);
+  const [categories, setCategories] = useState<Array<Category>>([]);
 
   useEffect(() => {
     window.addEventListener("resize", updateWindowDimensions);
@@ -25,8 +27,8 @@ export const CategoryLane = () => {
   }, []);
 
   useEffect(() => {
-    if (!loading && categoryData && categoryData.getUserCategories) {
-      const arr = categoryData.getUserCategories
+    if (categoryList) {
+      const arr = categoryList
         .slice()
         .sort((a, b) => (a.duration > b.duration ? -1 : 1));
 
@@ -44,7 +46,7 @@ export const CategoryLane = () => {
           .reduce((rsf, currentValue) => Math.max(rsf, currentValue))
       );
     }
-  }, [categoryData, loading]);
+  }, [categoryList]);
 
   const updateWindowDimensions = () => {
     setWindowHeight(window.innerHeight);

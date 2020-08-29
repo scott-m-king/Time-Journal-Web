@@ -9,8 +9,8 @@ export const CategoryCalendar: React.FC<CategoryCalendarProps> = ({}) => {
     <div style={{ height: 450 }}>
       <ResponsiveCalendar
         data={data2()}
-        from="2015-03-01"
-        to="2016-07-12"
+        from="2019-02-01"
+        to="2020-12-31"
         emptyColor="#eeeeee"
         colors={["#61cdbb", "#97e3d5", "#e8c1a0", "#f47560"]}
         margin={{ top: 40, right: 40, bottom: 40, left: 40 }}
