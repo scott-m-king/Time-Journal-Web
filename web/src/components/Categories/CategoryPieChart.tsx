@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { ResponsivePie, PieDatum } from "@nivo/pie";
-import { useSelector, useDispatch } from "react-redux";
-import { CategoryState } from "../../redux/reducers/categoriesReducer";
-import { setSelectedCategory } from "../../redux/actions";
-import { useGetUserCategoriesQuery } from "../../generated/graphql";
 import { Category } from "../../redux/types";
 
 interface CategoryDataProps {
   activeCategory: Category | undefined;
   categoryList: Category[] | undefined;
+  setActiveCategory(category: Category): void;
 }
 
 interface DefProps {
@@ -21,9 +18,9 @@ interface DefProps {
 export const CategoryPieChart: React.FC<CategoryDataProps> = ({
   activeCategory,
   categoryList,
+  setActiveCategory,
 }) => {
   const [fill, setFill] = useState<Array<DefProps>>([]);
-  const [activeId, setActiveId] = useState<string>("");
   const [chartData, setChartData] = useState<Array<PieDatum>>([]);
   const [categories, setCategories] = useState<Array<Category>>([]);
 
@@ -54,23 +51,15 @@ export const CategoryPieChart: React.FC<CategoryDataProps> = ({
           }
         : undefined
     );
-  }, [activeCategory]);
-
-  const dispatch = useDispatch();
+  }, [activeCategory, chartData]);
 
   const handleClick = (event: PieDatum) => {
-    if (activeId !== event.id) {
-      const category = categories.find((e) => e.description === event.id);
-      dispatch(setSelectedCategory(category));
-    } else {
-      dispatch(setSelectedCategory(undefined));
-      setActiveId("");
-      setFill([]);
-    }
+    const category = categories.find((e) => e.description === event.id);
+    setActiveCategory(category!);
   };
 
   const updateActiveCategory = (selectedCategory: PieDatum | undefined) => {
-    if (selectedCategory && activeId !== selectedCategory.id) {
+    if (selectedCategory) {
       let fillArray: DefProps[] = [];
 
       chartData.forEach((element) => {
@@ -83,11 +72,8 @@ export const CategoryPieChart: React.FC<CategoryDataProps> = ({
           });
         }
       });
-
-      setActiveId(selectedCategory.id.toString());
       setFill(fillArray);
     } else {
-      setActiveId("");
       setFill([]);
     }
   };

@@ -17,6 +17,8 @@ import {
 import { Link } from "react-router-dom";
 import { Chip } from "@material-ui/core";
 import { Category } from "../redux/types";
+import { setSelectedCategory } from "../redux/actions";
+import { useDispatch } from "react-redux";
 
 export const EntryTable2 = () => {
   const [entries, setEntries] = useState<Array<Array<string>>>([]);
@@ -30,6 +32,7 @@ export const EntryTable2 = () => {
     data: categoryData,
   } = useGetUserCategoriesQuery();
   const [deleteEntry] = useDeleteEntryMutation();
+  const dispatch = useDispatch();
 
   const columns = [
     {
@@ -56,7 +59,8 @@ export const EntryTable2 = () => {
         filter: true,
         customBodyRender: (value: string, tableMeta: any, updateValue: any) => {
           const handleClick = () => {
-            console.log(value);
+            const cat = categories.find((cat) => cat.id === parseInt(value));
+            dispatch(setSelectedCategory(cat));
           };
           return (
             <Link to="/ok/category_list" style={{ textDecoration: "none" }}>

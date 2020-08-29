@@ -2,18 +2,17 @@ import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import { CategoryCard } from "./CategoryCard";
 import { Category } from "../../redux/types";
-import { useDispatch } from "react-redux";
-import { setSelectedCategory } from "../../redux/actions";
-import { useGetUserCategoriesQuery } from "../../generated/graphql";
 
 interface CategoryLaneProps {
   activeCategory: Category | undefined;
   categoryList: Category[] | undefined;
+  setActiveCategory(category: Category): void;
 }
 
 export const CategoryLane: React.FC<CategoryLaneProps> = ({
   activeCategory,
   categoryList,
+  setActiveCategory,
 }) => {
   const [windowHeight, setWindowHeight] = useState(0);
   const MAX_HEIGHT = windowHeight - 165;
@@ -52,19 +51,6 @@ export const CategoryLane: React.FC<CategoryLaneProps> = ({
     setWindowHeight(window.innerHeight);
   };
 
-  const dispatch = useDispatch();
-
-  const onSelectCategory = (category: Category) => {
-    if (
-      (activeCategory && category.description !== activeCategory.description) ||
-      !activeCategory
-    ) {
-      dispatch(setSelectedCategory(category));
-    } else {
-      dispatch(setSelectedCategory(undefined));
-    }
-  };
-
   return (
     <Grid
       container
@@ -80,7 +66,7 @@ export const CategoryLane: React.FC<CategoryLaneProps> = ({
               duration={element.duration}
               totalDuration={totalDuration}
               barDuration={barDuration}
-              setActiveCategory={onSelectCategory}
+              setActiveCategory={setActiveCategory}
               activeCategory={activeCategory}
             />
           </Grid>

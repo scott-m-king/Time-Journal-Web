@@ -13,12 +13,14 @@ import { CategoryPieChart } from "../components/Categories/CategoryPieChart";
 import { CategoryTable } from "../components/Categories/CategoryTable";
 import { CategoryCalendar } from "../components/Categories/CategoryCalendar";
 import { NewCategoryDialog } from "../components/Categories/NewCategoryDialog";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { CategoryState } from "../redux/reducers/categoriesReducer";
 import {
   useGetAllUserEntriesQuery,
   useGetUserCategoriesQuery,
+  Category,
 } from "../generated/graphql";
+import { setSelectedCategory } from "../redux/actions";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -48,6 +50,19 @@ export const CategoryList = () => {
     setChecked((prev) => !prev);
   };
 
+  const dispatch = useDispatch();
+
+  const onSelectCategory = (category: Category) => {
+    if (
+      (activeCategory && category.description !== activeCategory.description) ||
+      !activeCategory
+    ) {
+      dispatch(setSelectedCategory(category));
+    } else {
+      dispatch(setSelectedCategory(undefined));
+    }
+  };
+
   return (
     <div className={classes.root}>
       <Grid container spacing={3}>
@@ -63,6 +78,7 @@ export const CategoryList = () => {
           <CategoryLane
             activeCategory={activeCategory}
             categoryList={categoryData?.getUserCategories}
+            setActiveCategory={onSelectCategory}
           />
         </Grid>
         <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
@@ -76,6 +92,7 @@ export const CategoryList = () => {
             <CategoryPieChart
               activeCategory={activeCategory}
               categoryList={categoryData?.getUserCategories}
+              setActiveCategory={onSelectCategory}
             />
           )}
           <br />
