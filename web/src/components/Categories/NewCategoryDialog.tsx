@@ -8,6 +8,11 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import { makeStyles, Theme, createStyles } from "@material-ui/core";
+import {
+  useCreateCategoryMutation,
+  GetUserCategoriesQuery,
+  GetUserCategoriesDocument,
+} from "../../generated/graphql";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -23,6 +28,8 @@ const useStyles = makeStyles((theme: Theme) =>
 export const NewCategoryDialog = () => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+  const [description, setDescription] = React.useState("");
+  const [createCategory] = useCreateCategoryMutation();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -30,6 +37,35 @@ export const NewCategoryDialog = () => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleSubmit = async () => {
+    if (description === "") {
+      alert("You must enter a name for your category");
+      return;
+    }
+
+    try {
+      await createCategory({
+        variables: {
+          description: description,
+        },
+        update: (store, { data }) => {
+          if (!data) {
+            return null;
+          }
+          store.writeQuery<GetUserCategoriesQuery>({
+            query: GetUserCategoriesDocument,
+            data: {
+              getUserCategories: data.createCategory,
+            },
+          });
+        },
+      });
+    } catch (err) {
+      alert(err);
+    }
+    handleClose();
   };
 
   return (
@@ -51,8 +87,8 @@ export const NewCategoryDialog = () => {
         <DialogTitle id="form-dialog-title">Create New Category</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To create a new category, enter the title below. This category will be 
-            initialized with 0 minutes and no entries.
+            To create a new category, enter the title below. This category will
+            be initialized with 0 minutes and no entries.
           </DialogContentText>
           <TextField
             autoFocus
@@ -60,6 +96,7 @@ export const NewCategoryDialog = () => {
             id="description"
             label="Category Title"
             type="input"
+            onChange={(e) => setDescription(e.target.value)}
             fullWidth
           />
         </DialogContent>
@@ -67,11 +104,11 @@ export const NewCategoryDialog = () => {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleSubmit} color="primary">
             Add
           </Button>
         </DialogActions>
       </Dialog>
     </div>
   );
-}
+};

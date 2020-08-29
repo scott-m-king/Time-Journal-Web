@@ -53,7 +53,6 @@ export type Category = {
   id: Scalars['Int'];
   description: Scalars['String'];
   duration: Scalars['Int'];
-  userId: Scalars['Int'];
   entries?: Maybe<Array<JournalEntry>>;
 };
 
@@ -73,7 +72,7 @@ export type Mutation = {
   logout: Scalars['Boolean'];
   registerUser: User;
   deleteAllUsers: Scalars['Boolean'];
-  createCategory: Scalars['Boolean'];
+  createCategory: Array<Category>;
   deleteCategory: Scalars['Boolean'];
   createEntry: CreateEntryResponse;
   deleteEntry: Scalars['String'];
@@ -96,7 +95,6 @@ export type MutationRegisterUserArgs = {
 
 export type MutationCreateCategoryArgs = {
   description: Scalars['String'];
-  userId: Scalars['Int'];
 };
 
 
@@ -138,7 +136,20 @@ export type GetUserCategoriesQuery = (
   { __typename?: 'Query' }
   & { getUserCategories: Array<(
     { __typename?: 'Category' }
-    & Pick<Category, 'id' | 'userId' | 'description' | 'duration'>
+    & Pick<Category, 'id' | 'description' | 'duration'>
+  )> }
+);
+
+export type CreateCategoryMutationVariables = Exact<{
+  description: Scalars['String'];
+}>;
+
+
+export type CreateCategoryMutation = (
+  { __typename?: 'Mutation' }
+  & { createCategory: Array<(
+    { __typename?: 'Category' }
+    & Pick<Category, 'id' | 'description' | 'duration'>
   )> }
 );
 
@@ -160,7 +171,7 @@ export type CreateEntryMutation = (
       & Pick<JournalEntry, 'id' | 'title' | 'notes' | 'duration' | 'date' | 'categoryId'>
     )>, categories: Array<(
       { __typename?: 'Category' }
-      & Pick<Category, 'id' | 'description' | 'duration' | 'userId'>
+      & Pick<Category, 'id' | 'description' | 'duration'>
     )> }
   ) }
 );
@@ -245,7 +256,6 @@ export const GetUserCategoriesDocument = gql`
     query getUserCategories {
   getUserCategories {
     id
-    userId
     description
     duration
   }
@@ -276,6 +286,40 @@ export function useGetUserCategoriesLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type GetUserCategoriesQueryHookResult = ReturnType<typeof useGetUserCategoriesQuery>;
 export type GetUserCategoriesLazyQueryHookResult = ReturnType<typeof useGetUserCategoriesLazyQuery>;
 export type GetUserCategoriesQueryResult = Apollo.QueryResult<GetUserCategoriesQuery, GetUserCategoriesQueryVariables>;
+export const CreateCategoryDocument = gql`
+    mutation createCategory($description: String!) {
+  createCategory(description: $description) {
+    id
+    description
+    duration
+  }
+}
+    `;
+export type CreateCategoryMutationFn = Apollo.MutationFunction<CreateCategoryMutation, CreateCategoryMutationVariables>;
+
+/**
+ * __useCreateCategoryMutation__
+ *
+ * To run a mutation, you first call `useCreateCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCategoryMutation, { data, loading, error }] = useCreateCategoryMutation({
+ *   variables: {
+ *      description: // value for 'description'
+ *   },
+ * });
+ */
+export function useCreateCategoryMutation(baseOptions?: Apollo.MutationHookOptions<CreateCategoryMutation, CreateCategoryMutationVariables>) {
+        return Apollo.useMutation<CreateCategoryMutation, CreateCategoryMutationVariables>(CreateCategoryDocument, baseOptions);
+      }
+export type CreateCategoryMutationHookResult = ReturnType<typeof useCreateCategoryMutation>;
+export type CreateCategoryMutationResult = Apollo.MutationResult<CreateCategoryMutation>;
+export type CreateCategoryMutationOptions = Apollo.BaseMutationOptions<CreateCategoryMutation, CreateCategoryMutationVariables>;
 export const CreateEntryDocument = gql`
     mutation createEntry($categoryId: Int!, $title: String!, $notes: String, $duration: Int!, $date: String) {
   createEntry(categoryId: $categoryId, title: $title, notes: $notes, duration: $duration, date: $date) {
@@ -291,7 +335,6 @@ export const CreateEntryDocument = gql`
       id
       description
       duration
-      userId
     }
   }
 }

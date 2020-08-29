@@ -26,7 +26,6 @@ export class Category extends BaseEntity {
   @Column("int", { default: 0 })
   duration: number;
 
-  @Field(() => Int)
   @Column()
   userId: number;
   @ManyToOne(() => User, (user) => user.categories)

@@ -80,13 +80,14 @@ const headCells: HeadCell[] = [
     disablePadding: true,
     label: "Title",
   },
+
+  { id: "date", numeric: false, disablePadding: false, label: "Date" },
   {
     id: "duration",
     numeric: true,
     disablePadding: false,
     label: "Duration (mins)",
   },
-  { id: "date", numeric: false, disablePadding: false, label: "Date" },
   { id: "categoryId", numeric: true, disablePadding: false, label: "Category" },
   {
     id: "notes",
@@ -407,8 +408,8 @@ export const EntryTable = () => {
                       >
                         {entry.title}
                       </TableCell>
-                      <TableCell align="right">{entry.duration}</TableCell>
                       <TableCell align="right">{entry.date}</TableCell>
+                      <TableCell align="right">{entry.duration}</TableCell>
                       <TableCell align="right">{entry.categoryId}</TableCell>
                       <TableCell align="right">{entry.notes}</TableCell>
                     </TableRow>

@@ -1,7 +1,6 @@
 query getUserCategories {
   getUserCategories {
     id
-    userId
     description
     duration
   }

@@ -29,7 +29,6 @@ import { JournalEntry } from "../redux/types";
 
 interface Category {
   id: number;
-  userId: number;
   description: string;
   duration: number;
 }
@@ -90,28 +89,8 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
         notes: "",
       });
     }
-    console.log(data?.getUserCategories)
+    console.log(data?.getUserCategories);
   }, [data]);
-
-  // const [getCategories, { loading, data }] = useGetUserCategoriesLazyQuery();
-
-  // React.useEffect(() => {
-  //   reloadCategories();
-  // }, [data]);
-
-  // const reloadCategories = () => {
-  //   getCategories();
-  //   if (!loading && data && data.getUserCategories) {
-  //     setCategories(data.getUserCategories);
-  //     setVals({
-  //       date: selectedDate,
-  //       categoryId: data.getUserCategories[0].id,
-  //       duration: 0,
-  //       title: "",
-  //       notes: "",
-  //     });
-  //   }
-  // };
 
   const handleDateChange = (date: Date) => {
     setSelectedDate(date);
@@ -127,7 +106,6 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
           setSubmitting(true);
           onSubmit(data);
           setSubmitting(false);
-          // reloadCategories();
           resetForm();
         }}
       >

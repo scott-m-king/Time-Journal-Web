@@ -24,7 +24,6 @@ mutation createEntry(
       id
       description
       duration
-      userId
     }
   }
 }

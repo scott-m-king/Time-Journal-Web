@@ -1,0 +1,7 @@
+mutation createCategory($description: String!) {
+  createCategory(description: $description) {
+    id
+    description
+    duration
+  }
+}

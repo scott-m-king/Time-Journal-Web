@@ -10,7 +10,7 @@ export class CategoryResolver {
   async getUserCategories(@Ctx() context: MyContext) {
     try {
       const user = await getUserInfo(context);
-      const categories = await Category.find({where: { userId: user?.id }});
+      const categories = await Category.find({ where: { userId: user!.id } });
       return categories;
     } catch (err) {
       console.log(err);
@@ -24,20 +24,23 @@ export class CategoryResolver {
     return category;
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => [Category])
   async createCategory(
-    @Arg("userId", () => Int) userId: number,
+    @Ctx() context: MyContext,
     @Arg("description", () => String) description: string
-  ) {
+  ): Promise<Array<Category>> {
     try {
+      const user = await getUserInfo(context);
       await Category.create({
         description: description,
-        userId: userId,
+        userId: user!.id,
       }).save();
+
+      const categories = await Category.find({ where: { userId: user!.id } });
+      return categories;
     } catch (err) {
-      return false;
+      throw new Error(err);
     }
-    return true;
   }
 
   @Mutation(() => Boolean)
