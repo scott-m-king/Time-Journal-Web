@@ -74,8 +74,8 @@ export type Mutation = {
   deleteAllUsers: Scalars['Boolean'];
   createCategory: Array<Category>;
   deleteCategory: Scalars['Boolean'];
-  createEntry: CreateEntryResponse;
-  deleteEntry: Scalars['String'];
+  createEntry: JournalEntryResponse;
+  deleteEntry: JournalEntryResponse;
 };
 
 
@@ -123,8 +123,8 @@ export type LoginResponse = {
   user: User;
 };
 
-export type CreateEntryResponse = {
-  __typename?: 'CreateEntryResponse';
+export type JournalEntryResponse = {
+  __typename?: 'JournalEntryResponse';
   entries: Array<JournalEntry>;
   categories: Array<Category>;
 };
@@ -165,7 +165,26 @@ export type CreateEntryMutationVariables = Exact<{
 export type CreateEntryMutation = (
   { __typename?: 'Mutation' }
   & { createEntry: (
-    { __typename?: 'CreateEntryResponse' }
+    { __typename?: 'JournalEntryResponse' }
+    & { entries: Array<(
+      { __typename?: 'JournalEntry' }
+      & Pick<JournalEntry, 'id' | 'title' | 'notes' | 'duration' | 'date' | 'categoryId'>
+    )>, categories: Array<(
+      { __typename?: 'Category' }
+      & Pick<Category, 'id' | 'description' | 'duration'>
+    )> }
+  ) }
+);
+
+export type DeleteEntryMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteEntryMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteEntry: (
+    { __typename?: 'JournalEntryResponse' }
     & { entries: Array<(
       { __typename?: 'JournalEntry' }
       & Pick<JournalEntry, 'id' | 'title' | 'notes' | 'duration' | 'date' | 'categoryId'>
@@ -368,6 +387,50 @@ export function useCreateEntryMutation(baseOptions?: Apollo.MutationHookOptions<
 export type CreateEntryMutationHookResult = ReturnType<typeof useCreateEntryMutation>;
 export type CreateEntryMutationResult = Apollo.MutationResult<CreateEntryMutation>;
 export type CreateEntryMutationOptions = Apollo.BaseMutationOptions<CreateEntryMutation, CreateEntryMutationVariables>;
+export const DeleteEntryDocument = gql`
+    mutation deleteEntry($id: Int!) {
+  deleteEntry(id: $id) {
+    entries {
+      id
+      title
+      notes
+      duration
+      date
+      categoryId
+    }
+    categories {
+      id
+      description
+      duration
+    }
+  }
+}
+    `;
+export type DeleteEntryMutationFn = Apollo.MutationFunction<DeleteEntryMutation, DeleteEntryMutationVariables>;
+
+/**
+ * __useDeleteEntryMutation__
+ *
+ * To run a mutation, you first call `useDeleteEntryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteEntryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteEntryMutation, { data, loading, error }] = useDeleteEntryMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteEntryMutation(baseOptions?: Apollo.MutationHookOptions<DeleteEntryMutation, DeleteEntryMutationVariables>) {
+        return Apollo.useMutation<DeleteEntryMutation, DeleteEntryMutationVariables>(DeleteEntryDocument, baseOptions);
+      }
+export type DeleteEntryMutationHookResult = ReturnType<typeof useDeleteEntryMutation>;
+export type DeleteEntryMutationResult = Apollo.MutationResult<DeleteEntryMutation>;
+export type DeleteEntryMutationOptions = Apollo.BaseMutationOptions<DeleteEntryMutation, DeleteEntryMutationVariables>;
 export const GetAllUserEntriesDocument = gql`
     query getAllUserEntries {
   getAllUserEntries {

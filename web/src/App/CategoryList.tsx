@@ -13,10 +13,9 @@ import { CategoryLane } from "../components/Categories/CategoryLane";
 import { CategoryPieChart } from "../components/Categories/CategoryPieChart";
 import { CategoryTable } from "../components/Categories/CategoryTable";
 import { CategoryCalendar } from "../components/Categories/CategoryCalendar";
-import { useDispatch } from "react-redux";
-import { setSelectedCategory } from "../redux/actions";
+// import { useDispatch } from "react-redux";
+// import { setSelectedCategory } from "../redux/actions";
 import { NewCategoryDialog } from "../components/Categories/NewCategoryDialog";
-import { CategoryLineChart } from "../components/Categories/CategoryLineChart";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -34,10 +33,11 @@ export const CategoryList = () => {
     setChecked((prev) => !prev);
   };
 
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(setSelectedCategory(undefined));
-  }, []);
+  // const dispatch = useDispatch();
+
+  // useEffect(() => {
+  //   dispatch(setSelectedCategory(undefined));
+  // }, []);
 
   return (
     <div className={classes.root}>

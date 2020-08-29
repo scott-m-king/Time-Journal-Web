@@ -12,6 +12,7 @@ import {
   GetAllUserEntriesDocument,
 } from "../generated/graphql";
 import { JournalEntry } from "../redux/types";
+import { EntryTable2 } from "../components/EntryTable2";
 
 const Root = styled.div`
   padding-top: 20px;
@@ -79,7 +80,7 @@ export const CreateEntry = () => {
         </Grid>
         <Grid item xs sm={12} md={12} lg={9} xl={9}>
           <Root>
-            <EntryTable />
+            <EntryTable2 />
           </Root>
         </Grid>
       </Grid>

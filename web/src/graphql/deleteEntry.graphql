@@ -1,0 +1,17 @@
+mutation deleteEntry($id: Int!) {
+  deleteEntry(id: $id) {
+    entries {
+      id
+      title
+      notes
+      duration
+      date
+      categoryId
+    }
+    categories {
+      id
+      description
+      duration
+    }
+  }
+}

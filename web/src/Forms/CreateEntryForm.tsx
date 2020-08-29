@@ -23,7 +23,6 @@ import {
 import DateFnsUtils from "@date-io/date-fns";
 import {
   useGetUserCategoriesQuery,
-  useGetUserCategoriesLazyQuery,
 } from "../generated/graphql";
 import { JournalEntry } from "../redux/types";
 
@@ -81,6 +80,7 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
   React.useEffect(() => {
     if (!loading && data && data.getUserCategories) {
       setCategories(data.getUserCategories);
+
       setVals({
         date: selectedDate,
         categoryId: data.getUserCategories[0].id,
@@ -89,7 +89,6 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
         notes: "",
       });
     }
-    console.log(data?.getUserCategories);
   }, [data]);
 
   const handleDateChange = (date: Date) => {

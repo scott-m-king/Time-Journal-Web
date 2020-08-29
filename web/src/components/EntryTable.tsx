@@ -81,7 +81,7 @@ const headCells: HeadCell[] = [
     label: "Title",
   },
 
-  { id: "date", numeric: false, disablePadding: false, label: "Date" },
+  { id: "date", numeric: false, disablePadding: true, label: "Date" },
   {
     id: "duration",
     numeric: true,
@@ -405,13 +405,22 @@ export const EntryTable = () => {
                         id={labelId}
                         scope="entry"
                         padding="none"
+                        style={{ minWidth: 175 }}
                       >
                         {entry.title}
                       </TableCell>
-                      <TableCell align="right">{entry.date}</TableCell>
+                      <TableCell
+                        align="left"
+                        padding="none"
+                        style={{ maxWidth: 100 }}
+                      >
+                        {entry.date}
+                      </TableCell>
                       <TableCell align="right">{entry.duration}</TableCell>
                       <TableCell align="right">{entry.categoryId}</TableCell>
-                      <TableCell align="right">{entry.notes}</TableCell>
+                      <TableCell align="left" style={{ maxWidth: 325 }}>
+                        {entry.notes}
+                      </TableCell>
                     </TableRow>
                   );
                 })}

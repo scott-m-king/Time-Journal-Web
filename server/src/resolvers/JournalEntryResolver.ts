@@ -14,7 +14,7 @@ import { MyContext } from "../MyContext";
 import { getUserInfo } from "../auth";
 
 @ObjectType()
-class CreateEntryResponse {
+class JournalEntryResponse {
   @Field(() => [JournalEntry])
   entries: JournalEntry[];
   @Field(() => [Category])
@@ -52,7 +52,7 @@ export class JournalEntryResolver {
   }
 
   // need to return list of categories here to reload entry form properly
-  @Mutation(() => CreateEntryResponse)
+  @Mutation(() => JournalEntryResponse)
   async createEntry(
     @Ctx() context: MyContext,
     @Arg("categoryId", () => Int) categoryId: number,
@@ -100,20 +100,35 @@ export class JournalEntryResolver {
     }
   }
 
-  @Mutation(() => String)
-  async deleteEntry(@Arg("id", () => Int) id: number) {
+  @Mutation(() => JournalEntryResponse)
+  async deleteEntry(
+    @Arg("id", () => Int) id: number,
+    @Ctx() context: MyContext
+  ): Promise<JournalEntryResponse> {
     try {
-      const toDelete = await JournalEntry.findOne({ id: id });
+      const user = await getUserInfo(context);
+
+      const toDelete = await JournalEntry.findOne({
+        where: { userId: user!.id, id: id },
+      });
+
       const category = await Category.findOne({ id: toDelete?.categoryId });
       await Category.update(
         { id: category!.id },
         { duration: category!.duration - toDelete!.duration }
       );
+
       await JournalEntry.delete({ id: id });
-      return `Journal entry successfully deleted`;
+
+      const entries = await JournalEntry.find({ userId: user!.id });
+      const categories = await Category.find({ userId: user!.id });
+
+      return {
+        entries: entries,
+        categories: categories,
+      };
     } catch (err) {
-      console.log(err);
-      return `Unable to delete journal entry`;
+      throw new Error(err);
     }
   }
 }
