@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { ResponsivePie, PieDatum } from "@nivo/pie";
-import { data } from "./piechartData";
 import { useSelector, useDispatch } from "react-redux";
 import { CategoryState } from "../../redux/reducers/categoriesReducer";
 import { setSelectedCategory } from "../../redux/actions";
+import { useGetUserCategoriesQuery } from "../../generated/graphql";
+import { Category } from "../../redux/types";
 
 interface CategoryDataProps {}
 
@@ -22,19 +23,24 @@ export const CategoryPieChart: React.FC<CategoryDataProps> = ({}) => {
     CategoryState,
     CategoryState["selectedCategory"]
   >((state) => state.selectedCategory);
+  const { loading, data: categoryData } = useGetUserCategoriesQuery();
+  const [categories, setCategories] = useState<Array<Category>>([]);
 
   useEffect(() => {
-    let updatedData: PieDatum[] = [];
-    data.forEach((element) => {
-      updatedData.push({
-        id: element.description,
-        label: element.description,
-        value: element.duration,
-        color: "",
+    if (!loading && categoryData && categoryData.getUserCategories) {
+      let updatedData: PieDatum[] = [];
+      categoryData.getUserCategories.forEach((element) => {
+        updatedData.push({
+          id: element.description,
+          label: element.description,
+          value: element.duration,
+          color: "",
+        });
       });
-    });
-    setChartData(updatedData);
-  }, []);
+      setCategories(categoryData.getUserCategories);
+      setChartData(updatedData);
+    }
+  }, [categoryData, loading]);
 
   useEffect(() => {
     updateActiveCategory(
@@ -53,7 +59,7 @@ export const CategoryPieChart: React.FC<CategoryDataProps> = ({}) => {
 
   const handleClick = (event: PieDatum) => {
     if (activeId !== event.id) {
-      const category = data.find((e) => e.description === event.id);
+      const category = categories.find((e) => e.description === event.id);
       dispatch(setSelectedCategory(category));
     } else {
       dispatch(setSelectedCategory(undefined));

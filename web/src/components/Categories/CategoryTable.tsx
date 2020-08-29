@@ -6,33 +6,74 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number
-) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
+import {
+  useGetUserCategoriesQuery,
+  useGetAllUserEntriesQuery,
+} from "../../generated/graphql";
+import { useSelector } from "react-redux";
+import { CategoryState } from "../../redux/reducers/categoriesReducer";
 
 export const CategoryTable = () => {
   const [windowHeight, setWindowHeight] = useState(0);
   const MAX_HEIGHT = windowHeight - 675;
+  const {
+    loading: entryLoading,
+    data: entryData,
+  } = useGetAllUserEntriesQuery();
+  const {
+    loading: categoryLoading,
+    data: categoryData,
+  } = useGetUserCategoriesQuery();
+  const [rows, setRows] = useState<Array<any>>([]);
+  const activeCategory = useSelector<
+    CategoryState,
+    CategoryState["selectedCategory"]
+  >((state) => state.selectedCategory);
 
   useEffect(() => {
     window.addEventListener("resize", updateWindowDimensions);
     updateWindowDimensions();
+    loadData();
   }, []);
+
+  useEffect(() => {
+    loadData();
+  }, [activeCategory, entryLoading, entryData, categoryLoading, categoryData]);
+
+  const loadData = () => {
+    if (!categoryLoading && categoryData && !entryLoading && entryData) {
+      if (activeCategory === undefined) {
+        let allRows: any[] = [];
+        entryData.getAllUserEntries.map((entry) => {
+          allRows.push({
+            title: entry.title,
+            date: entry.date,
+            duration: entry.duration,
+            category: categoryData.getUserCategories.find(
+              (elem) => elem.id === entry.categoryId
+            )?.description,
+          });
+        });
+        setRows(allRows);
+      } else {
+        let filteredRows: any[] = [];
+
+        entryData.getAllUserEntries
+          .filter((entry) => {
+            return entry.categoryId === activeCategory.id;
+          })
+          .map((filteredEntry) => {
+            filteredRows.push({
+              title: filteredEntry.title,
+              date: filteredEntry.date,
+              duration: filteredEntry.duration,
+              category: activeCategory.description,
+            });
+          });
+        setRows(filteredRows);
+      }
+    }
+  };
 
   const updateWindowDimensions = () => {
     setWindowHeight(window.innerHeight);
@@ -40,30 +81,25 @@ export const CategoryTable = () => {
 
   return (
     <div>
-      <TableContainer
-        component={Paper}
-        style={{ maxHeight: MAX_HEIGHT }}
-      >
+      <TableContainer component={Paper} style={{ maxHeight: MAX_HEIGHT }}>
         <Table stickyHeader aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Dessert (100g serving)</TableCell>
-              <TableCell align="right">Calories</TableCell>
-              <TableCell align="right">Fat&nbsp;(g)</TableCell>
-              <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-              <TableCell align="right">Protein&nbsp;(g)</TableCell>
+              <TableCell>Title</TableCell>
+              <TableCell align="right">Date</TableCell>
+              <TableCell align="right">Duration</TableCell>
+              <TableCell align="right">Category</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {rows.map((row) => (
-              <TableRow key={row.name}>
+              <TableRow key={row.title}>
                 <TableCell component="th" scope="row">
-                  {row.name}
+                  {row.title}
                 </TableCell>
-                <TableCell align="right">{row.calories}</TableCell>
-                <TableCell align="right">{row.fat}</TableCell>
-                <TableCell align="right">{row.carbs}</TableCell>
-                <TableCell align="right">{row.protein}</TableCell>
+                <TableCell align="right">{row.date}</TableCell>
+                <TableCell align="right">{row.duration}</TableCell>
+                <TableCell align="right">{row.category}</TableCell>
               </TableRow>
             ))}
           </TableBody>

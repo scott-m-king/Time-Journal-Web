@@ -4,8 +4,8 @@ import { CategoryCard } from "./CategoryCard";
 import { Category } from "../../redux/types";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedCategory } from "../../redux/actions";
-import { data } from "./piechartData";
 import { CategoryState } from "../../redux/reducers/categoriesReducer";
+import { useGetUserCategoriesQuery } from "../../generated/graphql";
 
 export const CategoryLane = () => {
   const [windowHeight, setWindowHeight] = useState(0);
@@ -14,20 +14,37 @@ export const CategoryLane = () => {
     CategoryState,
     CategoryState["selectedCategory"]
   >((state) => state.selectedCategory);
-
-  const totalDuration = data
-    .map((e) => e.duration)
-    .reduce((rsf, currentValue) => rsf + currentValue);
-
-  const barDuration = data
-    .map((e) => e.duration)
-    .reduce((rsf, currentValue) => Math.max(rsf, currentValue));
+  const { loading, data: categoryData } = useGetUserCategoriesQuery();
+  const [categories, setCategories] = useState<Array<Category>>([]);
+  const [totalDuration, setTotalDuration] = useState(0);
+  const [barDuration, setBarDuration] = useState(0);
 
   useEffect(() => {
     window.addEventListener("resize", updateWindowDimensions);
     updateWindowDimensions();
-    data.sort((a, b) => (a.duration > b.duration ? -1 : 1));
   }, []);
+
+  useEffect(() => {
+    if (!loading && categoryData && categoryData.getUserCategories) {
+      const arr = categoryData.getUserCategories
+        .slice()
+        .sort((a, b) => (a.duration > b.duration ? -1 : 1));
+
+      setCategories(arr);
+
+      setTotalDuration(
+        arr
+          .map((e) => e.duration)
+          .reduce((rsf, currentValue) => rsf + currentValue)
+      );
+
+      setBarDuration(
+        arr
+          .map((e) => e.duration)
+          .reduce((rsf, currentValue) => Math.max(rsf, currentValue))
+      );
+    }
+  }, [categoryData, loading]);
 
   const updateWindowDimensions = () => {
     setWindowHeight(window.innerHeight);
@@ -52,7 +69,7 @@ export const CategoryLane = () => {
       spacing={1}
       style={{ maxHeight: MAX_HEIGHT, overflow: "auto" }}
     >
-      {data.map((element) => {
+      {categories.map((element) => {
         return (
           <Grid item xs={12} key={element.id}>
             <CategoryCard

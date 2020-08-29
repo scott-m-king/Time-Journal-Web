@@ -33,12 +33,6 @@ export const CategoryList = () => {
     setChecked((prev) => !prev);
   };
 
-  // const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   dispatch(setSelectedCategory(undefined));
-  // }, []);
-
   return (
     <div className={classes.root}>
       <Grid container spacing={3}>
