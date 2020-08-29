@@ -1,7 +1,7 @@
 import React from "react";
 import Typography from "@material-ui/core/Typography";
 import { CreateEntryForm } from "../Forms/CreateEntryForm";
-import { EntryTable } from "../components/EntryTable";
+import { EntryTable } from "../old/EntryTable";
 import { Grid, makeStyles, Theme, createStyles } from "@material-ui/core";
 import styled from "styled-components";
 import {
@@ -12,7 +12,7 @@ import {
   GetAllUserEntriesDocument,
 } from "../generated/graphql";
 import { JournalEntry } from "../redux/types";
-import { EntryTable2 } from "../components/EntryTable2";
+import { EntryTable2 } from "../components/EntryTable";
 
 const Root = styled.div`
   padding-top: 20px;
