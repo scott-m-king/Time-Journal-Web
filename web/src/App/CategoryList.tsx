@@ -87,7 +87,10 @@ export const CategoryList = () => {
             label={checked ? "Switch to Pie Chart" : "Switch to Calendar"}
           />
           {checked ? (
-            <CategoryCalendar />
+            <CategoryCalendar
+              activeCategory={activeCategory}
+              entries={entryData?.getAllUserEntries}
+            />
           ) : (
             <CategoryPieChart
               activeCategory={activeCategory}
