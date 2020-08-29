@@ -21,9 +21,7 @@ import {
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import {
-  useGetUserCategoriesQuery,
-} from "../generated/graphql";
+import { useGetUserCategoriesQuery } from "../generated/graphql";
 import { JournalEntry } from "../redux/types";
 
 interface Category {
