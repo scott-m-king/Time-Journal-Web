@@ -18,28 +18,37 @@ export const CategoryCalendar: React.FC<CategoryCalendarProps> = ({
     let result: any[] = [];
 
     if (activeCategory !== undefined && entries) {
-      let arr = entries.filter(
+      let filteredEntries = entries.filter(
         (entry) => entry.categoryId === activeCategory.id
       );
 
-      for (let i = 0; i < arr.length; i++) {
-        console.log(data);
-        result.push({
-          day: getCurrentDayTimestamp(new Date(arr[0].date!)),
-          value: arr[i].duration,
-        });
-      }
-      setData(result);
+      populateCalendar(filteredEntries);
     } else if (entries) {
-      for (let i = 0; i < entries.length; i++) {
-        result.push({
-          day: getCurrentDayTimestamp(new Date(entries[i].date!)),
-          value: entries[i].duration,
-        });
-      }
-      setData(result);
+      populateCalendar(entries);
     }
   }, [activeCategory, entries]);
+
+  const populateCalendar = (arr: JournalEntry[]) => {
+    let result: any[] = [];
+    let days = new Map();
+
+    for (let i = 0; i < arr.length; i++) {
+      if (days.has(arr[i].date!)) {
+        days.set(arr[i].date!, days.get(arr[i].date!) + arr[i].duration);
+      } else {
+        days.set(arr[i].date!, arr[i].duration);
+      }
+    }
+
+    days.forEach((value, key) => {
+      result.push({
+        day: getCurrentDayTimestamp(new Date(key)),
+        value: value,
+      });
+    });
+
+    setData(result);
+  };
 
   const getCurrentDayTimestamp = (d: Date) => {
     return new Date(

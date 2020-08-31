@@ -13,11 +13,11 @@ import {
   GetAllUserEntriesQuery,
   GetAllUserEntriesDocument,
   useGetUserCategoriesQuery,
-} from "../generated/graphql";
+} from "../../generated/graphql";
 import { Link } from "react-router-dom";
 import { Chip } from "@material-ui/core";
-import { Category } from "../redux/types";
-import { setSelectedCategory } from "../redux/actions";
+import { Category } from "../../redux/types";
+import { setSelectedCategory } from "../../redux/actions";
 import { useDispatch } from "react-redux";
 
 export const EntryTable2 = () => {
@@ -151,7 +151,7 @@ export const EntryTable2 = () => {
         final.push(arr);
       });
 
-      setEntries(final);
+      setEntries(final.reverse());
     }
   };
 
