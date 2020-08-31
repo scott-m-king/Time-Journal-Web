@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { ResponsiveCalendar } from "@nivo/calendar";
-import { data2 } from "./calendarData2";
 import { Category } from "../../redux/types";
 import { JournalEntry } from "../../generated/graphql";
 
@@ -18,27 +17,28 @@ export const CategoryCalendar: React.FC<CategoryCalendarProps> = ({
   useEffect(() => {
     let result: any[] = [];
 
-    if (activeCategory && entries) {
+    if (activeCategory !== undefined && entries) {
       let arr = entries.filter(
         (entry) => entry.categoryId === activeCategory.id
       );
+
       for (let i = 0; i < arr.length; i++) {
+        console.log(data);
         result.push({
           day: getCurrentDayTimestamp(new Date(arr[0].date!)),
           value: arr[i].duration,
         });
       }
+      setData(result);
     } else if (entries) {
       for (let i = 0; i < entries.length; i++) {
-        console.log(entries[i].date!);
         result.push({
           day: getCurrentDayTimestamp(new Date(entries[i].date!)),
           value: entries[i].duration,
         });
       }
+      setData(result);
     }
-
-    setData(result);
   }, [activeCategory, entries]);
 
   const getCurrentDayTimestamp = (d: Date) => {

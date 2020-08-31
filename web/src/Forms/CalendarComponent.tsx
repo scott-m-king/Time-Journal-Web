@@ -5,7 +5,6 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
-import { blue, pink } from "@material-ui/core/colors";
 import { useField, useFormikContext, FieldAttributes } from "formik";
 import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersOverrides } from "@material-ui/pickers/typings/overrides";
@@ -37,7 +36,7 @@ const defaultMaterialTheme = createMuiTheme({
 export const CalendarComponent: React.FC<FieldAttributes<{}>> = ({
   ...props
 }) => {
-  const [field, meta] = useField<{}>(props);
+  const [field] = useField<{}>(props);
   const { setFieldValue } = useFormikContext();
 
   return (

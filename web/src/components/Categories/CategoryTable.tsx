@@ -85,8 +85,8 @@ export const CategoryTable: React.FC<CategoryTableProps> = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row.title}>
+            {rows.map((row, index) => (
+              <TableRow key={index}>
                 <TableCell component="th" scope="row">
                   {row.title}
                 </TableCell>
