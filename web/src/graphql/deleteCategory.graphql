@@ -1,0 +1,17 @@
+mutation deleteCategory($categoryId: Int!) {
+  deleteCategory(categoryId: $categoryId) {
+    entries {
+      id
+      title
+      notes
+      duration
+      date
+      categoryId
+    }
+    categories {
+      id
+      description
+      duration
+    }
+  }
+}

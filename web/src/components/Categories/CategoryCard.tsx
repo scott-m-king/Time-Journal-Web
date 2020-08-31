@@ -10,17 +10,13 @@ import {
   Menu,
   MenuItem,
   Collapse,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  Button,
 } from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { Colours } from "../../styles/Colours";
 import clsx from "clsx";
 import { Category } from "../../redux/types";
+import { DeleteCategoryDialog } from "./DeleteCategoryDialog";
+import { CategoryLane } from "./CategoryLane";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -48,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface CategoryCardProps {
+export interface CategoryCardProps {
   id: number;
   description: string;
   duration: number;
@@ -62,16 +58,7 @@ export const CategoryCard = (category: CategoryCardProps) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [expanded, setExpanded] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
-
-  const handleOpenDelete = () => {
-    setAnchorEl(null);
-    setOpen(true);
-  };
-
-  const handleCloseDelete = () => {
-    setOpen(false);
-  };
+  const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
 
   useEffect(() => {
     if (category.id === category.activeCategory?.id) {
@@ -89,16 +76,17 @@ export const CategoryCard = (category: CategoryCardProps) => {
     });
   };
 
+  const handleOpenDelete = () => {
+    setAnchorEl(null);
+    setOpenDeleteDialog(true);
+  };
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
-  };
-
-  const handleDelete = () => {
-    alert("Deleted.");
   };
 
   const percentageFill = (category.duration / category.barDuration) * 100;
@@ -192,32 +180,12 @@ export const CategoryCard = (category: CategoryCardProps) => {
         </Collapse>
       </Card>
       <div>
-        {open ? (
-          <Dialog
-            open={open}
-            onClose={handleCloseDelete}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogTitle id="alert-dialog-title">
-              {"Are you sure you want to delete this category?"}
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                This action will re-categorize all entries tagged with this
-                category to the 'Uncategorized' category and permanently delete
-                this category. This action cannot be undone.
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleCloseDelete} color="primary" autoFocus>
-                No
-              </Button>
-              <Button onClick={handleDelete} color="primary">
-                Yes
-              </Button>
-            </DialogActions>
-          </Dialog>
+        {openDeleteDialog ? (
+          <DeleteCategoryDialog
+            isOpen={openDeleteDialog}
+            setIsOpen={setOpenDeleteDialog}
+            category={category}
+          />
         ) : (
           ""
         )}

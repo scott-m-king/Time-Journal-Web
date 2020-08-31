@@ -16,10 +16,10 @@ export type Query = {
   users: Array<User>;
   findUser: User;
   me?: Maybe<User>;
-  getUserCategories: Array<Category>;
-  getSingleCategory: Category;
   getAllUserEntries: Array<JournalEntry>;
   getEntriesByCategory: Array<JournalEntry>;
+  getUserCategories: Array<Category>;
+  getSingleCategory: Category;
 };
 
 
@@ -28,14 +28,14 @@ export type QueryFindUserArgs = {
 };
 
 
-export type QueryGetSingleCategoryArgs = {
-  categoryId: Scalars['Int'];
-};
-
-
 export type QueryGetEntriesByCategoryArgs = {
   categoryId: Scalars['Int'];
   userId: Scalars['Int'];
+};
+
+
+export type QueryGetSingleCategoryArgs = {
+  categoryId: Scalars['Int'];
 };
 
 export type User = {
@@ -72,10 +72,10 @@ export type Mutation = {
   logout: Scalars['Boolean'];
   registerUser: User;
   deleteAllUsers: Scalars['Boolean'];
+  createEntry: JournalCategoryResponse;
+  deleteEntry: JournalCategoryResponse;
   createCategory: Array<Category>;
-  deleteCategory: Scalars['Boolean'];
-  createEntry: JournalEntryResponse;
-  deleteEntry: JournalEntryResponse;
+  deleteCategory: JournalCategoryResponse;
 };
 
 
@@ -93,17 +93,6 @@ export type MutationRegisterUserArgs = {
 };
 
 
-export type MutationCreateCategoryArgs = {
-  description: Scalars['String'];
-};
-
-
-export type MutationDeleteCategoryArgs = {
-  categoryId: Scalars['Int'];
-  userId: Scalars['Int'];
-};
-
-
 export type MutationCreateEntryArgs = {
   date?: Maybe<Scalars['String']>;
   duration: Scalars['Int'];
@@ -117,14 +106,24 @@ export type MutationDeleteEntryArgs = {
   id: Scalars['Int'];
 };
 
+
+export type MutationCreateCategoryArgs = {
+  description: Scalars['String'];
+};
+
+
+export type MutationDeleteCategoryArgs = {
+  categoryId: Scalars['Int'];
+};
+
 export type LoginResponse = {
   __typename?: 'LoginResponse';
   accessToken: Scalars['String'];
   user: User;
 };
 
-export type JournalEntryResponse = {
-  __typename?: 'JournalEntryResponse';
+export type JournalCategoryResponse = {
+  __typename?: 'JournalCategoryResponse';
   entries: Array<JournalEntry>;
   categories: Array<Category>;
 };
@@ -165,7 +164,26 @@ export type CreateEntryMutationVariables = Exact<{
 export type CreateEntryMutation = (
   { __typename?: 'Mutation' }
   & { createEntry: (
-    { __typename?: 'JournalEntryResponse' }
+    { __typename?: 'JournalCategoryResponse' }
+    & { entries: Array<(
+      { __typename?: 'JournalEntry' }
+      & Pick<JournalEntry, 'id' | 'title' | 'notes' | 'duration' | 'date' | 'categoryId'>
+    )>, categories: Array<(
+      { __typename?: 'Category' }
+      & Pick<Category, 'id' | 'description' | 'duration'>
+    )> }
+  ) }
+);
+
+export type DeleteCategoryMutationVariables = Exact<{
+  categoryId: Scalars['Int'];
+}>;
+
+
+export type DeleteCategoryMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteCategory: (
+    { __typename?: 'JournalCategoryResponse' }
     & { entries: Array<(
       { __typename?: 'JournalEntry' }
       & Pick<JournalEntry, 'id' | 'title' | 'notes' | 'duration' | 'date' | 'categoryId'>
@@ -184,7 +202,7 @@ export type DeleteEntryMutationVariables = Exact<{
 export type DeleteEntryMutation = (
   { __typename?: 'Mutation' }
   & { deleteEntry: (
-    { __typename?: 'JournalEntryResponse' }
+    { __typename?: 'JournalCategoryResponse' }
     & { entries: Array<(
       { __typename?: 'JournalEntry' }
       & Pick<JournalEntry, 'id' | 'title' | 'notes' | 'duration' | 'date' | 'categoryId'>
@@ -387,6 +405,50 @@ export function useCreateEntryMutation(baseOptions?: Apollo.MutationHookOptions<
 export type CreateEntryMutationHookResult = ReturnType<typeof useCreateEntryMutation>;
 export type CreateEntryMutationResult = Apollo.MutationResult<CreateEntryMutation>;
 export type CreateEntryMutationOptions = Apollo.BaseMutationOptions<CreateEntryMutation, CreateEntryMutationVariables>;
+export const DeleteCategoryDocument = gql`
+    mutation deleteCategory($categoryId: Int!) {
+  deleteCategory(categoryId: $categoryId) {
+    entries {
+      id
+      title
+      notes
+      duration
+      date
+      categoryId
+    }
+    categories {
+      id
+      description
+      duration
+    }
+  }
+}
+    `;
+export type DeleteCategoryMutationFn = Apollo.MutationFunction<DeleteCategoryMutation, DeleteCategoryMutationVariables>;
+
+/**
+ * __useDeleteCategoryMutation__
+ *
+ * To run a mutation, you first call `useDeleteCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCategoryMutation, { data, loading, error }] = useDeleteCategoryMutation({
+ *   variables: {
+ *      categoryId: // value for 'categoryId'
+ *   },
+ * });
+ */
+export function useDeleteCategoryMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCategoryMutation, DeleteCategoryMutationVariables>) {
+        return Apollo.useMutation<DeleteCategoryMutation, DeleteCategoryMutationVariables>(DeleteCategoryDocument, baseOptions);
+      }
+export type DeleteCategoryMutationHookResult = ReturnType<typeof useDeleteCategoryMutation>;
+export type DeleteCategoryMutationResult = Apollo.MutationResult<DeleteCategoryMutation>;
+export type DeleteCategoryMutationOptions = Apollo.BaseMutationOptions<DeleteCategoryMutation, DeleteCategoryMutationVariables>;
 export const DeleteEntryDocument = gql`
     mutation deleteEntry($id: Int!) {
   deleteEntry(id: $id) {

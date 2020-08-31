@@ -3,6 +3,7 @@ import { Category } from "../entity/Category";
 import { JournalEntry } from "../entity/JournalEntry";
 import { MyContext } from "../MyContext";
 import { getUserInfo } from "../auth";
+import { JournalCategoryResponse } from "./JournalEntryResolver";
 
 @Resolver()
 export class CategoryResolver {
@@ -43,19 +44,21 @@ export class CategoryResolver {
     }
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => JournalCategoryResponse)
   async deleteCategory(
-    @Arg("userId", () => Int) userId: number,
+    @Ctx() context: MyContext,
     @Arg("categoryId", () => Int) categoryId: number
-  ) {
+  ): Promise<JournalCategoryResponse> {
     try {
+      const user = await getUserInfo(context);
+
       const toDelete = await Category.findOne({ id: categoryId });
       if (toDelete?.description === "Uncategorized") {
         throw new Error(`Cannot delete the "Uncategorized" category.`);
       }
 
       const uncategorized = await Category.findOne({
-        where: { userId: userId, description: "Uncategorized" },
+        where: { userId: user!.id, description: "Uncategorized" },
       });
 
       await Category.update(
@@ -75,10 +78,16 @@ export class CategoryResolver {
       }
 
       await Category.delete({ id: categoryId });
+
+      const updateEntries = await JournalEntry.find({ userId: user!.id });
+      const updatedCategories = await Category.find({ userId: user!.id });
+
+      return {
+        entries: updateEntries,
+        categories: updatedCategories,
+      };
     } catch (err) {
-      console.log(err);
-      return false;
+      throw new Error(err);
     }
-    return true;
   }
 }

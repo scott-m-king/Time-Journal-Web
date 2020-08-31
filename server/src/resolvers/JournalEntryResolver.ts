@@ -14,7 +14,7 @@ import { MyContext } from "../MyContext";
 import { getUserInfo } from "../auth";
 
 @ObjectType()
-class JournalEntryResponse {
+export class JournalCategoryResponse {
   @Field(() => [JournalEntry])
   entries: JournalEntry[];
   @Field(() => [Category])
@@ -52,7 +52,7 @@ export class JournalEntryResolver {
   }
 
   // need to return list of categories here to reload entry form properly
-  @Mutation(() => JournalEntryResponse)
+  @Mutation(() => JournalCategoryResponse)
   async createEntry(
     @Ctx() context: MyContext,
     @Arg("categoryId", () => Int) categoryId: number,
@@ -100,11 +100,11 @@ export class JournalEntryResolver {
     }
   }
 
-  @Mutation(() => JournalEntryResponse)
+  @Mutation(() => JournalCategoryResponse)
   async deleteEntry(
     @Arg("id", () => Int) id: number,
     @Ctx() context: MyContext
-  ): Promise<JournalEntryResponse> {
+  ): Promise<JournalCategoryResponse> {
     try {
       const user = await getUserInfo(context);
 
