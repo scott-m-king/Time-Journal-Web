@@ -15,6 +15,7 @@ import {
   GetUserCategoriesQuery,
   GetAllUserEntriesQuery,
   GetAllUserEntriesDocument,
+  useEditEntryMutation,
 } from "../generated/graphql";
 import { JournalEntry } from "../redux/types";
 import { EntryTable2 } from "../components/JournalEntries/EntryTable";
@@ -41,6 +42,7 @@ function Alert(props: AlertProps) {
 export const CreateEntry = () => {
   const classes = useStyles();
   const [createEntry] = useCreateEntryMutation();
+  const [editEntry] = useEditEntryMutation();
   const [open, setOpen] = React.useState(false);
 
   const handleClick = () => {
@@ -93,6 +95,45 @@ export const CreateEntry = () => {
     }
   };
 
+  const handleEdit = async (id: number, data: JournalEntry) => {
+    try {
+      const response = await editEntry({
+        variables: {
+          id: id,
+          categoryId: data.categoryId,
+          title: data.title,
+          notes: data.notes,
+          duration: data.duration,
+          date: data.date,
+        },
+        update: (store, { data }) => {
+          if (!data) {
+            return null;
+          }
+          store.writeQuery<GetUserCategoriesQuery>({
+            query: GetUserCategoriesDocument,
+            data: {
+              getUserCategories: data.editEntry.categories,
+            },
+          });
+          store.writeQuery<GetAllUserEntriesQuery>({
+            query: GetAllUserEntriesDocument,
+            data: {
+              getAllUserEntries: data.editEntry.entries,
+            },
+          });
+        },
+      });
+      if (!response) {
+        alert("Failed to edit.");
+        return;
+      }
+      handleClick();
+    } catch (err) {
+      alert(err);
+    }
+  };
+
   return (
     <div className={classes.root}>
       <Grid container spacing={3}>
@@ -101,7 +142,7 @@ export const CreateEntry = () => {
         </Grid>
         <Grid item xs sm={12} md={12} lg={3} xl={3}>
           <Paper className={classes.paper}>
-            <CreateEntryForm onSubmit={handleSubmit} />
+            <CreateEntryForm onSubmit={handleSubmit} onEdit={handleEdit} />
           </Paper>
         </Grid>
         <Grid item xs sm={12} md={12} lg={9} xl={9}>

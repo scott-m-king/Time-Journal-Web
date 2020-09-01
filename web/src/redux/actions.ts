@@ -23,3 +23,13 @@ export const setEntryToEdit = (
   type: "SET_ENTRY_TO_EDIT",
   payload: entry,
 });
+
+export type SetCalendarViewAction = {
+  type: `SET_CALENDAR_VIEW`;
+  payload: boolean;
+};
+
+export const setCalendarView = (view: boolean): SetCalendarViewAction => ({
+  type: "SET_CALENDAR_VIEW",
+  payload: view,
+});

@@ -19,7 +19,6 @@ import * as yup from "yup";
 import { useGetUserCategoriesQuery } from "../generated/graphql";
 import { JournalEntry } from "../redux/types";
 import { CalendarComponent } from "./CalendarComponent";
-import { EntryState } from "../redux/reducers/editEntryReducer";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../redux/reducers";
 import { setEntryToEdit } from "../redux/actions";
@@ -32,6 +31,7 @@ interface Category {
 
 interface Props {
   onSubmit: (values: JournalEntry) => Promise<void>;
+  onEdit: (id: number, values: JournalEntry) => Promise<void>;
 }
 
 const validationSchema = yup.object({
@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
+export const CreateEntryForm: React.FC<Props> = ({ onSubmit, onEdit }) => {
   const classes = useStyles();
   const [categories, setCategories] = React.useState<Array<Category>>([]);
   const { data, loading } = useGetUserCategoriesQuery();
@@ -66,7 +66,7 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
   });
   const [editMode, setEditMode] = React.useState<boolean>(false);
   const dispatch = useDispatch();
-  const editEntry = useSelector(
+  const entryToEdit = useSelector(
     (state: RootState) => state.editEntry.editEntry
   );
 
@@ -85,17 +85,17 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
   }, [data]);
 
   React.useEffect(() => {
-    if (editEntry) {
+    if (entryToEdit) {
       setVals({
-        date: editEntry.date,
-        categoryId: editEntry.categoryId,
-        duration: editEntry.duration,
-        title: editEntry.title,
-        notes: editEntry.notes,
+        date: entryToEdit.date,
+        categoryId: entryToEdit.categoryId,
+        duration: entryToEdit.duration,
+        title: entryToEdit.title,
+        notes: entryToEdit.notes,
       });
       setEditMode(true);
     }
-  }, [editEntry]);
+  }, [entryToEdit]);
 
   const handleCancel = () => {
     setEditMode(false);
@@ -109,6 +109,11 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
     dispatch(setEntryToEdit(undefined));
   };
 
+  const editEntry = async (updatedEntry: JournalEntry) => {
+    onEdit(entryToEdit!.id!, updatedEntry);
+    handleCancel();
+  };
+
   return (
     <div>
       <Formik
@@ -117,7 +122,11 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
         enableReinitialize
         onSubmit={async (data, { setSubmitting, resetForm }) => {
           setSubmitting(true);
-          onSubmit(data);
+          if (!entryToEdit) {
+            onSubmit(data);
+          } else {
+            editEntry(data);
+          }
           setSubmitting(false);
           resetForm();
         }}

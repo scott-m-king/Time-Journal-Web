@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Typography from "@material-ui/core/Typography";
 import {
   Grid,
@@ -19,7 +19,7 @@ import {
   useGetUserCategoriesQuery,
   Category,
 } from "../generated/graphql";
-import { setSelectedCategory } from "../redux/actions";
+import { setSelectedCategory, setCalendarView } from "../redux/actions";
 import { RootState } from "../redux/reducers";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -32,9 +32,11 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const CategoryList = () => {
   const classes = useStyles();
-  const [checked, setChecked] = React.useState(false);
   const activeCategory = useSelector(
     (state: RootState) => state.activeCategory.selectedCategory
+  );
+  const calendarView = useSelector(
+    (state: RootState) => state.calendarView.view
   );
   const {
     loading: entryLoading,
@@ -44,16 +46,18 @@ export const CategoryList = () => {
     loading: categoryLoading,
     data: categoryData,
   } = useGetUserCategoriesQuery();
+  const dispatch = useDispatch();
 
   const handleChange = () => {
-    setChecked((prev) => !prev);
+    dispatch(setCalendarView(!calendarView));
   };
-
-  const dispatch = useDispatch();
 
   const onSelectCategory = (category: Category) => {
     if (
-      (activeCategory && category.description !== activeCategory.description) ||
+      (!entryLoading &&
+        !categoryLoading &&
+        activeCategory &&
+        category.description !== activeCategory.description) ||
       !activeCategory
     ) {
       dispatch(setSelectedCategory(category));
@@ -82,10 +86,10 @@ export const CategoryList = () => {
         </Grid>
         <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
           <FormControlLabel
-            control={<Switch checked={checked} onChange={handleChange} />}
-            label={checked ? "Switch to Pie Chart" : "Switch to Calendar"}
+            control={<Switch checked={calendarView} onChange={handleChange} />}
+            label={calendarView ? "Switch to Pie Chart" : "Switch to Calendar"}
           />
-          {checked ? (
+          {calendarView ? (
             <CategoryCalendar
               activeCategory={activeCategory}
               entries={entryData?.getAllUserEntries}

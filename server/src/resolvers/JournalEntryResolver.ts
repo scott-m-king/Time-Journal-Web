@@ -154,8 +154,8 @@ export class JournalEntryResolver {
           id: toEdit!.categoryId,
         });
         await Category.update(
-          { id: toEdit!.id },
-          { duration: categoryOld!.duration - duration }
+          { id: toEdit!.categoryId },
+          { duration: categoryOld!.duration - toEdit!.duration }
         );
 
         const categoryNew = await Category.findOne({ id: categoryId });

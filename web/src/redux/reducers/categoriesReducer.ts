@@ -13,7 +13,6 @@ export const categoriesReducer = (
   state: CategoryState = initialState,
   action: SetSelectedCategoryAction
 ) => {
-  console.log(action.type);
   switch (action.type) {
     case "SET_SELECTED_CATEGORY": {
       return {

@@ -69,7 +69,7 @@ export const Analytics = () => {
   };
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+      {/* <Button variant="outlined" color="primary" onClick={handleClickOpen}>
         Open form dialog
       </Button>
       <Dialog
@@ -93,7 +93,7 @@ export const Analytics = () => {
             Subscribe
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
     </div>
   );
 };

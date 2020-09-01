@@ -21,7 +21,6 @@ import { setSelectedCategory } from "../../redux/actions";
 import { setEntryToEdit } from "../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 import CreateIcon from "@material-ui/icons/Create";
-import CreateOutlinedIcon from "@material-ui/icons/CreateOutlined";
 import { RootState } from "../../redux/reducers";
 import { Colours } from "../../styles/Colours";
 

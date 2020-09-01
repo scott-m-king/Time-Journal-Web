@@ -13,7 +13,6 @@ export const editEntryReducer = (
   state: EntryState = initialState,
   action: SetEntryToEditAction
 ) => {
-  console.log(action.type);
   switch (action.type) {
     case "SET_ENTRY_TO_EDIT": {
       return {

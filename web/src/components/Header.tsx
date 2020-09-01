@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { useMeQuery, useLogoutMutation } from "../generated/graphql";
 import { setAccessToken } from "../accessToken";
 import { Colours } from "../styles/Colours";
+import HistoryIcon from "@material-ui/icons/History";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -23,6 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     title: {
       flexGrow: 1,
+      paddingTop: 6,
     },
   })
 );
@@ -40,19 +42,26 @@ export const Header: React.FC = () => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="fixed" className={classes.appBar} style={{background: Colours.primary}}>
+      <AppBar
+        position="fixed"
+        className={classes.appBar}
+        style={{ background: Colours.primary }}
+      >
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
             {body !== undefined ? (
-              <Link to="/ok/dashboard" style={{ textDecoration: "none", color: "white" }}>
-                Time Journal
+              <Link
+                to="/ok/dashboard"
+                style={{
+                  textDecoration: "none",
+                  color: "white",
+                }}
+              >
+                <HistoryIcon fontSize="large" />
               </Link>
             ) : (
-              <Link
-                to="/"
-                style={{ textDecoration: "none", color: "white" }}
-              >
-                Time Journal
+              <Link to="/" style={{ textDecoration: "none", color: "white" }}>
+                <HistoryIcon fontSize="large" />
               </Link>
             )}
           </Typography>
