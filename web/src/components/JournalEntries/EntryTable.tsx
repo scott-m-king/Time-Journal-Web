@@ -16,15 +16,19 @@ import {
 } from "../../generated/graphql";
 import { Link } from "react-router-dom";
 import { Chip, IconButton } from "@material-ui/core";
-import { Category } from "../../redux/types";
+import { Category, JournalEntry } from "../../redux/types";
 import { setSelectedCategory } from "../../redux/actions";
 import { setEntryToEdit } from "../../redux/actions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CreateIcon from "@material-ui/icons/Create";
+import CreateOutlinedIcon from "@material-ui/icons/CreateOutlined";
+import { RootState } from "../../redux/reducers";
+import { Colours } from "../../styles/Colours";
 
 export const EntryTable2 = () => {
   const [entries, setEntries] = useState<Array<Array<string>>>([]);
   const [categories, setCategories] = useState<Array<Category>>([]);
+  const [edit, setEdit] = useState<JournalEntry | undefined>(undefined);
   const {
     loading: entryLoading,
     data: entryData,
@@ -35,6 +39,13 @@ export const EntryTable2 = () => {
   } = useGetUserCategoriesQuery();
   const [deleteEntry] = useDeleteEntryMutation();
   const dispatch = useDispatch();
+  const editEntry = useSelector(
+    (state: RootState) => state.editEntry.editEntry
+  );
+
+  useEffect(() => {
+    setEdit(editEntry);
+  }, [editEntry]);
 
   const columns = [
     {
@@ -101,9 +112,19 @@ export const EntryTable2 = () => {
 
           return (
             <div>
-              <IconButton aria-label="edit" size="small" onClick={handleClick}>
-                <CreateIcon />
-              </IconButton>
+              {edit && parseInt(value) === edit.id! ? (
+                <IconButton aria-label="edit" size="small">
+                  <CreateIcon style={{ color: Colours.secondary }} />
+                </IconButton>
+              ) : (
+                <IconButton
+                  aria-label="edit"
+                  size="small"
+                  onClick={handleClick}
+                >
+                  <CreateIcon />
+                </IconButton>
+              )}
             </div>
           );
         },
@@ -115,10 +136,10 @@ export const EntryTable2 = () => {
     elevation: 1,
     print: false,
     onRowsDelete: async (row: any) => {
+      // entry list is reversed because we want to see most recently added entries first.
+      const reversedEntries = entryData!.getAllUserEntries.slice().reverse();
       for (let i = 0; i < row.data.length; i++) {
-        await handleDelete(
-          entryData!.getAllUserEntries[row.data[i].dataIndex].id
-        );
+        await handleDelete(reversedEntries[row.data[i].dataIndex].id);
       }
     },
     textLabels: {
@@ -178,6 +199,7 @@ export const EntryTable2 = () => {
         final.push(arr);
       });
 
+      // entry list is reversed because we want to see most recently added entries first. This affects delete.
       setEntries(final.reverse());
     }
   };

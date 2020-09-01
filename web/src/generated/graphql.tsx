@@ -59,7 +59,7 @@ export type Category = {
 export type JournalEntry = {
   __typename?: 'JournalEntry';
   id: Scalars['Int'];
-  date?: Maybe<Scalars['String']>;
+  date: Scalars['String'];
   title: Scalars['String'];
   duration: Scalars['Int'];
   notes?: Maybe<Scalars['String']>;
@@ -74,6 +74,7 @@ export type Mutation = {
   deleteAllUsers: Scalars['Boolean'];
   createEntry: JournalCategoryResponse;
   deleteEntry: JournalCategoryResponse;
+  editEntry: JournalCategoryResponse;
   createCategory: Array<Category>;
   deleteCategory: JournalCategoryResponse;
 };
@@ -94,7 +95,7 @@ export type MutationRegisterUserArgs = {
 
 
 export type MutationCreateEntryArgs = {
-  date?: Maybe<Scalars['String']>;
+  date: Scalars['String'];
   duration: Scalars['Int'];
   notes?: Maybe<Scalars['String']>;
   title: Scalars['String'];
@@ -103,6 +104,16 @@ export type MutationCreateEntryArgs = {
 
 
 export type MutationDeleteEntryArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationEditEntryArgs = {
+  date: Scalars['String'];
+  duration: Scalars['Int'];
+  notes?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
+  categoryId: Scalars['Int'];
   id: Scalars['Int'];
 };
 
@@ -157,7 +168,7 @@ export type CreateEntryMutationVariables = Exact<{
   title: Scalars['String'];
   notes?: Maybe<Scalars['String']>;
   duration: Scalars['Int'];
-  date?: Maybe<Scalars['String']>;
+  date: Scalars['String'];
 }>;
 
 
@@ -202,6 +213,30 @@ export type DeleteEntryMutationVariables = Exact<{
 export type DeleteEntryMutation = (
   { __typename?: 'Mutation' }
   & { deleteEntry: (
+    { __typename?: 'JournalCategoryResponse' }
+    & { entries: Array<(
+      { __typename?: 'JournalEntry' }
+      & Pick<JournalEntry, 'id' | 'title' | 'notes' | 'duration' | 'date' | 'categoryId'>
+    )>, categories: Array<(
+      { __typename?: 'Category' }
+      & Pick<Category, 'id' | 'description' | 'duration'>
+    )> }
+  ) }
+);
+
+export type EditEntryMutationVariables = Exact<{
+  id: Scalars['Int'];
+  categoryId: Scalars['Int'];
+  title: Scalars['String'];
+  notes?: Maybe<Scalars['String']>;
+  duration: Scalars['Int'];
+  date: Scalars['String'];
+}>;
+
+
+export type EditEntryMutation = (
+  { __typename?: 'Mutation' }
+  & { editEntry: (
     { __typename?: 'JournalCategoryResponse' }
     & { entries: Array<(
       { __typename?: 'JournalEntry' }
@@ -358,7 +393,7 @@ export type CreateCategoryMutationHookResult = ReturnType<typeof useCreateCatego
 export type CreateCategoryMutationResult = Apollo.MutationResult<CreateCategoryMutation>;
 export type CreateCategoryMutationOptions = Apollo.BaseMutationOptions<CreateCategoryMutation, CreateCategoryMutationVariables>;
 export const CreateEntryDocument = gql`
-    mutation createEntry($categoryId: Int!, $title: String!, $notes: String, $duration: Int!, $date: String) {
+    mutation createEntry($categoryId: Int!, $title: String!, $notes: String, $duration: Int!, $date: String!) {
   createEntry(categoryId: $categoryId, title: $title, notes: $notes, duration: $duration, date: $date) {
     entries {
       id
@@ -493,6 +528,55 @@ export function useDeleteEntryMutation(baseOptions?: Apollo.MutationHookOptions<
 export type DeleteEntryMutationHookResult = ReturnType<typeof useDeleteEntryMutation>;
 export type DeleteEntryMutationResult = Apollo.MutationResult<DeleteEntryMutation>;
 export type DeleteEntryMutationOptions = Apollo.BaseMutationOptions<DeleteEntryMutation, DeleteEntryMutationVariables>;
+export const EditEntryDocument = gql`
+    mutation editEntry($id: Int!, $categoryId: Int!, $title: String!, $notes: String, $duration: Int!, $date: String!) {
+  editEntry(id: $id, categoryId: $categoryId, title: $title, duration: $duration, date: $date, notes: $notes) {
+    entries {
+      id
+      title
+      notes
+      duration
+      date
+      categoryId
+    }
+    categories {
+      id
+      description
+      duration
+    }
+  }
+}
+    `;
+export type EditEntryMutationFn = Apollo.MutationFunction<EditEntryMutation, EditEntryMutationVariables>;
+
+/**
+ * __useEditEntryMutation__
+ *
+ * To run a mutation, you first call `useEditEntryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditEntryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editEntryMutation, { data, loading, error }] = useEditEntryMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      categoryId: // value for 'categoryId'
+ *      title: // value for 'title'
+ *      notes: // value for 'notes'
+ *      duration: // value for 'duration'
+ *      date: // value for 'date'
+ *   },
+ * });
+ */
+export function useEditEntryMutation(baseOptions?: Apollo.MutationHookOptions<EditEntryMutation, EditEntryMutationVariables>) {
+        return Apollo.useMutation<EditEntryMutation, EditEntryMutationVariables>(EditEntryDocument, baseOptions);
+      }
+export type EditEntryMutationHookResult = ReturnType<typeof useEditEntryMutation>;
+export type EditEntryMutationResult = Apollo.MutationResult<EditEntryMutation>;
+export type EditEntryMutationOptions = Apollo.BaseMutationOptions<EditEntryMutation, EditEntryMutationVariables>;
 export const GetAllUserEntriesDocument = gql`
     query getAllUserEntries {
   getAllUserEntries {

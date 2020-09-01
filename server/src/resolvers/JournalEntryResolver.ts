@@ -59,7 +59,7 @@ export class JournalEntryResolver {
     @Arg("title", () => String) title: string,
     @Arg("notes", () => String, { nullable: true }) notes: String,
     @Arg("duration", () => Int) duration: number,
-    @Arg("date", () => String, { nullable: true }) date: String
+    @Arg("date", () => String) date: String
   ) {
     let user;
 
@@ -119,6 +119,62 @@ export class JournalEntryResolver {
       );
 
       await JournalEntry.delete({ id: id });
+
+      const entries = await JournalEntry.find({ userId: user!.id });
+      const categories = await Category.find({ userId: user!.id });
+
+      return {
+        entries: entries,
+        categories: categories,
+      };
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
+  @Mutation(() => JournalCategoryResponse)
+  async editEntry(
+    @Ctx() context: MyContext,
+    @Arg("id", () => Int) id: number,
+    @Arg("categoryId", () => Int) categoryId: number,
+    @Arg("title", () => String) title: string,
+    @Arg("notes", () => String, { nullable: true }) notes: String,
+    @Arg("duration", () => Int) duration: number,
+    @Arg("date", () => String) date: String
+  ): Promise<JournalCategoryResponse> {
+    try {
+      const user = await getUserInfo(context);
+
+      const toEdit = await JournalEntry.findOne({
+        where: { userId: user!.id, id: id },
+      });
+
+      if (categoryId !== toEdit!.categoryId) {
+        const categoryOld = await Category.findOne({
+          id: toEdit!.categoryId,
+        });
+        await Category.update(
+          { id: toEdit!.id },
+          { duration: categoryOld!.duration - duration }
+        );
+
+        const categoryNew = await Category.findOne({ id: categoryId });
+        await Category.update(
+          { id: categoryId },
+          { duration: categoryNew!.duration + duration }
+        );
+      }
+
+      await JournalEntry.update(
+        { id: toEdit!.id },
+        {
+          categoryId,
+          title,
+          notes,
+          duration,
+          date,
+        }
+      );
 
       const entries = await JournalEntry.find({ userId: user!.id });
       const categories = await Category.find({ userId: user!.id });

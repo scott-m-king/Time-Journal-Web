@@ -20,8 +20,9 @@ import { useGetUserCategoriesQuery } from "../generated/graphql";
 import { JournalEntry } from "../redux/types";
 import { CalendarComponent } from "./CalendarComponent";
 import { EntryState } from "../redux/reducers/editEntryReducer";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../redux/reducers";
+import { setEntryToEdit } from "../redux/actions";
 
 interface Category {
   id: number;
@@ -64,7 +65,7 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
     notes: "",
   });
   const [editMode, setEditMode] = React.useState<boolean>(false);
-
+  const dispatch = useDispatch();
   const editEntry = useSelector(
     (state: RootState) => state.editEntry.editEntry
   );
@@ -105,6 +106,7 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
       title: "",
       notes: "",
     });
+    dispatch(setEntryToEdit(undefined));
   };
 
   return (

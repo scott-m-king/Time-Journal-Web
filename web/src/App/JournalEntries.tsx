@@ -7,6 +7,7 @@ import {
   Theme,
   createStyles,
   Paper,
+  Snackbar,
 } from "@material-ui/core";
 import {
   useCreateEntryMutation,
@@ -17,6 +18,7 @@ import {
 } from "../generated/graphql";
 import { JournalEntry } from "../redux/types";
 import { EntryTable2 } from "../components/JournalEntries/EntryTable";
+import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,9 +34,26 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+function Alert(props: AlertProps) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 export const CreateEntry = () => {
   const classes = useStyles();
   const [createEntry] = useCreateEntryMutation();
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   const handleSubmit = async (data: JournalEntry) => {
     try {
@@ -66,7 +85,9 @@ export const CreateEntry = () => {
       });
       if (!response) {
         alert("Failed to add.");
+        return;
       }
+      handleClick();
     } catch (err) {
       alert(err);
     }
@@ -87,6 +108,11 @@ export const CreateEntry = () => {
           <EntryTable2 />
         </Grid>
       </Grid>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success">
+          Entry successfully added!
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
