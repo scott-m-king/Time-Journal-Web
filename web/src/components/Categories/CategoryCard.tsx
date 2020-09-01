@@ -16,7 +16,6 @@ import { Colours } from "../../styles/Colours";
 import clsx from "clsx";
 import { Category } from "../../redux/types";
 import { DeleteCategoryDialog } from "./DeleteCategoryDialog";
-import { CategoryLane } from "./CategoryLane";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -117,24 +116,30 @@ export const CategoryCard = (category: CategoryCardProps) => {
           }
           action={
             <div>
-              <IconButton
-                aria-label="more"
-                aria-controls="simple-menu"
-                aria-haspopup="true"
-                onClick={handleClick}
-              >
-                <MoreVertIcon />
-              </IconButton>
-              <Menu
-                id="simple-menu"
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>Edit</MenuItem>
-                <MenuItem onClick={handleOpenDelete}>Delete</MenuItem>
-              </Menu>
+              {category.description !== "Uncategorized" ? (
+                <div>
+                  <IconButton
+                    aria-label="more"
+                    aria-controls="simple-menu"
+                    aria-haspopup="true"
+                    onClick={handleClick}
+                  >
+                    <MoreVertIcon />
+                  </IconButton>
+                  <Menu
+                    id="simple-menu"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                  >
+                    <MenuItem onClick={handleClose}>Edit</MenuItem>
+                    <MenuItem onClick={handleOpenDelete}>Delete</MenuItem>
+                  </Menu>
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           }
           title={

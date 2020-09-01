@@ -21,6 +21,7 @@ import { JournalEntry } from "../redux/types";
 import { CalendarComponent } from "./CalendarComponent";
 import { EntryState } from "../redux/reducers/editEntryReducer";
 import { useSelector } from "react-redux";
+import { RootState } from "../redux/reducers";
 
 interface Category {
   id: number;
@@ -62,9 +63,10 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
     title: "",
     notes: "",
   });
+  const [editMode, setEditMode] = React.useState<boolean>(false);
 
-  const editEntry = useSelector<EntryState, EntryState["editEntry"]>(
-    (state) => state.editEntry
+  const editEntry = useSelector(
+    (state: RootState) => state.editEntry.editEntry
   );
 
   React.useEffect(() => {
@@ -90,8 +92,20 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
         title: editEntry.title,
         notes: editEntry.notes,
       });
+      setEditMode(true);
     }
   }, [editEntry]);
+
+  const handleCancel = () => {
+    setEditMode(false);
+    setVals({
+      date: new Date().toDateString(),
+      categoryId: data!.getUserCategories[0].id,
+      duration: 0,
+      title: "",
+      notes: "",
+    });
+  };
 
   return (
     <div>
@@ -174,13 +188,39 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
               </Grid>
               <Grid container spacing={3} justify="center">
                 <Grid item>
-                  <Button
-                    disabled={isSubmitting}
-                    type="submit"
-                    variant="outlined"
-                  >
-                    Add Entry
-                  </Button>
+                  {editMode ? (
+                    <Grid container spacing={3}>
+                      <Grid item xs={6}>
+                        <Button
+                          disabled={isSubmitting}
+                          type="submit"
+                          variant="outlined"
+                          fullWidth
+                          style={{ whiteSpace: "nowrap" }}
+                        >
+                          Edit Entry
+                        </Button>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <Button
+                          disabled={isSubmitting}
+                          onClick={handleCancel}
+                          variant="outlined"
+                          fullWidth
+                        >
+                          Cancel
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  ) : (
+                    <Button
+                      disabled={isSubmitting}
+                      type="submit"
+                      variant="outlined"
+                    >
+                      Add Entry
+                    </Button>
+                  )}
                 </Grid>
               </Grid>
             </div>

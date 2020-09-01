@@ -14,13 +14,13 @@ import { CategoryTable } from "../components/Categories/CategoryTable";
 import { CategoryCalendar } from "../components/Categories/CategoryCalendar";
 import { NewCategoryDialog } from "../components/Categories/NewCategoryDialog";
 import { useSelector, useDispatch } from "react-redux";
-import { CategoryState } from "../redux/reducers/categoriesReducer";
 import {
   useGetAllUserEntriesQuery,
   useGetUserCategoriesQuery,
   Category,
 } from "../generated/graphql";
 import { setSelectedCategory } from "../redux/actions";
+import { RootState } from "../redux/reducers";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -33,10 +33,9 @@ const useStyles = makeStyles((theme: Theme) =>
 export const CategoryList = () => {
   const classes = useStyles();
   const [checked, setChecked] = React.useState(false);
-  const activeCategory = useSelector<
-    CategoryState,
-    CategoryState["selectedCategory"]
-  >((state) => state.selectedCategory);
+  const activeCategory = useSelector(
+    (state: RootState) => state.activeCategory.selectedCategory
+  );
   const {
     loading: entryLoading,
     data: entryData,
