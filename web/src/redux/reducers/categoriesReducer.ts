@@ -1,4 +1,4 @@
-import { Action } from "../actions";
+import { SetSelectedCategoryAction } from "../actions";
 import { Category } from "../types";
 
 export interface CategoryState {
@@ -11,7 +11,7 @@ const initialState = {
 
 export const categoriesReducer = (
   state: CategoryState = initialState,
-  action: Action
+  action: SetSelectedCategoryAction
 ) => {
   switch (action.type) {
     case "SET_SELECTED_CATEGORY": {

@@ -5,7 +5,7 @@ export interface Category {
 }
 
 export interface JournalEntry {
-  date: Date;
+  date: string;
   categoryId: number;
   duration: number;
   title: string;

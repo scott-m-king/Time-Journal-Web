@@ -8,6 +8,11 @@ interface CategoryCalendarProps {
   entries: JournalEntry[] | undefined;
 }
 
+interface CalendarDataProps {
+  day: string;
+  value: number;
+}
+
 export const CategoryCalendar: React.FC<CategoryCalendarProps> = ({
   activeCategory,
   entries,
@@ -15,10 +20,8 @@ export const CategoryCalendar: React.FC<CategoryCalendarProps> = ({
   const [data, setData] = useState<Array<any>>([]);
 
   useEffect(() => {
-    let result: any[] = [];
-
     if (activeCategory !== undefined && entries) {
-      let filteredEntries = entries.filter(
+      const filteredEntries = entries.filter(
         (entry) => entry.categoryId === activeCategory.id
       );
 
@@ -28,15 +31,15 @@ export const CategoryCalendar: React.FC<CategoryCalendarProps> = ({
     }
   }, [activeCategory, entries]);
 
-  const populateCalendar = (arr: JournalEntry[]) => {
-    let result: any[] = [];
+  const populateCalendar = (data: JournalEntry[]) => {
+    let result: CalendarDataProps[] = [];
     let days = new Map();
 
-    for (let i = 0; i < arr.length; i++) {
-      if (days.has(arr[i].date!)) {
-        days.set(arr[i].date!, days.get(arr[i].date!) + arr[i].duration);
+    for (let i = 0; i < data.length; i++) {
+      if (days.has(data[i].date!)) {
+        days.set(data[i].date!, days.get(data[i].date!) + data[i].duration);
       } else {
-        days.set(arr[i].date!, arr[i].duration);
+        days.set(data[i].date!, data[i].duration);
       }
     }
 

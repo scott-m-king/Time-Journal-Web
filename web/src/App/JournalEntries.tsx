@@ -1,8 +1,13 @@
 import React from "react";
 import Typography from "@material-ui/core/Typography";
 import { CreateEntryForm } from "../Forms/CreateEntryForm";
-import { Grid, makeStyles, Theme, createStyles } from "@material-ui/core";
-import styled from "styled-components";
+import {
+  Grid,
+  makeStyles,
+  Theme,
+  createStyles,
+  Paper,
+} from "@material-ui/core";
 import {
   useCreateEntryMutation,
   GetUserCategoriesDocument,
@@ -13,10 +18,6 @@ import {
 import { JournalEntry } from "../redux/types";
 import { EntryTable2 } from "../components/JournalEntries/EntryTable";
 
-const Root = styled.div`
-  padding-top: 20px;
-`;
-
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -24,6 +25,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     paper: {
       padding: theme.spacing(2),
+      textAlign: "center",
+      width: "100%",
+      color: theme.palette.text.secondary,
     },
   })
 );
@@ -40,7 +44,7 @@ export const CreateEntry = () => {
           title: data.title,
           notes: data.notes,
           duration: data.duration,
-          date: data.date.toDateString(),
+          date: data.date,
         },
         update: (store, { data }) => {
           if (!data) {
@@ -75,12 +79,12 @@ export const CreateEntry = () => {
           <Typography variant="h4">Journal Entries</Typography>
         </Grid>
         <Grid item xs sm={12} md={12} lg={3} xl={3}>
-          <CreateEntryForm onSubmit={handleSubmit} />
+          <Paper className={classes.paper}>
+            <CreateEntryForm onSubmit={handleSubmit} />
+          </Paper>
         </Grid>
         <Grid item xs sm={12} md={12} lg={9} xl={9}>
-          <Root>
-            <EntryTable2 />
-          </Root>
+          <EntryTable2 />
         </Grid>
       </Grid>
     </div>

@@ -15,10 +15,12 @@ import {
   useGetUserCategoriesQuery,
 } from "../../generated/graphql";
 import { Link } from "react-router-dom";
-import { Chip } from "@material-ui/core";
+import { Chip, IconButton } from "@material-ui/core";
 import { Category } from "../../redux/types";
 import { setSelectedCategory } from "../../redux/actions";
+import { setEntryToEdit } from "../../redux/actions";
 import { useDispatch } from "react-redux";
+import CreateIcon from "@material-ui/icons/Create";
 
 export const EntryTable2 = () => {
   const [entries, setEntries] = useState<Array<Array<string>>>([]);
@@ -84,6 +86,29 @@ export const EntryTable2 = () => {
         filter: true,
       },
     },
+    {
+      name: "Edit",
+      options: {
+        filter: false,
+        sort: false,
+        customBodyRender: (value: string, tableMeta: any, updateValue: any) => {
+          const handleClick = () => {
+            const entry: any = entryData!.getAllUserEntries.find(
+              (elem) => parseInt(value) === elem.id
+            );
+            dispatch(setEntryToEdit(entry));
+          };
+
+          return (
+            <div>
+              <IconButton aria-label="edit" size="small" onClick={handleClick}>
+                <CreateIcon />
+              </IconButton>
+            </div>
+          );
+        },
+      },
+    },
   ];
 
   const options = {
@@ -101,6 +126,7 @@ export const EntryTable2 = () => {
         noMatch: "No entries found",
       },
     },
+    // selectableRows: "none" as any,
   };
 
   const handleDelete = async (entryId: number) => {
@@ -148,6 +174,7 @@ export const EntryTable2 = () => {
         arr.push(element.duration);
         arr.push(element.categoryId);
         arr.push(element.notes ? element.notes : null);
+        arr.push(element.id);
         final.push(arr);
       });
 

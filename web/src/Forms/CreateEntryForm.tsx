@@ -19,6 +19,8 @@ import * as yup from "yup";
 import { useGetUserCategoriesQuery } from "../generated/graphql";
 import { JournalEntry } from "../redux/types";
 import { CalendarComponent } from "./CalendarComponent";
+import { EntryState } from "../redux/reducers/editEntryReducer";
+import { useSelector } from "react-redux";
 
 interface Category {
   id: number;
@@ -38,14 +40,7 @@ const validationSchema = yup.object({
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      paddingTop: "20px",
       textAlign: "center",
-    },
-    paper: {
-      padding: theme.spacing(2),
-      textAlign: "center",
-      width: "100%",
-      color: theme.palette.text.secondary,
     },
     margin: {
       margin: theme.spacing(1),
@@ -58,24 +53,26 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
   const classes = useStyles();
-
   const [categories, setCategories] = React.useState<Array<Category>>([]);
+  const { data, loading } = useGetUserCategoriesQuery();
   const [vals, setVals] = React.useState<JournalEntry>({
-    date: new Date(),
+    date: new Date().toDateString(),
     categoryId: 0,
     duration: 0,
     title: "",
     notes: "",
   });
 
-  const { data, loading } = useGetUserCategoriesQuery();
+  const editEntry = useSelector<EntryState, EntryState["editEntry"]>(
+    (state) => state.editEntry
+  );
 
   React.useEffect(() => {
     if (!loading && data && data.getUserCategories) {
       setCategories(data.getUserCategories);
 
       setVals({
-        date: new Date(),
+        date: new Date().toDateString(),
         categoryId: data.getUserCategories[0].id,
         duration: 0,
         title: "",
@@ -83,6 +80,18 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
       });
     }
   }, [data]);
+
+  React.useEffect(() => {
+    if (editEntry) {
+      setVals({
+        date: editEntry.date,
+        categoryId: editEntry.categoryId,
+        duration: editEntry.duration,
+        title: editEntry.title,
+        notes: editEntry.notes,
+      });
+    }
+  }, [editEntry]);
 
   return (
     <div>
@@ -100,82 +109,80 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit }) => {
         {({ isSubmitting }) => (
           <Form>
             <div className={classes.root}>
-              <Paper className={classes.paper}>
-                <Grid container spacing={3}>
-                  <Grid item xs>
-                    <CalendarComponent name="date" />
-                  </Grid>
+              <Grid container spacing={3}>
+                <Grid item xs>
+                  <CalendarComponent name="date" />
                 </Grid>
-                <Grid container spacing={3}>
-                  <Grid item xs>
-                    <FormControl variant="outlined" fullWidth>
-                      <InputLabel>Category</InputLabel>
-                      <Field name="categoryId" label="Category" as={Select}>
-                        {categories.map((category, index) => {
-                          return (
-                            <MenuItem key={index} value={category.id}>
-                              {category.description} - {category.duration} mins
-                              spent
-                            </MenuItem>
-                          );
-                        })}
-                      </Field>
-                    </FormControl>
-                  </Grid>
+              </Grid>
+              <Grid container spacing={3}>
+                <Grid item xs>
+                  <FormControl variant="outlined" fullWidth>
+                    <InputLabel>Category</InputLabel>
+                    <Field name="categoryId" label="Category" as={Select}>
+                      {categories.map((category, index) => {
+                        return (
+                          <MenuItem key={index} value={category.id}>
+                            {category.description} - {category.duration} mins
+                            spent
+                          </MenuItem>
+                        );
+                      })}
+                    </Field>
+                  </FormControl>
                 </Grid>
-                <Grid container spacing={3}>
-                  <Grid item xs>
-                    <Field
-                      type="number"
-                      label="Duration"
-                      name="duration"
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="start">mins</InputAdornment>
-                        ),
-                      }}
-                      fullWidth
-                      variant="outlined"
-                      as={TextField}
-                    />
-                  </Grid>
+              </Grid>
+              <Grid container spacing={3}>
+                <Grid item xs>
+                  <Field
+                    type="number"
+                    label="Duration"
+                    name="duration"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="start">mins</InputAdornment>
+                      ),
+                    }}
+                    fullWidth
+                    variant="outlined"
+                    as={TextField}
+                  />
                 </Grid>
-                <Grid container spacing={3}>
-                  <Grid item xs>
-                    <Field
-                      label="Title"
-                      name="title"
-                      fullWidth
-                      variant="outlined"
-                      as={TextField}
-                    />
-                  </Grid>
+              </Grid>
+              <Grid container spacing={3}>
+                <Grid item xs>
+                  <Field
+                    label="Title"
+                    name="title"
+                    fullWidth
+                    variant="outlined"
+                    as={TextField}
+                  />
                 </Grid>
-                <Grid container spacing={3}>
-                  <Grid item xs>
-                    <Field
-                      label="Additional notes (optional)"
-                      name="notes"
-                      multiline
-                      fullWidth
-                      rows={7}
-                      variant="outlined"
-                      as={TextField}
-                    />
-                  </Grid>
+              </Grid>
+              <Grid container spacing={3}>
+                <Grid item xs>
+                  <Field
+                    label="Additional notes (optional)"
+                    name="notes"
+                    multiline
+                    fullWidth
+                    rows={7}
+                    variant="outlined"
+                    as={TextField}
+                  />
                 </Grid>
-                <Grid container spacing={3} justify="center">
-                  <Grid item>
-                    <Button
-                      disabled={isSubmitting}
-                      type="submit"
-                      variant="outlined"
-                    >
-                      Add Entry
-                    </Button>
-                  </Grid>
+              </Grid>
+              <Grid container spacing={3} justify="center">
+                <Grid item>
+                  <Button
+                    disabled={isSubmitting}
+                    type="submit"
+                    variant="outlined"
+                  >
+                    Add Entry
+                  </Button>
                 </Grid>
-              </Paper>
+              </Grid>
             </div>
           </Form>
         )}

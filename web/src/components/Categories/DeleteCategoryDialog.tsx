@@ -30,6 +30,11 @@ export const DeleteCategoryDialog: React.FC<DeleteDialogProps> = ({
   const [deleteCategory] = useDeleteCategoryMutation();
 
   const handleDelete = async () => {
+    if (category.description === "Uncategorized") {
+      alert("You cannot delete the 'Uncategorized' category.");
+      return;
+    }
+
     try {
       await deleteCategory({
         variables: {
