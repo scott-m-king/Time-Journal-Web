@@ -25,10 +25,8 @@ import { ResponsiveCalendar } from "@nivo/calendar";
 import { ResponsiveLine } from "@nivo/line";
 import {
   data2,
-  data3,
   generateData,
 } from "../components/Categories/calendarData2";
-import { Colours } from "../styles/Colours";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -78,10 +76,6 @@ export const Dashboard = () => {
   } else {
     body = "";
   }
-
-  useEffect(() => {
-    console.log(generateData());
-  }, []);
 
   const handleSubmit = async (data: JournalEntry) => {
     try {
@@ -159,7 +153,6 @@ export const Dashboard = () => {
   };
 
   const getCurrentDayTimestamp = (d: Date) => {
-    console.log(d);
     return new Date(
       Date.UTC(
         d.getFullYear(),
@@ -262,7 +255,7 @@ export const Dashboard = () => {
                       }}
                     >
                       <ResponsiveLine
-                        data={data3}
+                        data={generateData()}
                         margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
                         xScale={{ type: "point" }}
                         yScale={{
@@ -280,7 +273,7 @@ export const Dashboard = () => {
                           tickSize: 5,
                           tickPadding: 5,
                           tickRotation: 0,
-                          legend: "transportation",
+                          legend: "month",
                           legendOffset: 36,
                           legendPosition: "middle",
                         }}
@@ -289,7 +282,7 @@ export const Dashboard = () => {
                           tickSize: 5,
                           tickPadding: 5,
                           tickRotation: 0,
-                          legend: "count",
+                          legend: "minutes",
                           legendOffset: -40,
                           legendPosition: "middle",
                         }}

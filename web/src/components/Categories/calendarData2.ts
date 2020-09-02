@@ -2,7 +2,7 @@ export const data2 = () => {
   let arr = [];
   for (let i = 0; i < 200; i++) {
     arr.push({
-      day: randomDate(new Date(2020, 1, 1), new Date(2021, 1, 1)),
+      day: randomDate(new Date(2020, 1, 1), new Date(2021, 2, 1)),
       value: i,
     });
   }
@@ -28,6 +28,7 @@ function getCurrentDayTimestamp(d: Date) {
       d.getMinutes(),
       d.getSeconds()
     )
+
     // `toIsoString` returns something like "2017-08-22T08:32:32.847Z"
     // and we want the first part ("2017-08-22")
   )
