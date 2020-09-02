@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   useMeQuery,
   GetUserCategoriesQuery,
@@ -23,7 +23,12 @@ import { CreateEntryForm } from "../Forms/CreateEntryForm";
 import { JournalEntry } from "../redux/types";
 import { ResponsiveCalendar } from "@nivo/calendar";
 import { ResponsiveLine } from "@nivo/line";
-import { data2, data3 } from "../components/Categories/calendarData2";
+import {
+  data2,
+  data3,
+  generateData,
+} from "../components/Categories/calendarData2";
+import { Colours } from "../styles/Colours";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -73,6 +78,10 @@ export const Dashboard = () => {
   } else {
     body = "";
   }
+
+  useEffect(() => {
+    console.log(generateData());
+  }, []);
 
   const handleSubmit = async (data: JournalEntry) => {
     try {
@@ -265,6 +274,7 @@ export const Dashboard = () => {
                         }}
                         axisTop={null}
                         axisRight={null}
+                        curve="cardinal"
                         axisBottom={{
                           orient: "bottom",
                           tickSize: 5,
@@ -293,17 +303,17 @@ export const Dashboard = () => {
                         useMesh={true}
                         legends={[
                           {
-                            anchor: "bottom-right",
+                            anchor: "right",
                             direction: "column",
                             justify: false,
-                            translateX: 100,
-                            translateY: 0,
-                            itemsSpacing: 0,
+                            translateX: 111,
+                            translateY: -50,
+                            itemsSpacing: 4,
                             itemDirection: "left-to-right",
-                            itemWidth: 80,
+                            itemWidth: 99,
                             itemHeight: 20,
                             itemOpacity: 0.75,
-                            symbolSize: 12,
+                            symbolSize: 9,
                             symbolShape: "circle",
                             symbolBorderColor: "rgba(0, 0, 0, .5)",
                             effects: [
