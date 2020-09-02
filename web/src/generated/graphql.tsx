@@ -59,7 +59,7 @@ export type Category = {
 export type JournalEntry = {
   __typename?: 'JournalEntry';
   id: Scalars['Int'];
-  date?: Maybe<Scalars['String']>;
+  date: Scalars['String'];
   title: Scalars['String'];
   duration: Scalars['Int'];
   notes?: Maybe<Scalars['String']>;
@@ -155,7 +155,7 @@ export type JournalCategoryResponse = {
 
 export type EntryInput = {
   id: Scalars['Int'];
-  date?: Maybe<Scalars['String']>;
+  date: Scalars['String'];
   title: Scalars['String'];
   duration: Scalars['Int'];
   notes?: Maybe<Scalars['String']>;

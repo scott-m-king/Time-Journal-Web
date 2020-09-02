@@ -2,7 +2,7 @@ export const data2 = () => {
   let arr = [];
   for (let i = 0; i < 200; i++) {
     arr.push({
-      day: randomDate(new Date(2020, 1, 1), new Date(2021, 2, 1)),
+      day: randomDate(new Date(2019, 12, 1), new Date(2021, 2, 1)),
       value: i,
     });
   }
@@ -18,7 +18,7 @@ function randomDate(start: Date, end: Date) {
 }
 
 // https://stackoverflow.com/questions/23593052/format-javascript-date-as-yyyy-mm-dd?page=2&tab=votes#tab-top
-function getCurrentDayTimestamp(d: Date) {
+export const getCurrentDayTimestamp = (d: Date) => {
   return new Date(
     Date.UTC(
       d.getFullYear(),
@@ -34,7 +34,7 @@ function getCurrentDayTimestamp(d: Date) {
   )
     .toISOString()
     .slice(0, 10);
-}
+};
 
 const arr = [
   "Uncategorized",

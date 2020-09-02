@@ -18,8 +18,8 @@ export class JournalEntry extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Field(() => String, { nullable: true })
-  @Column({ nullable: true })
+  @Field(() => String)
+  @Column()
   date: String;
 
   @Field()
