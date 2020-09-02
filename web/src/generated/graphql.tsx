@@ -73,6 +73,7 @@ export type Mutation = {
   registerUser: User;
   deleteAllUsers: Scalars['Boolean'];
   createEntry: JournalCategoryResponse;
+  batchUploadJournalEntry: JournalCategoryResponse;
   deleteEntry: JournalCategoryResponse;
   editEntry: JournalCategoryResponse;
   createCategory: Array<Category>;
@@ -101,6 +102,12 @@ export type MutationCreateEntryArgs = {
   notes?: Maybe<Scalars['String']>;
   title: Scalars['String'];
   categoryId: Scalars['Int'];
+};
+
+
+export type MutationBatchUploadJournalEntryArgs = {
+  categoryArray: Array<Scalars['String']>;
+  entryArray: Array<EntryInput>;
 };
 
 
@@ -145,6 +152,35 @@ export type JournalCategoryResponse = {
   entries: Array<JournalEntry>;
   categories: Array<Category>;
 };
+
+export type EntryInput = {
+  id: Scalars['Int'];
+  date?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
+  duration: Scalars['Int'];
+  notes?: Maybe<Scalars['String']>;
+  categoryId: Scalars['Int'];
+};
+
+export type BatchUploadJournalEntryMutationVariables = Exact<{
+  entryArray: Array<EntryInput>;
+  categoryArray: Array<Scalars['String']>;
+}>;
+
+
+export type BatchUploadJournalEntryMutation = (
+  { __typename?: 'Mutation' }
+  & { batchUploadJournalEntry: (
+    { __typename?: 'JournalCategoryResponse' }
+    & { entries: Array<(
+      { __typename?: 'JournalEntry' }
+      & Pick<JournalEntry, 'id' | 'title' | 'notes' | 'duration' | 'date' | 'categoryId'>
+    )>, categories: Array<(
+      { __typename?: 'Category' }
+      & Pick<Category, 'id' | 'description' | 'duration'>
+    )> }
+  ) }
+);
 
 export type GetUserCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -351,6 +387,51 @@ export type UsersQuery = (
 );
 
 
+export const BatchUploadJournalEntryDocument = gql`
+    mutation batchUploadJournalEntry($entryArray: [EntryInput!]!, $categoryArray: [String!]!) {
+  batchUploadJournalEntry(entryArray: $entryArray, categoryArray: $categoryArray) {
+    entries {
+      id
+      title
+      notes
+      duration
+      date
+      categoryId
+    }
+    categories {
+      id
+      description
+      duration
+    }
+  }
+}
+    `;
+export type BatchUploadJournalEntryMutationFn = Apollo.MutationFunction<BatchUploadJournalEntryMutation, BatchUploadJournalEntryMutationVariables>;
+
+/**
+ * __useBatchUploadJournalEntryMutation__
+ *
+ * To run a mutation, you first call `useBatchUploadJournalEntryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBatchUploadJournalEntryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [batchUploadJournalEntryMutation, { data, loading, error }] = useBatchUploadJournalEntryMutation({
+ *   variables: {
+ *      entryArray: // value for 'entryArray'
+ *      categoryArray: // value for 'categoryArray'
+ *   },
+ * });
+ */
+export function useBatchUploadJournalEntryMutation(baseOptions?: Apollo.MutationHookOptions<BatchUploadJournalEntryMutation, BatchUploadJournalEntryMutationVariables>) {
+        return Apollo.useMutation<BatchUploadJournalEntryMutation, BatchUploadJournalEntryMutationVariables>(BatchUploadJournalEntryDocument, baseOptions);
+      }
+export type BatchUploadJournalEntryMutationHookResult = ReturnType<typeof useBatchUploadJournalEntryMutation>;
+export type BatchUploadJournalEntryMutationResult = Apollo.MutationResult<BatchUploadJournalEntryMutation>;
+export type BatchUploadJournalEntryMutationOptions = Apollo.BaseMutationOptions<BatchUploadJournalEntryMutation, BatchUploadJournalEntryMutationVariables>;
 export const GetUserCategoriesDocument = gql`
     query getUserCategories {
   getUserCategories {

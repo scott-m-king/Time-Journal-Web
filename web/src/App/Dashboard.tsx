@@ -23,10 +23,7 @@ import { CreateEntryForm } from "../Forms/CreateEntryForm";
 import { JournalEntry } from "../redux/types";
 import { ResponsiveCalendar } from "@nivo/calendar";
 import { ResponsiveLine } from "@nivo/line";
-import {
-  data2,
-  generateData,
-} from "../components/Categories/calendarData2";
+import { data2, generateData } from "../Functions/calendarData2";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

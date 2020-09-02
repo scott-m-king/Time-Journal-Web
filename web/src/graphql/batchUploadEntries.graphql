@@ -1,0 +1,23 @@
+mutation batchUploadJournalEntry(
+  $entryArray: [EntryInput!]!
+  $categoryArray: [String!]!
+) {
+  batchUploadJournalEntry(
+    entryArray: $entryArray
+    categoryArray: $categoryArray
+  ) {
+    entries {
+      id
+      title
+      notes
+      duration
+      date
+      categoryId
+    }
+    categories {
+      id
+      description
+      duration
+    }
+  }
+}

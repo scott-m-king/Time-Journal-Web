@@ -101,6 +101,56 @@ export class JournalEntryResolver {
   }
 
   @Mutation(() => JournalCategoryResponse)
+  async batchUploadJournalEntry(
+    @Ctx() context: MyContext,
+    @Arg("entryArray", () => [JournalEntry]) entryArray: JournalEntry[],
+    @Arg("categoryArray", () => [String]) categoryArray: string[]
+  ): Promise<JournalCategoryResponse> {
+    try {
+      const user = await getUserInfo(context);
+
+      for (let i = 0; i < entryArray.length; i++) {
+        let category: Category | undefined;
+
+        category = await Category.findOne({
+          where: { userId: user?.id, description: categoryArray[i] },
+        });
+
+        if (!category) {
+          category = await Category.create({
+            description: categoryArray[i],
+            userId: user!.id,
+          }).save();
+        }
+
+        await JournalEntry.create({
+          userId: user!.id,
+          categoryId: category.id,
+          title: entryArray[i].title,
+          notes: entryArray[i].notes,
+          duration: entryArray[i].duration,
+          date: entryArray[i].date,
+        }).save();
+
+        await Category.update(
+          { id: category!.id },
+          { duration: category!.duration + entryArray[i].duration }
+        );
+      }
+
+      const entries = await JournalEntry.find({ userId: user!.id });
+      const categories = await Category.find({ userId: user!.id });
+
+      return {
+        entries: entries,
+        categories: categories,
+      };
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
+  @Mutation(() => JournalCategoryResponse)
   async deleteEntry(
     @Arg("idArray", () => [Int]) idArray: number[],
     @Ctx() context: MyContext

@@ -20,6 +20,7 @@ import {
 import { JournalEntry } from "../redux/types";
 import { EntryTable } from "../components/JournalEntries/EntryTable";
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
+import { UploadCSV } from "../components/JournalEntries/UploadCSV";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,6 +32,9 @@ const useStyles = makeStyles((theme: Theme) =>
       textAlign: "center",
       width: "100%",
       color: theme.palette.text.secondary,
+    },
+    button: {
+      textAlign: "center",
     },
   })
 );
@@ -153,8 +157,11 @@ export const CreateEntry = () => {
   return (
     <div className={classes.root}>
       <Grid container spacing={3}>
-        <Grid item xs={12}>
+        <Grid item xs={3}>
           <Typography variant="h4">Journal Entries</Typography>
+        </Grid>
+        <Grid item xs={9} style={{ textAlign: "right" }}>
+          <UploadCSV />
         </Grid>
         <Grid item xs sm={12} md={12} lg={3} xl={3}>
           <Paper className={classes.paper}>

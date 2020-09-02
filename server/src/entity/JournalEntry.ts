@@ -6,9 +6,11 @@ import {
   ManyToOne,
   JoinColumn,
 } from "typeorm";
-import { Field, Int, ObjectType } from "type-graphql";
+import { Field, Int, ObjectType, InputType } from "type-graphql";
 import { Category } from "./Category";
 import { User } from "./User";
+
+@InputType("EntryInput")
 @ObjectType()
 @Entity("entries")
 export class JournalEntry extends BaseEntity {
