@@ -63,8 +63,6 @@ export const CategoryCalendar: React.FC<CategoryCalendarProps> = ({
         d.getMinutes(),
         d.getSeconds()
       )
-      // `toIsoString` returns something like "2017-08-22T08:32:32.847Z"
-      // and we want the first part ("2017-08-22")
     )
       .toISOString()
       .slice(0, 10);

@@ -146,6 +146,29 @@ export const EntryTable2 = () => {
         noMatch: "No entries found",
       },
     },
+    customSort: (data: any[], dataIndex: number, rowIndex: string) => {
+      switch (dataIndex) {
+        case 1:
+          return data.sort((a, b) => {
+            const dateA = new Date(a.data[dataIndex]).getTime();
+            const dateB = new Date(b.data[dataIndex]).getTime();
+            return (dateA < dateB ? -1 : 1) * (rowIndex === "desc" ? 1 : -1);
+          });
+        case 3:
+          return data.sort((a, b) => {
+            const catA = a.data[dataIndex];
+            const catB = b.data[dataIndex];
+            return (catA > catB ? -1 : 1) * (rowIndex === "desc" ? 1 : -1);
+          });
+        default:
+          return data.sort((a, b) => {
+            return (
+              (a.data[dataIndex].length < b.data[dataIndex].length ? -1 : 1) *
+              (rowIndex === "desc" ? 1 : -1)
+            );
+          });
+      }
+    },
     // selectableRows: "none" as any,
   };
 
@@ -193,7 +216,7 @@ export const EntryTable2 = () => {
         arr.push(element.date!);
         arr.push(element.duration);
         arr.push(element.categoryId);
-        arr.push(element.notes ? element.notes : null);
+        arr.push(element.notes ? element.notes : "");
         arr.push(element.id);
         final.push(arr);
       });

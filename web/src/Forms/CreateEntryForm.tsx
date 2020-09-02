@@ -35,7 +35,7 @@ interface Props {
 }
 
 const validationSchema = yup.object({
-  duration: yup.number().required("Duration must be filled out."),
+  duration: yup.number().required("Duration must be filled out.").moreThan(0),
   title: yup.string().required("Entry must have a title."),
 });
 

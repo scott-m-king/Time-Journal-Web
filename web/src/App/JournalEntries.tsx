@@ -65,7 +65,7 @@ export const CreateEntry = () => {
           title: data.title,
           notes: data.notes,
           duration: data.duration,
-          date: data.date,
+          date: getCurrentDayTimestamp(new Date(data.date)),
         },
         update: (store, { data }) => {
           if (!data) {
@@ -104,7 +104,7 @@ export const CreateEntry = () => {
           title: data.title,
           notes: data.notes,
           duration: data.duration,
-          date: data.date,
+          date: getCurrentDayTimestamp(new Date(data.date)),
         },
         update: (store, { data }) => {
           if (!data) {
@@ -132,6 +132,22 @@ export const CreateEntry = () => {
     } catch (err) {
       alert(err);
     }
+  };
+
+  const getCurrentDayTimestamp = (d: Date) => {
+    console.log(d);
+    return new Date(
+      Date.UTC(
+        d.getFullYear(),
+        d.getMonth(),
+        d.getDate(),
+        d.getHours(),
+        d.getMinutes(),
+        d.getSeconds()
+      )
+    )
+      .toUTCString()
+      .slice(0, 16);
   };
 
   return (
