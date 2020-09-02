@@ -4,7 +4,6 @@ import { Form, Formik, Field } from "formik";
 import * as React from "react";
 import {
   TextField,
-  Paper,
   Grid,
   makeStyles,
   createStyles,
@@ -22,6 +21,7 @@ import { CalendarComponent } from "./CalendarComponent";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../redux/reducers";
 import { setEntryToEdit } from "../redux/actions";
+import { NewCategoryDialog } from "../components/Categories/NewCategoryDialog";
 
 interface Category {
   id: number;
@@ -69,6 +69,7 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit, onEdit }) => {
   const entryToEdit = useSelector(
     (state: RootState) => state.editEntry.editEntry
   );
+  const [addCategory, setAddCategory] = React.useState(false);
 
   React.useEffect(() => {
     if (!loading && data && data.getUserCategories) {
@@ -95,7 +96,7 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit, onEdit }) => {
       });
       setEditMode(true);
     }
-  }, [entryToEdit]);
+  }, [entryToEdit, data]);
 
   const handleCancel = () => {
     setEditMode(false);
@@ -131,7 +132,7 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit, onEdit }) => {
           resetForm();
         }}
       >
-        {({ isSubmitting }) => (
+        {({ setFieldValue, isSubmitting }) => (
           <Form>
             <div className={classes.root}>
               <Grid container spacing={3}>
@@ -143,7 +144,22 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit, onEdit }) => {
                 <Grid item xs>
                   <FormControl variant="outlined" fullWidth>
                     <InputLabel>Category</InputLabel>
-                    <Field name="categoryId" label="Category" as={Select}>
+                    <Field
+                      name="categoryId"
+                      label="Category"
+                      as={Select}
+                      onChange={(e: any) => {
+                        if (e.target.value === Infinity) {
+                          setAddCategory(true);
+                          setFieldValue(
+                            "categoryId",
+                            data!.getUserCategories[0].id
+                          );
+                        } else {
+                          setFieldValue("categoryId", e.target.value);
+                        }
+                      }}
+                    >
                       {categories.map((category, index) => {
                         return (
                           <MenuItem key={index} value={category.id}>
@@ -152,6 +168,7 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit, onEdit }) => {
                           </MenuItem>
                         );
                       })}
+                      <MenuItem value={Infinity}>Add new category...</MenuItem>
                     </Field>
                   </FormControl>
                 </Grid>
@@ -238,6 +255,7 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit, onEdit }) => {
           </Form>
         )}
       </Formik>
+      <NewCategoryDialog isOpen={addCategory} setIsOpen={setAddCategory} />
     </div>
   );
 };

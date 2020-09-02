@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Typography from "@material-ui/core/Typography";
 import {
   Grid,
@@ -7,6 +7,7 @@ import {
   Switch,
   Theme,
   createStyles,
+  Button,
 } from "@material-ui/core";
 import { CategoryLane } from "../components/Categories/CategoryLane";
 import { CategoryPieChart } from "../components/Categories/CategoryPieChart";
@@ -21,11 +22,15 @@ import {
 } from "../generated/graphql";
 import { setSelectedCategory, setCalendarView } from "../redux/actions";
 import { RootState } from "../redux/reducers";
+import AddCircleIcon from "@material-ui/icons/AddCircle";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
+    },
+    button: {
+      margin: theme.spacing(1),
     },
   })
 );
@@ -47,6 +52,7 @@ export const CategoryList = () => {
     data: categoryData,
   } = useGetUserCategoriesQuery();
   const dispatch = useDispatch();
+  const [addCategory, setAddCategory] = useState(false);
 
   const handleChange = () => {
     dispatch(setCalendarView(!calendarView));
@@ -73,7 +79,16 @@ export const CategoryList = () => {
           <Typography variant="h4">Categories</Typography>
         </Grid>
         <Grid item xs={9} style={{ textAlign: "right" }}>
-          <NewCategoryDialog />
+          <Button
+            variant="outlined"
+            color="default"
+            className={classes.button}
+            startIcon={<AddCircleIcon />}
+            onClick={() => setAddCategory(true)}
+          >
+            Create New Category
+          </Button>
+          <NewCategoryDialog isOpen={addCategory} setIsOpen={setAddCategory} />
         </Grid>
       </Grid>
       <Grid container spacing={3}>

@@ -83,7 +83,7 @@ export const EditCategoryDialog: React.FC<DeleteDialogProps> = ({
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          Enter a name to change this category's title to:
+          Enter a name to change <b>{category.description}'s</b> title to:
         </DialogContentText>
         <TextField
           autoFocus

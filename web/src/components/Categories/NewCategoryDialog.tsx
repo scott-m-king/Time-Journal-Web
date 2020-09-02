@@ -6,37 +6,26 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
-import { makeStyles, Theme, createStyles } from "@material-ui/core";
 import {
   useCreateCategoryMutation,
   GetUserCategoriesQuery,
   GetUserCategoriesDocument,
 } from "../../generated/graphql";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      flexGrow: 1,
-    },
-    button: {
-      margin: theme.spacing(1),
-    },
-  })
-);
+interface NewCategoryDialogProps {
+  isOpen: boolean;
+  setIsOpen: (bool: boolean) => void;
+}
 
-export const NewCategoryDialog = () => {
-  const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+export const NewCategoryDialog: React.FC<NewCategoryDialogProps> = ({
+  isOpen,
+  setIsOpen,
+}) => {
   const [description, setDescription] = React.useState("");
   const [createCategory] = useCreateCategoryMutation();
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
   const handleClose = () => {
-    setOpen(false);
+    setIsOpen(false);
   };
 
   const handleSubmit = async () => {
@@ -70,17 +59,8 @@ export const NewCategoryDialog = () => {
 
   return (
     <div>
-      <Button
-        variant="outlined"
-        color="default"
-        className={classes.button}
-        startIcon={<AddCircleIcon />}
-        onClick={handleClickOpen}
-      >
-        Create New Category
-      </Button>
       <Dialog
-        open={open}
+        open={isOpen}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
