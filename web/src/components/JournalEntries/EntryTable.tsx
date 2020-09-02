@@ -24,7 +24,7 @@ import CreateIcon from "@material-ui/icons/Create";
 import { RootState } from "../../redux/reducers";
 import { Colours } from "../../styles/Colours";
 
-export const EntryTable2 = () => {
+export const EntryTable = () => {
   const [entries, setEntries] = useState<Array<Array<string>>>([]);
   const [categories, setCategories] = useState<Array<Category>>([]);
   const [edit, setEdit] = useState<JournalEntry | undefined>(undefined);
@@ -106,6 +106,7 @@ export const EntryTable2 = () => {
             const entry: any = entryData!.getAllUserEntries.find(
               (elem) => parseInt(value) === elem.id
             );
+            console.log(editEntry);
             dispatch(setEntryToEdit(entry));
           };
 

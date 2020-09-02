@@ -8,7 +8,7 @@ import { Body } from "./layouts/Body";
 import { Auth } from "./layouts/Auth";
 import { CreateEntry } from "./App/JournalEntries";
 import { CategoryList } from "./App/CategoryList";
-import { Analytics } from "./App/Analytics";
+import { Settings } from "./App/Settings";
 
 export const Routes: React.FC = () => {
   return (
@@ -50,10 +50,10 @@ export const Routes: React.FC = () => {
           )}
         />
         <Route
-          path="/ok/analytics"
+          path="/ok/settings"
           render={() => (
             <Body>
-              <Analytics />
+              <Settings />
             </Body>
           )}
         />

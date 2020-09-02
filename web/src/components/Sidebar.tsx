@@ -11,10 +11,10 @@ import ListItemText from "@material-ui/core/ListItemText";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import MenuBookIcon from "@material-ui/icons/MenuBook";
 import ListIcon from "@material-ui/icons/List";
-import TimelineIcon from "@material-ui/icons/Timeline";
+import SettingsIcon from "@material-ui/icons/Settings";
 import { useMeQuery } from "../generated/graphql";
 import { Link } from "react-router-dom";
-import { Colours } from '../styles/Colours';
+import { Colours } from "../styles/Colours";
 
 const drawerWidth = 240;
 
@@ -47,7 +47,7 @@ export const Sidebar = () => {
   }
 
   const routes1 = ["/ok/dashboard"];
-  const routes2 = ["/ok/create_entry", "/ok/category_list", "/ok/analytics"];
+  const routes2 = ["/ok/create_entry", "/ok/category_list", "/ok/settings"];
 
   const icons = (index: number) => {
     switch (index) {
@@ -56,7 +56,7 @@ export const Sidebar = () => {
       case 1:
         return <ListIcon />;
       default:
-        return <TimelineIcon />;
+        return <SettingsIcon />;
     }
   };
 
@@ -92,7 +92,7 @@ export const Sidebar = () => {
               </List>
               <Divider />
               <List>
-                {["Journal Entries", "Categories", "Analytics"].map(
+                {["Journal Entries", "Categories", "Account Settings"].map(
                   (text, index) => (
                     <Link
                       to={routes2[index]}

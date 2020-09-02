@@ -18,7 +18,7 @@ import {
   useEditEntryMutation,
 } from "../generated/graphql";
 import { JournalEntry } from "../redux/types";
-import { EntryTable2 } from "../components/JournalEntries/EntryTable";
+import { EntryTable } from "../components/JournalEntries/EntryTable";
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -162,7 +162,7 @@ export const CreateEntry = () => {
           </Paper>
         </Grid>
         <Grid item xs sm={12} md={12} lg={9} xl={9}>
-          <EntryTable2 />
+          <EntryTable />
         </Grid>
       </Grid>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
