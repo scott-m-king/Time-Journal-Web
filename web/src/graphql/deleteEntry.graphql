@@ -1,5 +1,5 @@
-mutation deleteEntry($id: Int!) {
-  deleteEntry(id: $id) {
+mutation deleteEntry($idArray: [Int!]!) {
+  deleteEntry(idArray: $idArray) {
     entries {
       id
       title

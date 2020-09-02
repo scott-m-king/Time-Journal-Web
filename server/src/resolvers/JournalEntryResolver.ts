@@ -102,23 +102,25 @@ export class JournalEntryResolver {
 
   @Mutation(() => JournalCategoryResponse)
   async deleteEntry(
-    @Arg("id", () => Int) id: number,
+    @Arg("idArray", () => [Int]) idArray: number[],
     @Ctx() context: MyContext
   ): Promise<JournalCategoryResponse> {
     try {
       const user = await getUserInfo(context);
 
-      const toDelete = await JournalEntry.findOne({
-        where: { userId: user!.id, id: id },
-      });
+      for (let i = 0; i < idArray.length; i++) {
+        const toDelete = await JournalEntry.findOne({
+          where: { userId: user!.id, id: idArray[i] },
+        });
 
-      const category = await Category.findOne({ id: toDelete?.categoryId });
-      await Category.update(
-        { id: category!.id },
-        { duration: category!.duration - toDelete!.duration }
-      );
+        const category = await Category.findOne({ id: toDelete?.categoryId });
+        await Category.update(
+          { id: category!.id },
+          { duration: category!.duration - toDelete!.duration }
+        );
 
-      await JournalEntry.delete({ id: id });
+        await JournalEntry.delete({ id: idArray[i] });
+      }
 
       const entries = await JournalEntry.find({ userId: user!.id });
       const categories = await Category.find({ userId: user!.id });

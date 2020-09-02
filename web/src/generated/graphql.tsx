@@ -105,7 +105,7 @@ export type MutationCreateEntryArgs = {
 
 
 export type MutationDeleteEntryArgs = {
-  id: Scalars['Int'];
+  idArray: Array<Scalars['Int']>;
 };
 
 
@@ -213,7 +213,7 @@ export type DeleteCategoryMutation = (
 );
 
 export type DeleteEntryMutationVariables = Exact<{
-  id: Scalars['Int'];
+  idArray: Array<Scalars['Int']>;
 }>;
 
 
@@ -512,8 +512,8 @@ export type DeleteCategoryMutationHookResult = ReturnType<typeof useDeleteCatego
 export type DeleteCategoryMutationResult = Apollo.MutationResult<DeleteCategoryMutation>;
 export type DeleteCategoryMutationOptions = Apollo.BaseMutationOptions<DeleteCategoryMutation, DeleteCategoryMutationVariables>;
 export const DeleteEntryDocument = gql`
-    mutation deleteEntry($id: Int!) {
-  deleteEntry(id: $id) {
+    mutation deleteEntry($idArray: [Int!]!) {
+  deleteEntry(idArray: $idArray) {
     entries {
       id
       title
@@ -545,7 +545,7 @@ export type DeleteEntryMutationFn = Apollo.MutationFunction<DeleteEntryMutation,
  * @example
  * const [deleteEntryMutation, { data, loading, error }] = useDeleteEntryMutation({
  *   variables: {
- *      id: // value for 'id'
+ *      idArray: // value for 'idArray'
  *   },
  * });
  */

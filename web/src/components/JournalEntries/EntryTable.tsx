@@ -15,7 +15,7 @@ import {
   useGetUserCategoriesQuery,
 } from "../../generated/graphql";
 import { Link } from "react-router-dom";
-import { Chip, IconButton } from "@material-ui/core";
+import { Chip, IconButton, CircularProgress } from "@material-ui/core";
 import { Category, JournalEntry } from "../../redux/types";
 import { setSelectedCategory } from "../../redux/actions";
 import { setEntryToEdit } from "../../redux/actions";
@@ -132,15 +132,21 @@ export const EntryTable = () => {
     },
   ];
 
+  const [deletingItems, setDeletingItems] = useState(false);
+
   const options = {
     elevation: 1,
     print: false,
     onRowsDelete: async (row: any) => {
       // entry list is reversed because we want to see most recently added entries first.
+      setDeletingItems(true);
       const reversedEntries = entryData!.getAllUserEntries.slice().reverse();
+      let toDelete = [];
       for (let i = 0; i < row.data.length; i++) {
-        await handleDelete(reversedEntries[row.data[i].dataIndex].id);
+        toDelete.push(reversedEntries[row.data[i].dataIndex].id);
       }
+      await handleDelete(toDelete);
+      setDeletingItems(false);
     },
     textLabels: {
       body: {
@@ -173,10 +179,10 @@ export const EntryTable = () => {
     // selectableRows: "none" as any,
   };
 
-  const handleDelete = async (entryId: number) => {
+  const handleDelete = async (idArray: number[]) => {
     await deleteEntry({
       variables: {
-        id: entryId,
+        idArray,
       },
       update: (store, { data }) => {
         if (!data) {
@@ -227,14 +233,34 @@ export const EntryTable = () => {
     }
   };
 
+  const loadingComponent = (
+    <div
+      style={{
+        position: "absolute",
+        zIndex: 110,
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background: "rgba(255,255,255,0.8)",
+      }}
+    >
+      <CircularProgress size={24} />
+    </div>
+  );
+
   return (
-    <>
+    <div style={{ position: "relative" }}>
+      {deletingItems && loadingComponent}
       <MUIDataTable
         title={"Entries"}
         data={entries}
         columns={columns}
         options={options}
       />
-    </>
+    </div>
   );
 };
