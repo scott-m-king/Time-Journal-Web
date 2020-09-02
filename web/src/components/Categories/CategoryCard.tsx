@@ -16,6 +16,7 @@ import { Colours } from "../../styles/Colours";
 import clsx from "clsx";
 import { Category } from "../../redux/types";
 import { DeleteCategoryDialog } from "./DeleteCategoryDialog";
+import { EditCategoryDialog } from "./EditCategoryDialog";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -58,6 +59,7 @@ export const CategoryCard = (category: CategoryCardProps) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [expanded, setExpanded] = React.useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
+  const [openEditDialog, setOpenEditDialog] = React.useState(false);
 
   useEffect(() => {
     if (category.id === category.activeCategory?.id) {
@@ -78,6 +80,11 @@ export const CategoryCard = (category: CategoryCardProps) => {
   const handleOpenDelete = () => {
     setAnchorEl(null);
     setOpenDeleteDialog(true);
+  };
+
+  const handleOpenEdit = () => {
+    setAnchorEl(null);
+    setOpenEditDialog(true);
   };
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -133,7 +140,7 @@ export const CategoryCard = (category: CategoryCardProps) => {
                     open={Boolean(anchorEl)}
                     onClose={handleClose}
                   >
-                    <MenuItem onClick={handleClose}>Edit</MenuItem>
+                    <MenuItem onClick={handleOpenEdit}>Edit</MenuItem>
                     <MenuItem onClick={handleOpenDelete}>Delete</MenuItem>
                   </Menu>
                 </div>
@@ -189,6 +196,17 @@ export const CategoryCard = (category: CategoryCardProps) => {
           <DeleteCategoryDialog
             isOpen={openDeleteDialog}
             setIsOpen={setOpenDeleteDialog}
+            category={category}
+          />
+        ) : (
+          ""
+        )}
+      </div>
+      <div>
+        {openEditDialog ? (
+          <EditCategoryDialog
+            isOpen={openEditDialog}
+            setIsOpen={setOpenEditDialog}
             category={category}
           />
         ) : (

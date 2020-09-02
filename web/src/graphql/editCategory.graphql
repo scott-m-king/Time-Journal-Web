@@ -1,0 +1,20 @@
+mutation editCategory($categoryId: Int!, $updatedDescription: String!) {
+  editCategory(
+    categoryId: $categoryId
+    updatedDescription: $updatedDescription
+  ) {
+    entries {
+      id
+      title
+      notes
+      duration
+      date
+      categoryId
+    }
+    categories {
+      id
+      description
+      duration
+    }
+  }
+}

@@ -59,7 +59,7 @@ export type Category = {
 export type JournalEntry = {
   __typename?: 'JournalEntry';
   id: Scalars['Int'];
-  date: Scalars['String'];
+  date?: Maybe<Scalars['String']>;
   title: Scalars['String'];
   duration: Scalars['Int'];
   notes?: Maybe<Scalars['String']>;
@@ -77,6 +77,7 @@ export type Mutation = {
   editEntry: JournalCategoryResponse;
   createCategory: Array<Category>;
   deleteCategory: JournalCategoryResponse;
+  editCategory: JournalCategoryResponse;
 };
 
 
@@ -124,6 +125,12 @@ export type MutationCreateCategoryArgs = {
 
 
 export type MutationDeleteCategoryArgs = {
+  categoryId: Scalars['Int'];
+};
+
+
+export type MutationEditCategoryArgs = {
+  updatedDescription: Scalars['String'];
   categoryId: Scalars['Int'];
 };
 
@@ -213,6 +220,26 @@ export type DeleteEntryMutationVariables = Exact<{
 export type DeleteEntryMutation = (
   { __typename?: 'Mutation' }
   & { deleteEntry: (
+    { __typename?: 'JournalCategoryResponse' }
+    & { entries: Array<(
+      { __typename?: 'JournalEntry' }
+      & Pick<JournalEntry, 'id' | 'title' | 'notes' | 'duration' | 'date' | 'categoryId'>
+    )>, categories: Array<(
+      { __typename?: 'Category' }
+      & Pick<Category, 'id' | 'description' | 'duration'>
+    )> }
+  ) }
+);
+
+export type EditCategoryMutationVariables = Exact<{
+  categoryId: Scalars['Int'];
+  updatedDescription: Scalars['String'];
+}>;
+
+
+export type EditCategoryMutation = (
+  { __typename?: 'Mutation' }
+  & { editCategory: (
     { __typename?: 'JournalCategoryResponse' }
     & { entries: Array<(
       { __typename?: 'JournalEntry' }
@@ -528,6 +555,51 @@ export function useDeleteEntryMutation(baseOptions?: Apollo.MutationHookOptions<
 export type DeleteEntryMutationHookResult = ReturnType<typeof useDeleteEntryMutation>;
 export type DeleteEntryMutationResult = Apollo.MutationResult<DeleteEntryMutation>;
 export type DeleteEntryMutationOptions = Apollo.BaseMutationOptions<DeleteEntryMutation, DeleteEntryMutationVariables>;
+export const EditCategoryDocument = gql`
+    mutation editCategory($categoryId: Int!, $updatedDescription: String!) {
+  editCategory(categoryId: $categoryId, updatedDescription: $updatedDescription) {
+    entries {
+      id
+      title
+      notes
+      duration
+      date
+      categoryId
+    }
+    categories {
+      id
+      description
+      duration
+    }
+  }
+}
+    `;
+export type EditCategoryMutationFn = Apollo.MutationFunction<EditCategoryMutation, EditCategoryMutationVariables>;
+
+/**
+ * __useEditCategoryMutation__
+ *
+ * To run a mutation, you first call `useEditCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editCategoryMutation, { data, loading, error }] = useEditCategoryMutation({
+ *   variables: {
+ *      categoryId: // value for 'categoryId'
+ *      updatedDescription: // value for 'updatedDescription'
+ *   },
+ * });
+ */
+export function useEditCategoryMutation(baseOptions?: Apollo.MutationHookOptions<EditCategoryMutation, EditCategoryMutationVariables>) {
+        return Apollo.useMutation<EditCategoryMutation, EditCategoryMutationVariables>(EditCategoryDocument, baseOptions);
+      }
+export type EditCategoryMutationHookResult = ReturnType<typeof useEditCategoryMutation>;
+export type EditCategoryMutationResult = Apollo.MutationResult<EditCategoryMutation>;
+export type EditCategoryMutationOptions = Apollo.BaseMutationOptions<EditCategoryMutation, EditCategoryMutationVariables>;
 export const EditEntryDocument = gql`
     mutation editEntry($id: Int!, $categoryId: Int!, $title: String!, $notes: String, $duration: Int!, $date: String!) {
   editEntry(id: $id, categoryId: $categoryId, title: $title, duration: $duration, date: $date, notes: $notes) {

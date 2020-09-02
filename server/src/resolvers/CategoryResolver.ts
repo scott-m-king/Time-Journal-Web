@@ -90,4 +90,39 @@ export class CategoryResolver {
       throw new Error(err);
     }
   }
+
+  @Mutation(() => JournalCategoryResponse)
+  async editCategory(
+    @Ctx() context: MyContext,
+    @Arg("categoryId", () => Int) categoryId: number,
+    @Arg("updatedDescription", () => String) updatedDescription: string
+  ): Promise<JournalCategoryResponse> {
+    try {
+      const user = await getUserInfo(context);
+
+      const toEdit = await Category.findOne({ id: categoryId });
+      if (toEdit?.description === "Uncategorized") {
+        throw new Error(`Cannot delete the "Uncategorized" category.`);
+      }
+
+      if (updatedDescription.toLowerCase() === "uncategorized") {
+        throw new Error(`Cannot delete rename categories to "Uncategorized".`);
+      }
+
+      await Category.update(
+        { id: categoryId },
+        { description: updatedDescription }
+      );
+
+      const updateEntries = await JournalEntry.find({ userId: user!.id });
+      const updatedCategories = await Category.find({ userId: user!.id });
+
+      return {
+        entries: updateEntries,
+        categories: updatedCategories,
+      };
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
 }
