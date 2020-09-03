@@ -1,13 +1,16 @@
 import React from "react";
-import { generateData } from "../../Functions/calendarData2";
+import { DataObject } from "../../Functions/calendarData2";
 import { ResponsiveLine } from "@nivo/line";
-interface LineGraphProps {}
 
-export const LineGraphWidget: React.FC<LineGraphProps> = ({}) => {
+interface LineGraphProps {
+  data: DataObject[];
+}
+
+export const LineGraphWidget: React.FC<LineGraphProps> = ({ data }) => {
   return (
     <>
       <ResponsiveLine
-        data={generateData()}
+        data={data}
         margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
         xScale={{ type: "point" }}
         yScale={{
@@ -19,7 +22,7 @@ export const LineGraphWidget: React.FC<LineGraphProps> = ({}) => {
         }}
         axisTop={null}
         axisRight={null}
-        curve="cardinal"
+        curve="monotoneX"
         axisBottom={{
           orient: "bottom",
           tickSize: 5,
@@ -38,10 +41,11 @@ export const LineGraphWidget: React.FC<LineGraphProps> = ({}) => {
           legendOffset: -40,
           legendPosition: "middle",
         }}
-        colors={{ scheme: "nivo" }}
+        colors={{ scheme: "paired" }}
         pointSize={10}
         pointColor={{ theme: "background" }}
         pointBorderWidth={2}
+        enableSlices="x"
         pointBorderColor={{ from: "serieColor" }}
         pointLabel="y"
         pointLabelYOffset={-12}

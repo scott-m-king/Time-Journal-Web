@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   useMeQuery,
   GetUserCategoriesQuery,
@@ -7,6 +7,8 @@ import {
   GetAllUserEntriesDocument,
   useCreateEntryMutation,
   useEditEntryMutation,
+  useGetAllUserEntriesQuery,
+  useGetUserCategoriesQuery,
 } from "../generated/graphql";
 import {
   makeStyles,
@@ -24,7 +26,11 @@ import { JournalEntry } from "../redux/types";
 import { LineGraphWidget } from "../components/Dashboard/LineGraphWidget";
 import { CalendarWidget } from "../components/Dashboard/CalendarWidget";
 import { MostRecentWidget } from "../components/Dashboard/MostRecentWidget";
-import { getCurrentDayTimestamp } from "../Functions/calendarData2";
+import {
+  getCurrentDayTimestamp,
+  generateLineGraphData,
+  DataObject,
+} from "../Functions/calendarData2";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -75,6 +81,33 @@ export const Dashboard = () => {
   const { data, loading } = useMeQuery();
   const classes = useStyles();
   const [createEntry] = useCreateEntryMutation();
+  const {
+    loading: entryLoading,
+    data: entryData,
+  } = useGetAllUserEntriesQuery();
+  const {
+    loading: categoryLoading,
+    data: categoryData,
+  } = useGetUserCategoriesQuery();
+  const [calendarData, setCalendarData] = useState<Array<DataObject>>([]);
+
+  useEffect(() => {
+    if (
+      !entryLoading &&
+      !categoryLoading &&
+      entryData &&
+      entryData.getAllUserEntries &&
+      categoryData &&
+      categoryData.getUserCategories
+    ) {
+      setCalendarData(
+        generateLineGraphData(
+          entryData.getAllUserEntries,
+          categoryData.getUserCategories
+        )
+      );
+    }
+  }, [entryData, categoryData, entryLoading, categoryLoading]);
 
   const handleSubmit = async (data: JournalEntry) => {
     try {
@@ -209,7 +242,7 @@ export const Dashboard = () => {
                   </Typography>
                   <div style={{ position: "relative", height: 392 }}>
                     <div className={classes.widgets}>
-                      <LineGraphWidget />
+                      <LineGraphWidget data={calendarData} />
                     </div>
                   </div>
                 </Card>

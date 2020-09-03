@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Typography from "@material-ui/core/Typography";
 import { CreateEntryForm } from "../Forms/CreateEntryForm";
 import {
@@ -59,7 +59,7 @@ export const CreateEntry = () => {
     }
 
     setOpen(false);
-  };
+  };  
 
   const handleSubmit = async (data: JournalEntry) => {
     try {

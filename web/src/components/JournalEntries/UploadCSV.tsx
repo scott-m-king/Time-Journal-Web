@@ -94,6 +94,9 @@ export const UploadCSV = () => {
         categoryList.push(arr[i][3]);
       }
 
+      console.log(entryArray);
+      console.log(categoryList);
+
       uploadFileToServer(entryArray, categoryList);
     }
   }, [values]);
