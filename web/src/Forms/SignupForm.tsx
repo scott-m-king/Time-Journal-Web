@@ -58,7 +58,6 @@ const MyTextField: React.FC<FieldAttributes<{}>> = ({
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      paddingTop: "50px",
       textAlign: "center",
       justifyContent: "center",
       alignItems: "center",
@@ -68,7 +67,6 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(2),
       textAlign: "center",
       color: theme.palette.text.secondary,
-      width: "40%",
     },
   })
 );

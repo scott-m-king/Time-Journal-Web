@@ -4,8 +4,10 @@ import { CssBaseline } from "@material-ui/core";
 import { Header } from "../components/Header";
 
 const Root = styled.div`
-  padding-top: 80px;
-  padding-left: 20px;
+  height: 100%;
+  width: 100%;
+  padding-top: 12px;
+  padding-right: 12px;
 `;
 
 export const Auth: React.FC<any> = ({ children }) => {

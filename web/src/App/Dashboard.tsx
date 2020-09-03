@@ -73,18 +73,8 @@ const Layout = styled.div`
 
 export const Dashboard = () => {
   const { data, loading } = useMeQuery();
-  let body: any = null;
   const classes = useStyles();
   const [createEntry] = useCreateEntryMutation();
-  const [editEntry] = useEditEntryMutation();
-
-  if (loading) {
-    body = "loading...";
-  } else if (data && data.me) {
-    body = data.me.firstName;
-  } else {
-    body = "";
-  }
 
   const handleSubmit = async (data: JournalEntry) => {
     try {
@@ -130,7 +120,13 @@ export const Dashboard = () => {
       <div className={classes.root}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <Typography variant="h4">Welcome back, {body}</Typography>
+            {loading ? (
+              ""
+            ) : (
+              <Typography variant="h4">
+                Welcome back, {data?.me?.firstName}
+              </Typography>
+            )}
           </Grid>
           <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
             <Paper className={classes.paper}>
