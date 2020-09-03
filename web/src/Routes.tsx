@@ -1,11 +1,9 @@
 import React from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { Dashboard } from "./App/Dashboard";
 import { Login } from "./Auth/Login";
 import { Signup } from "./Auth/Signup";
-import { LandingPage } from "./LandingPage";
 import { Body } from "./layouts/Body";
-import { Auth } from "./layouts/Auth";
 import { CreateEntry } from "./App/JournalEntries";
 import { CategoryList } from "./App/CategoryList";
 import { Settings } from "./App/Settings";
@@ -14,15 +12,9 @@ export const Routes: React.FC = () => {
   return (
     <BrowserRouter>
       <Switch>
-        <Route
-          exact
-          path="/"
-          render={() => (
-            <Auth>
-              <LandingPage />
-            </Auth>
-          )}
-        />
+        <Route exact path="/">
+          <Redirect to="/login" />
+        </Route>
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
         <Route
