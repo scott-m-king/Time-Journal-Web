@@ -108,6 +108,9 @@ export const CategoryList = () => {
             <CategoryCalendar
               activeCategory={activeCategory}
               entries={entryData?.getAllUserEntries}
+              maxHeight={450}
+              start="2020-02-01"
+              end="2021-12-31"
             />
           ) : (
             <CategoryPieChart

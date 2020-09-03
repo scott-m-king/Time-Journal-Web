@@ -6,6 +6,9 @@ import { JournalEntry } from "../../generated/graphql";
 interface CategoryCalendarProps {
   activeCategory: Category | undefined;
   entries: JournalEntry[] | undefined;
+  maxHeight: number;
+  start: string;
+  end: string;
 }
 
 interface CalendarDataProps {
@@ -16,6 +19,9 @@ interface CalendarDataProps {
 export const CategoryCalendar: React.FC<CategoryCalendarProps> = ({
   activeCategory,
   entries,
+  maxHeight,
+  start,
+  end
 }) => {
   const [data, setData] = useState<Array<any>>([]);
 
@@ -69,11 +75,11 @@ export const CategoryCalendar: React.FC<CategoryCalendarProps> = ({
   };
 
   return (
-    <div style={{ height: 450 }}>
+    <div style={{ height: maxHeight }}>
       <ResponsiveCalendar
         data={data}
-        from="2020-02-01"
-        to="2021-12-31"
+        from={start}
+        to={end}
         emptyColor="#eeeeee"
         colors={["#61cdbb", "#97e3d5", "#e8c1a0", "#f47560"]}
         margin={{ top: 40, right: 40, bottom: 40, left: 40 }}
@@ -97,3 +103,4 @@ export const CategoryCalendar: React.FC<CategoryCalendarProps> = ({
     </div>
   );
 };
+

@@ -6,7 +6,6 @@ import {
   GetAllUserEntriesQuery,
   GetAllUserEntriesDocument,
   useCreateEntryMutation,
-  useEditEntryMutation,
   useGetAllUserEntriesQuery,
   useGetUserCategoriesQuery,
 } from "../generated/graphql";
@@ -24,13 +23,15 @@ import styled from "styled-components";
 import { CreateEntryForm } from "../Forms/CreateEntryForm";
 import { JournalEntry } from "../redux/types";
 import { LineGraphWidget } from "../components/Dashboard/LineGraphWidget";
-import { CalendarWidget } from "../components/Dashboard/CalendarWidget";
 import { MostRecentWidget } from "../components/Dashboard/MostRecentWidget";
 import {
   getCurrentDayTimestamp,
   generateLineGraphData,
   DataObject,
 } from "../Functions/calendarData2";
+import { CategoryCalendar } from "../components/Categories/CategoryCalendar";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/reducers";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -89,7 +90,12 @@ export const Dashboard = () => {
     loading: categoryLoading,
     data: categoryData,
   } = useGetUserCategoriesQuery();
-  const [calendarData, setCalendarData] = useState<Array<DataObject>>([]);
+  const [calendarData, setCalendarData] = useState<
+    Array<DataObject> | undefined
+  >([]);
+  const activeCategory = useSelector(
+    (state: RootState) => state.activeCategory.selectedCategory
+  );
 
   useEffect(() => {
     if (
@@ -258,18 +264,21 @@ export const Dashboard = () => {
               >
                 Entries per day
               </Typography>
-              <div style={{ position: "relative", height: 235 }}>
+              <div style={{ position: "relative", height: 273 }}>
                 <div className={classes.widgets}>
-                  <CalendarWidget />
+                  <CategoryCalendar
+                    activeCategory={activeCategory}
+                    entries={entryData?.getAllUserEntries}
+                    maxHeight={250}
+                    start="2020-02-01"
+                    end="2020-12-31"
+                  />
                 </div>
               </div>
             </Card>
           </Grid>
           <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
-            <Card
-              className={classes.cards}
-              style={{ maxHeight: 282, overflow: "auto" }}
-            >
+            <Card className={classes.cards} style={{ overflow: "auto" }}>
               <Typography
                 variant="h6"
                 component="h4"

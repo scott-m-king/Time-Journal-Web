@@ -70,8 +70,11 @@ export const generateLineGraphData = (
   entries: JournalEntry[],
   categories: Category[]
 ) => {
+  if (entries.length === 0) {
+    return undefined;
+  }
+
   let parsed = sortByCategory(entries, categories);
-  // console.log(parsed);
   let result: DataObject[] = [];
   for (let i = 0; i < parsed.length; i++) {
     let obj: DataObject = {
@@ -154,7 +157,9 @@ const sortByCategory = (entries: JournalEntry[], categories: Category[]) => {
       });
       counter++;
     }
-    result.push(resultEntries);
+    if (resultEntries.length !== 0) {
+      result.push(resultEntries);
+    }
   }
   return result;
 };

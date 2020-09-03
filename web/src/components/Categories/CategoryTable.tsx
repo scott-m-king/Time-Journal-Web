@@ -21,7 +21,7 @@ export const CategoryTable: React.FC<CategoryTableProps> = ({
   entries,
 }) => {
   const [windowHeight, setWindowHeight] = useState(0);
-  const MAX_HEIGHT = windowHeight - 675;
+  const MAX_HEIGHT = windowHeight - 683;
   const [rows, setRows] = useState<Array<any>>([]);
 
   useEffect(() => {
