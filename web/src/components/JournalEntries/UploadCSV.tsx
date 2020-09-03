@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
+import PublishIcon from "@material-ui/icons/Publish";
 
 import {
   useGetUserCategoriesQuery,
@@ -12,6 +12,7 @@ import {
   GetAllUserEntriesQuery,
   GetAllUserEntriesDocument,
 } from "../../generated/graphql";
+import { getCurrentDayTimestamp } from "../../Functions/dataProcessing";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -86,17 +87,13 @@ export const UploadCSV = () => {
         entryArray.push({
           id: 0,
           title: arr[i][0],
-          date: arr[i][1],
+          date: getCurrentDayTimestamp(new Date(arr[i][1])),
           duration: parseInt(arr[i][2]),
           categoryId: 0,
           notes: arr[i][4],
         });
         categoryList.push(arr[i][3]);
       }
-
-      console.log(entryArray);
-      console.log(categoryList);
-
       uploadFileToServer(entryArray, categoryList);
     }
   }, [values]);
@@ -149,7 +146,7 @@ export const UploadCSV = () => {
           variant="outlined"
           color="default"
           className={classes.button}
-          startIcon={<AddCircleIcon />}
+          startIcon={<PublishIcon />}
           component="span"
         >
           Upload CSV

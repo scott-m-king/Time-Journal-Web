@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Typography from "@material-ui/core/Typography";
 import { CreateEntryForm } from "../Forms/CreateEntryForm";
 import {
@@ -21,6 +21,7 @@ import { JournalEntry } from "../redux/types";
 import { EntryTable } from "../components/JournalEntries/EntryTable";
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
 import { UploadCSV } from "../components/JournalEntries/UploadCSV";
+import { getCurrentDayTimestamp } from "../Functions/dataProcessing";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -59,7 +60,7 @@ export const CreateEntry = () => {
     }
 
     setOpen(false);
-  };  
+  };
 
   const handleSubmit = async (data: JournalEntry) => {
     try {
@@ -136,22 +137,6 @@ export const CreateEntry = () => {
     } catch (err) {
       alert(err);
     }
-  };
-
-  const getCurrentDayTimestamp = (d: Date) => {
-    console.log(d);
-    return new Date(
-      Date.UTC(
-        d.getFullYear(),
-        d.getMonth(),
-        d.getDate(),
-        d.getHours(),
-        d.getMinutes(),
-        d.getSeconds()
-      )
-    )
-      .toUTCString()
-      .slice(0, 16);
   };
 
   return (

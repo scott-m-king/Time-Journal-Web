@@ -15,31 +15,33 @@ import {
   createStyles,
   Typography,
   Card,
-  CardContent,
   Grid,
   Paper,
+  CircularProgress,
 } from "@material-ui/core";
 import styled from "styled-components";
 import { CreateEntryForm } from "../Forms/CreateEntryForm";
 import { JournalEntry } from "../redux/types";
 import { LineGraphWidget } from "../components/Dashboard/LineGraphWidget";
-import { MostRecentWidget } from "../components/Dashboard/MostRecentWidget";
+import { TopFiveWidget } from "../components/Dashboard/TopFiveWidget";
 import {
   getCurrentDayTimestamp,
   generateLineGraphData,
   DataObject,
-} from "../Functions/calendarData2";
+} from "../Functions/dataProcessing";
 import { CategoryCalendar } from "../components/Categories/CategoryCalendar";
-import { useSelector } from "react-redux";
-import { RootState } from "../redux/reducers";
+import { TotalEntriesCard } from "../components/Dashboard/TotalEntriesCard";
+import { WeeklyEntriesCard } from "../components/Dashboard/WeeklyEntriesCard";
+import { TopCategoryCard } from "../components/Dashboard/TopCategoryCard";
 
-const useStyles = makeStyles((theme: Theme) =>
+export const dashboardStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
     },
     cards: {
       textAlign: "center",
+      height: 115,
     },
     bullet: {
       display: "inline-block",
@@ -80,7 +82,7 @@ const Layout = styled.div`
 
 export const Dashboard = () => {
   const { data, loading } = useMeQuery();
-  const classes = useStyles();
+  const classes = dashboardStyles();
   const [createEntry] = useCreateEntryMutation();
   const {
     loading: entryLoading,
@@ -93,9 +95,6 @@ export const Dashboard = () => {
   const [calendarData, setCalendarData] = useState<
     Array<DataObject> | undefined
   >([]);
-  const activeCategory = useSelector(
-    (state: RootState) => state.activeCategory.selectedCategory
-  );
 
   useEffect(() => {
     if (
@@ -177,68 +176,27 @@ export const Dashboard = () => {
           </Grid>
           <Grid item xs={9}>
             <Grid container spacing={3}>
-              <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
-                <Card className={classes.cards}>
-                  <CardContent>
-                    <Typography
-                      variant="h5"
-                      component="h2"
-                      className={classes.top}
-                    >
-                      <b>16</b> Entries
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      component="p"
-                      className={classes.bot}
-                    >
-                      Entered in total
-                    </Typography>
-                  </CardContent>
-                </Card>
+              <Grid
+                item
+                xs={4}
+                sm={4}
+                md={4}
+                lg={4}
+                xl={4}
+                style={{ textAlign: "center" }}
+              >
+                <TotalEntriesCard
+                  numEntries={entryData?.getAllUserEntries.length}
+                />
               </Grid>
               <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
-                <Card className={classes.cards}>
-                  <CardContent>
-                    <Typography
-                      variant="h5"
-                      component="h2"
-                      className={classes.top}
-                    >
-                      <b>5</b> Entries
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      component="p"
-                      className={classes.bot}
-                    >
-                      Entered in the last week
-                    </Typography>
-                  </CardContent>
-                </Card>
+                <WeeklyEntriesCard />
               </Grid>
               <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
-                <Card className={classes.cards}>
-                  <CardContent>
-                    <Typography
-                      variant="h5"
-                      component="h2"
-                      className={classes.top}
-                    >
-                      <b>School</b>
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      component="p"
-                      className={classes.bot}
-                    >
-                      Most time spent in this category
-                    </Typography>
-                  </CardContent>
-                </Card>
+                <TopCategoryCard />
               </Grid>
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                <Card className={classes.cards}>
+                <Card>
                   <Typography
                     variant="h6"
                     component="h4"
@@ -256,7 +214,7 @@ export const Dashboard = () => {
             </Grid>
           </Grid>
           <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
-            <Card className={classes.cards}>
+            <Card>
               <Typography
                 variant="h6"
                 component="h4"
@@ -267,7 +225,7 @@ export const Dashboard = () => {
               <div style={{ position: "relative", height: 273 }}>
                 <div className={classes.widgets}>
                   <CategoryCalendar
-                    activeCategory={activeCategory}
+                    activeCategory={undefined}
                     entries={entryData?.getAllUserEntries}
                     maxHeight={250}
                     start="2020-02-01"
@@ -278,15 +236,15 @@ export const Dashboard = () => {
             </Card>
           </Grid>
           <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
-            <Card className={classes.cards} style={{ overflow: "auto" }}>
+            <Card style={{ height: 320, overflow: "auto" }}>
               <Typography
                 variant="h6"
                 component="h4"
                 className={classes.headers}
               >
-                Most Recent
+                Top 5 Categories
               </Typography>
-              <MostRecentWidget />
+              <TopFiveWidget />
             </Card>
           </Grid>
         </Grid>

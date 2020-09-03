@@ -1,24 +1,5 @@
 import { JournalEntry, Category } from "../generated/graphql";
 
-export const data2 = () => {
-  let arr = [];
-  for (let i = 0; i < 200; i++) {
-    arr.push({
-      day: randomDate(new Date(2019, 12, 1), new Date(2021, 2, 1)),
-      value: i,
-    });
-  }
-  return arr;
-};
-
-function randomDate(start: Date, end: Date) {
-  return getCurrentDayTimestamp(
-    new Date(
-      start.getTime() + Math.random() * (end.getTime() - start.getTime())
-    )
-  );
-}
-
 // https://stackoverflow.com/questions/23593052/format-javascript-date-as-yyyy-mm-dd?page=2&tab=votes#tab-top
 export const getCurrentDayTimestamp = (d: Date) => {
   return new Date(
@@ -237,3 +218,22 @@ const sortByCategory = (entries: JournalEntry[], categories: Category[]) => {
 // };
 
 // export const data3 = generateData();
+
+// export const data2 = () => {
+//   let arr = [];
+//   for (let i = 0; i < 200; i++) {
+//     arr.push({
+//       day: randomDate(new Date(2019, 12, 1), new Date(2021, 2, 1)),
+//       value: i,
+//     });
+//   }
+//   return arr;
+// };
+
+// function randomDate(start: Date, end: Date) {
+//   return getCurrentDayTimestamp(
+//     new Date(
+//       start.getTime() + Math.random() * (end.getTime() - start.getTime())
+//     )
+//   );
+// }

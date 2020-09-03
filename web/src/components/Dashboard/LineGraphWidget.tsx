@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { DataObject } from "../../Functions/calendarData2";
+import { DataObject } from "../../Functions/dataProcessing";
 import { ResponsiveLine } from "@nivo/line";
 import { Typography } from "@material-ui/core";
 

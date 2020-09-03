@@ -8,6 +8,7 @@ import {
   makeStyles,
   createStyles,
   Theme,
+  Typography,
 } from "@material-ui/core";
 import * as yup from "yup";
 import { Link } from "react-router-dom";
@@ -64,58 +65,60 @@ export const LoginForm: React.FC<Props> = ({ onSubmit }) => {
   const classes = useStyles();
 
   return (
-    <Formik
-      initialValues={{
-        email: "",
-        password: "",
-      }}
-      validationSchema={validationSchema}
-      onSubmit={async (data, { setSubmitting, resetForm }) => {
-        setSubmitting(true);
-        onSubmit(data);
-        setSubmitting(false);
-      }}
-    >
-      {({ isSubmitting }) => (
-        <Form>
-          <div className={classes.root}>
-            <Paper className={classes.paper}>
-              <Grid container spacing={3}>
-                <Grid item xs>
-                  <MyTextField placeholder="email" name="email" />
+    <>
+      <Formik
+        initialValues={{
+          email: "",
+          password: "",
+        }}
+        validationSchema={validationSchema}
+        onSubmit={async (data, { setSubmitting, resetForm }) => {
+          setSubmitting(true);
+          onSubmit(data);
+          setSubmitting(false);
+        }}
+      >
+        {({ isSubmitting }) => (
+          <Form>
+            <div className={classes.root}>
+              <Paper className={classes.paper}>
+                <Grid container spacing={3}>
+                  <Grid item xs>
+                    <MyTextField placeholder="email" name="email" />
+                  </Grid>
                 </Grid>
-              </Grid>
-              <Grid container spacing={3}>
-                <Grid item xs>
-                  <MyTextField
-                    placeholder="password"
-                    name="password"
-                    type="password"
-                  />
+                <Grid container spacing={3}>
+                  <Grid item xs>
+                    <MyTextField
+                      placeholder="password"
+                      name="password"
+                      type="password"
+                    />
+                  </Grid>
                 </Grid>
-              </Grid>
-              <Grid container spacing={3} justify="center">
-                <Grid item>
-                  <Button
-                    disabled={isSubmitting}
-                    type="submit"
-                    variant="outlined"
-                  >
-                    Login
-                  </Button>
+                <Grid container spacing={3} justify="center">
+                  <Grid item>
+                    <Button
+                      disabled={isSubmitting}
+                      type="submit"
+                      variant="outlined"
+                    >
+                      Login
+                    </Button>
+                  </Grid>
                 </Grid>
-              </Grid>
-              <Grid container spacing={3} justify="center">
-                <Grid item>
-                  <Link to="/signup" style={{ textDecoration: "none" }}>
-                    Sign Up
-                  </Link>
+                <Grid container spacing={3} justify="center">
+                  <Grid item>
+                    <Link to="/signup" style={{ textDecoration: "none" }}>
+                      Sign Up
+                    </Link>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </Paper>
-          </div>
-        </Form>
-      )}
-    </Formik>
+              </Paper>
+            </div>
+          </Form>
+        )}
+      </Formik>
+    </>
   );
 };
