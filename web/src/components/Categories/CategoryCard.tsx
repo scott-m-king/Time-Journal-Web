@@ -1,5 +1,10 @@
 import React, { useEffect } from "react";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import {
+  makeStyles,
+  Theme,
+  createStyles,
+  useTheme,
+} from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
@@ -60,6 +65,7 @@ export const CategoryCard = (category: CategoryCardProps) => {
   const [expanded, setExpanded] = React.useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
   const [openEditDialog, setOpenEditDialog] = React.useState(false);
+  const theme = useTheme();
 
   useEffect(() => {
     if (category.id === category.activeCategory?.id) {
@@ -108,10 +114,10 @@ export const CategoryCard = (category: CategoryCardProps) => {
         <CardHeader
           style={{
             background: `linear-gradient(90deg, ${
-              Colours.primaryLight
-            } ${Math.round(percentageFill)}%, #FFFFFF ${Math.round(
-              percentageFill
-            )}%)`,
+              theme.palette.primary.light
+            } ${Math.round(percentageFill)}%, ${
+              theme.palette.background.paper
+            } ${Math.round(percentageFill)}%)`,
           }}
           avatar={
             <Avatar

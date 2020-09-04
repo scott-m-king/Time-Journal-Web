@@ -33,6 +33,13 @@ const useStyles = makeStyles((theme: Theme) =>
     drawerContainer: {
       overflow: "auto",
     },
+    link: {
+      textDecoration: "none",
+      color: theme.palette.text.primary,
+    },
+    iconic: {
+      color: theme.palette.secondary.main,
+    },
   })
 );
 
@@ -78,11 +85,11 @@ export const Sidebar = () => {
                 {["Dashboard"].map((text, index) => (
                   <Link
                     to={routes1[index]}
-                    style={{ textDecoration: "none", color: "black" }}
+                    className={classes.link}
                     key={index}
                   >
                     <ListItem button key={index}>
-                      <ListItemIcon style={{ color: Colours.secondary }}>
+                      <ListItemIcon className={classes.iconic}>
                         <DashboardIcon />
                       </ListItemIcon>
                       <ListItemText primary={text} />
@@ -96,11 +103,11 @@ export const Sidebar = () => {
                   (text, index) => (
                     <Link
                       to={routes2[index]}
-                      style={{ textDecoration: "none", color: "black" }}
+                      className={classes.link}
                       key={index}
                     >
                       <ListItem button key={index}>
-                        <ListItemIcon style={{ color: Colours.secondary }}>
+                        <ListItemIcon className={classes.iconic}>
                           {icons(index)}
                         </ListItemIcon>
                         <ListItemText primary={text} />

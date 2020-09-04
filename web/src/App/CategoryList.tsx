@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     button: {
       margin: theme.spacing(1),
+      color: theme.palette.text.primary,
     },
   })
 );
@@ -81,7 +82,6 @@ export const CategoryList = () => {
         <Grid item xs={9} style={{ textAlign: "right" }}>
           <Button
             variant="outlined"
-            color="default"
             className={classes.button}
             startIcon={<AddCircleIcon />}
             onClick={() => setAddCategory(true)}

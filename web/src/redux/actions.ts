@@ -33,3 +33,13 @@ export const setCalendarView = (view: boolean): SetCalendarViewAction => ({
   type: "SET_CALENDAR_VIEW",
   payload: view,
 });
+
+export type SetThemeAction = {
+  type: `SET_THEME`;
+  payload: boolean;
+};
+
+export const setTheme = (theme: boolean): SetThemeAction => ({
+  type: "SET_THEME",
+  payload: theme,
+});
