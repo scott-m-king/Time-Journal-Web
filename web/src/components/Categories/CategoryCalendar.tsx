@@ -21,7 +21,7 @@ export const CategoryCalendar: React.FC<CategoryCalendarProps> = ({
   entries,
   maxHeight,
   start,
-  end
+  end,
 }) => {
   const [data, setData] = useState<Array<any>>([]);
 
@@ -103,4 +103,3 @@ export const CategoryCalendar: React.FC<CategoryCalendarProps> = ({
     </div>
   );
 };
-

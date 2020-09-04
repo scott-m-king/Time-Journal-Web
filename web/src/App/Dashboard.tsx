@@ -17,7 +17,6 @@ import {
   Card,
   Grid,
   Paper,
-  CircularProgress,
 } from "@material-ui/core";
 import styled from "styled-components";
 import { CreateEntryForm } from "../Forms/CreateEntryForm";
@@ -32,7 +31,7 @@ import {
 import { CategoryCalendar } from "../components/Categories/CategoryCalendar";
 import { TotalEntriesCard } from "../components/Dashboard/TotalEntriesCard";
 import { WeeklyEntriesCard } from "../components/Dashboard/WeeklyEntriesCard";
-import { TopCategoryCard } from "../components/Dashboard/TopCategoryCard";
+import { TotalMinutesCard } from "../components/Dashboard/TotalMinutesCard";
 
 export const dashboardStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -95,6 +94,10 @@ export const Dashboard = () => {
   const [calendarData, setCalendarData] = useState<
     Array<DataObject> | undefined
   >([]);
+  const [numEntries, setNumEntries] = useState<number | undefined>(undefined);
+  const [totalMinutes, setTotalMinutes] = useState<number | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     if (
@@ -111,6 +114,23 @@ export const Dashboard = () => {
           categoryData.getUserCategories
         )
       );
+      if (entryData.getAllUserEntries.length === 0) {
+        setTotalMinutes(0);
+        setNumEntries(0);
+      } else {
+        let num = entryData.getAllUserEntries.reduce((acc, cur) => ({
+          title: "",
+          id: 0,
+          date: "",
+          notes: "",
+          categoryId: 0,
+          duration: acc.duration + cur.duration,
+        })).duration;
+        console.log(num);
+
+        setTotalMinutes(num);
+        setNumEntries(entryData.getAllUserEntries.length);
+      }
     }
   }, [entryData, categoryData, entryLoading, categoryLoading]);
 
@@ -185,15 +205,13 @@ export const Dashboard = () => {
                 xl={4}
                 style={{ textAlign: "center" }}
               >
-                <TotalEntriesCard
-                  numEntries={entryData?.getAllUserEntries.length}
-                />
+                <TotalEntriesCard numEntries={numEntries} />
+              </Grid>
+              <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+                <TotalMinutesCard totalDuration={totalMinutes} />
               </Grid>
               <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
                 <WeeklyEntriesCard />
-              </Grid>
-              <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
-                <TopCategoryCard />
               </Grid>
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                 <Card>

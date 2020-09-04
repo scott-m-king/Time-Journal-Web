@@ -7,12 +7,12 @@ import {
   CircularProgress,
 } from "@material-ui/core";
 
-interface TotalEntriesCardProps {
-  numEntries: number | undefined;
+interface TopCategoryCardProps {
+  totalDuration: number | undefined;
 }
 
-export const TotalEntriesCard: React.FC<TotalEntriesCardProps> = ({
-  numEntries,
+export const TotalMinutesCard: React.FC<TopCategoryCardProps> = ({
+  totalDuration,
 }) => {
   const classes = dashboardStyles();
 
@@ -20,13 +20,13 @@ export const TotalEntriesCard: React.FC<TotalEntriesCardProps> = ({
     <>
       <Card className={classes.cards}>
         <CardContent>
-          {numEntries !== undefined ? (
+          {totalDuration !== undefined ? (
             <>
               <Typography variant="h5" component="h2" className={classes.top}>
-                <b>{numEntries}</b> Entries
+                <b>{totalDuration}</b> minutes
               </Typography>
               <Typography variant="body2" component="p" className={classes.bot}>
-                Entered in total
+                Logged in total
               </Typography>
             </>
           ) : (

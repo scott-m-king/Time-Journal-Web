@@ -1,38 +1,14 @@
-import Button from "@material-ui/core/Button";
-import { Form, Formik, useField, FieldAttributes } from "formik";
-import * as React from "react";
-import {
-  TextField,
-  Paper,
-  Grid,
-  makeStyles,
-  createStyles,
-  Theme,
-} from "@material-ui/core";
-import * as yup from "yup";
+import React from "react";
+import { Formik, Form, FieldAttributes, useField } from "formik";
+import classes from "*.module.css";
+import { Paper, Grid, Button, TextField } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
-interface Values {
-  firstName: string;
-  lastName: string;
-  password: string;
-  passwordRepeat: string;
-  email: string;
-}
+import * as yup from "yup";
 
-interface Props {
-  onSubmit: (values: Values) => void;
+interface UserSettingsFormProps {
+  onSubmit: (data: any) => void;
 }
-
-const validationSchema = yup.object({
-  firstName: yup.string().required("First name must be filled out."),
-  email: yup.string().email().required("Email must be filled out."),
-  password: yup.string().required("Password must be filled out."),
-  passwordRepeat: yup
-    .string()
-    .required("Please re-enter password.")
-    .oneOf([yup.ref("password"), ""], "Passwords must match"),
-});
 
 const MyTextField: React.FC<FieldAttributes<{}>> = ({
   placeholder,
@@ -47,7 +23,7 @@ const MyTextField: React.FC<FieldAttributes<{}>> = ({
       label={placeholder}
       variant="outlined"
       fullWidth
-      type={type}
+      type={type ? type : "text"}
       {...field}
       error={errorText !== ""}
       helperText={errorText}
@@ -55,22 +31,11 @@ const MyTextField: React.FC<FieldAttributes<{}>> = ({
   );
 };
 
-export const signupStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      width: 600,
-    },
-    paper: {
-      padding: theme.spacing(2),
-      textAlign: "center",
-      color: theme.palette.text.secondary,
-    },
-  })
-);
+const validationSchema = yup.object({});
 
-export const SignupForm: React.FC<Props> = ({ onSubmit }) => {
-  const classes = signupStyles();
-
+export const UserSettingsForm: React.FC<UserSettingsFormProps> = ({
+  onSubmit,
+}) => {
   return (
     <div>
       <Formik
@@ -103,24 +68,6 @@ export const SignupForm: React.FC<Props> = ({ onSubmit }) => {
                 <Grid container spacing={3}>
                   <Grid item xs>
                     <MyTextField placeholder="email" name="email" />
-                  </Grid>
-                </Grid>
-                <Grid container spacing={3}>
-                  <Grid item xs>
-                    <MyTextField
-                      placeholder="password"
-                      name="password"
-                      type="password"
-                    />
-                  </Grid>
-                </Grid>
-                <Grid container spacing={3}>
-                  <Grid item xs>
-                    <MyTextField
-                      placeholder="re-enter password"
-                      name="passwordRepeat"
-                      type="password"
-                    />
                   </Grid>
                 </Grid>
                 <Grid container spacing={3} justify="center">

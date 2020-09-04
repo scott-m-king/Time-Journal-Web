@@ -8,10 +8,6 @@ interface LineGraphProps {
 }
 
 export const LineGraphWidget: React.FC<LineGraphProps> = ({ data }) => {
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   return (
     <>
       {data ? (
@@ -47,7 +43,7 @@ export const LineGraphWidget: React.FC<LineGraphProps> = ({ data }) => {
             legendOffset: -40,
             legendPosition: "middle",
           }}
-          colors={{ scheme: "nivo" }}
+          colors={{ scheme: "paired" }}
           pointSize={10}
           pointColor={{ theme: "background" }}
           pointBorderWidth={2}
@@ -84,7 +80,16 @@ export const LineGraphWidget: React.FC<LineGraphProps> = ({ data }) => {
           ]}
         />
       ) : (
-        <Typography variant="h6">No entries yet!</Typography>
+        <Typography
+          variant="h6"
+          style={{
+            textAlign: "center",
+            justifyContent: "center",
+            paddingTop: 20,
+          }}
+        >
+          No entries yet!
+        </Typography>
       )}
     </>
   );
