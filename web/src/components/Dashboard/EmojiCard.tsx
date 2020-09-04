@@ -1,28 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { dashboardStyles } from "../../App/Dashboard";
-import { Card, CardContent, Typography, Button } from "@material-ui/core";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Button,
+} from "@material-ui/core";
 
 interface WeeklyEntriesCardProps {}
 
-export const WeeklyEntriesCard: React.FC<WeeklyEntriesCardProps> = ({}) => {
+export const EmojiCard: React.FC<WeeklyEntriesCardProps> = ({}) => {
   const classes = dashboardStyles();
   const [emoji, setEmoji] = useState("");
-
   useEffect(() => {
     fetchData();
   }, []);
-
-  function decodeHtml(html: any) {
-    var txt = document.createElement("textarea");
-    txt.innerHTML = html;
-    return txt.value;
-  }
 
   const fetchData = () => {
     fetch("https://ranmoji.herokuapp.com/emojis/api/v.1.0/").then(
       (response) => {
         response.json().then((data) => {
-          setEmoji(decodeHtml(data.emoji));
+          setEmoji(
+            String.fromCodePoint(
+              parseInt(data.emoji.split("").slice(3, 8).join(""), 16)
+            )
+          );
         });
       }
     );
@@ -31,7 +33,6 @@ export const WeeklyEntriesCard: React.FC<WeeklyEntriesCardProps> = ({}) => {
   const handleClick = () => {
     fetchData();
   };
-
   return (
     <>
       <Card className={classes.cards}>

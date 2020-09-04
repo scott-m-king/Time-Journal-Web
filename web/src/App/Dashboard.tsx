@@ -30,7 +30,7 @@ import {
 } from "../Functions/dataProcessing";
 import { CategoryCalendar } from "../components/Categories/CategoryCalendar";
 import { TotalEntriesCard } from "../components/Dashboard/TotalEntriesCard";
-import { WeeklyEntriesCard } from "../components/Dashboard/WeeklyEntriesCard";
+import { EmojiCard } from "../components/Dashboard/EmojiCard";
 import { TotalMinutesCard } from "../components/Dashboard/TotalMinutesCard";
 
 export const dashboardStyles = makeStyles((theme: Theme) =>
@@ -211,7 +211,7 @@ export const Dashboard = () => {
                 <TotalMinutesCard totalDuration={totalMinutes} />
               </Grid>
               <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
-                <WeeklyEntriesCard />
+                <EmojiCard />
               </Grid>
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                 <Card>
@@ -262,7 +262,7 @@ export const Dashboard = () => {
               >
                 Top 5 Categories
               </Typography>
-              <TopFiveWidget />
+              <TopFiveWidget categoryList={categoryData?.getUserCategories} />
             </Card>
           </Grid>
         </Grid>

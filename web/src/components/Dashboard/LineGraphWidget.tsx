@@ -1,5 +1,9 @@
 import React, { useEffect } from "react";
-import { DataObject } from "../../Functions/dataProcessing";
+import {
+  DataObject,
+  data2,
+  generateData,
+} from "../../Functions/dataProcessing";
 import { ResponsiveLine } from "@nivo/line";
 import { Typography } from "@material-ui/core";
 
@@ -12,6 +16,7 @@ export const LineGraphWidget: React.FC<LineGraphProps> = ({ data }) => {
     <>
       {data ? (
         <ResponsiveLine
+          // data={generateData()}
           data={data!}
           margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
           xScale={{ type: "point" }}

@@ -145,6 +145,7 @@ const sortByCategory = (entries: JournalEntry[], categories: Category[]) => {
   return result;
 };
 
+
 // const sortByDate = (entries: JournalEntry[]) => {
 //   let temp: any[] = [];
 
@@ -185,55 +186,55 @@ const sortByCategory = (entries: JournalEntry[], categories: Category[]) => {
 //   return result;
 // };
 
-// const arr = [
-//   "Uncategorized",
-//   "Leisure",
-//   "School",
-//   "Exercise",
-//   "Chores",
-//   "Work",
-//   "Social",
-//   "Family",
-//   "Misc.",
-// ];
+const arr = [
+  "Uncategorized",
+  "Leisure",
+  "School",
+  "Exercise",
+  "Chores",
+  "Work",
+  "Social",
+  "Family",
+  "Misc.",
+];
 
-// export const generateData = () => {
-//   let result: DataObject[] = [];
+export const generateData = () => {
+  let result: DataObject[] = [];
 
-//   for (let i = 0; i < arr.length; i++) {
-//     let obj: DataObject = {
-//       id: arr[i],
-//       color: nivo[Math.round(Math.random() * 5)],
-//       data: [],
-//     };
-//     for (let j = 0; j < 12; j++) {
-//       obj.data.push({
-//         x: months[j],
-//         y: Math.round(Math.random() * (600 - 1) + 1),
-//       });
-//     }
-//     result.push(obj);
-//   }
-//   return result;
-// };
+  for (let i = 0; i < arr.length; i++) {
+    let obj: DataObject = {
+      id: arr[i],
+      color: nivo[Math.round(Math.random() * 5)],
+      data: [],
+    };
+    for (let j = 0; j < 12; j++) {
+      obj.data.push({
+        x: months[j],
+        y: Math.round(Math.random() * (600 - 1) + 1),
+      });
+    }
+    result.push(obj);
+  }
+  return result;
+};
 
-// export const data3 = generateData();
+export const data3 = generateData();
 
-// export const data2 = () => {
-//   let arr = [];
-//   for (let i = 0; i < 200; i++) {
-//     arr.push({
-//       day: randomDate(new Date(2019, 12, 1), new Date(2021, 2, 1)),
-//       value: i,
-//     });
-//   }
-//   return arr;
-// };
+export const data2 = () => {
+  let arr = [];
+  for (let i = 0; i < 200; i++) {
+    arr.push({
+      day: randomDate(new Date(2019, 12, 1), new Date(2021, 2, 1)),
+      value: i,
+    });
+  }
+  return arr;
+};
 
-// function randomDate(start: Date, end: Date) {
-//   return getCurrentDayTimestamp(
-//     new Date(
-//       start.getTime() + Math.random() * (end.getTime() - start.getTime())
-//     )
-//   );
-// }
+function randomDate(start: Date, end: Date) {
+  return getCurrentDayTimestamp(
+    new Date(
+      start.getTime() + Math.random() * (end.getTime() - start.getTime())
+    )
+  );
+}
