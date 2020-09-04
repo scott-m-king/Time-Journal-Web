@@ -4,8 +4,7 @@ import { setAccessToken } from "./accessToken";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import { Colours } from "./styles/Colours";
 import { blueGrey, cyan } from "@material-ui/core/colors";
-import { useSelector } from "react-redux";
-import { RootState } from "./redux/reducers";
+import { useMeQuery } from "./generated/graphql";
 
 const lightTheme = createMuiTheme({
   palette: {
@@ -41,9 +40,9 @@ const darkTheme = createMuiTheme({
 });
 
 export const App = () => {
-  const [loading, setLoading] = useState(true);
+  const [loadPage, setLoadPage] = useState(true);
   const [theme, setTheme] = useState<any>(lightTheme);
-  const themeState = useSelector((state: RootState) => state.theme.theme);
+  const { loading, data } = useMeQuery();
 
   useEffect(() => {
     fetch("http://localhost:4000/refresh_token", {
@@ -52,19 +51,23 @@ export const App = () => {
     }).then(async (x) => {
       const { accessToken } = await x.json();
       setAccessToken(accessToken);
-      setLoading(false);
+      setLoadPage(false);
     });
   }, []);
 
   useEffect(() => {
-    if (themeState) {
-      setTheme(darkTheme);
-    } else {
-      setTheme(lightTheme);
+    if (!loading && data && data.me) {
+      if (data.me.theme === "light") {
+        setTheme(lightTheme);
+      } else {
+        setTheme(darkTheme);
+      }
     }
-  }, [themeState]);
 
-  if (loading) {
+    setLoadPage(false);
+  }, [data]);
+
+  if (loadPage) {
     return <div>loading...</div>;
   }
 

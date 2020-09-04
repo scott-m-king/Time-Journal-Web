@@ -98,6 +98,7 @@ export class UserResolver {
       lastName,
       email,
       password: hashedPassword,
+      theme: "light",
     };
 
     try {

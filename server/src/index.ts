@@ -39,7 +39,6 @@ import { JournalEntryResolver } from "./resolvers/JournalEntryResolver";
     try {
       payload = verify(token, process.env.REFRESH_TOKEN_SECRET!);
     } catch (err) {
-      console.log(err);
       res.send({ ok: false, accessToken: "" });
     }
 

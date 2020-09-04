@@ -44,6 +44,7 @@ export type User = {
   firstName: Scalars['String'];
   lastName: Scalars['String'];
   email: Scalars['String'];
+  theme: Scalars['String'];
   categories: Array<Category>;
   entries: Array<JournalEntry>;
 };
@@ -335,7 +336,7 @@ export type LoginMutation = (
     & Pick<LoginResponse, 'accessToken'>
     & { user: (
       { __typename?: 'User' }
-      & Pick<User, 'id' | 'firstName' | 'lastName' | 'email'>
+      & Pick<User, 'id' | 'firstName' | 'lastName' | 'email' | 'theme'>
     ) }
   ) }
 );
@@ -355,7 +356,7 @@ export type MeQuery = (
   { __typename?: 'Query' }
   & { me?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'firstName' | 'lastName' | 'email'>
+    & Pick<User, 'id' | 'firstName' | 'lastName' | 'email' | 'theme'>
   )> }
 );
 
@@ -775,6 +776,7 @@ export const LoginDocument = gql`
       firstName
       lastName
       email
+      theme
     }
     accessToken
   }
@@ -842,6 +844,7 @@ export const MeDocument = gql`
     firstName
     lastName
     email
+    theme
   }
 }
     `;

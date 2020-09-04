@@ -36,6 +36,10 @@ export class User extends BaseEntity {
   @Column("int", { default: 0 })
   tokenVersion: number;
 
+  @Field()
+  @Column()
+  theme: string;
+
   @Field(() => [Category])
   @OneToMany(() => Category, (category) => category.user)
   categories: Category[];

@@ -21,17 +21,17 @@ export const createRefreshToken = (user: User) => {
 export const getUserInfo = async (context: MyContext) => {
   const authentication = context.req.headers["authorization"];
 
-    if (!authentication) {
-      throw new Error("not authenticated");
-    }
+  if (!authentication) {
+    throw new Error("not authenticated");
+  }
 
-    try {
-      const token = authentication.split(" ")[1];
-      const payload: any = verify(token, process.env.ACCESS_TOKEN_SECRET!);
-      const user = await User.findOne(payload.userId);
-      return user;
-    } catch (err) {
-      console.log(err);
-      return null;
-    }
-}
+  try {
+    const token = authentication.split(" ")[1];
+    const payload: any = verify(token, process.env.ACCESS_TOKEN_SECRET!);
+    const user = await User.findOne(payload.userId);
+    return user;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};

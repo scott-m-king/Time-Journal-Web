@@ -8,6 +8,7 @@ import {
   ApolloLink,
   HttpLink,
   Observable,
+  NormalizedCacheObject,
 } from "@apollo/client";
 import { getAccessToken, setAccessToken } from "./accessToken";
 import { onError } from "@apollo/client/link/error";
@@ -42,7 +43,6 @@ const requestLink = new ApolloLink(
           });
         })
         .catch(observer.error.bind(observer));
-
       return () => {
         if (handle) handle.unsubscribe();
       };
@@ -55,6 +55,7 @@ const client = new ApolloClient({
       accessTokenField: "accessToken",
       isTokenValidOrUndefined: () => {
         const token = getAccessToken();
+        console.log(token);
 
         if (!token) {
           return true;
@@ -71,8 +72,8 @@ const client = new ApolloClient({
           return false;
         }
       },
-      fetchAccessToken: () => {
-        return fetch("http://localhost:4000/refresh_token", {
+      fetchAccessToken: async () => {
+        return await fetch("http://localhost:4000/refresh_token", {
           method: "POST",
           credentials: "include",
         });
