@@ -27,12 +27,6 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     cssOutlinedInput: {
       color: theme.palette.text.primary,
-      "&:hover:not($disabled):not($error) $notchedOutline": {
-        borderColor: `${theme.palette.text.primary} !important`,
-      },
-      "&$focused $notchedOutline": {
-        borderColor: `${theme.palette.text.primary} !important`,
-      },
     },
     notchedOutline: {
       borderWidth: "1px",
@@ -62,7 +56,7 @@ export const CalendarComponent: React.FC<FieldAttributes<{}>> = ({
             borderColor: COLOR,
           },
           "&$focused $notchedOutline": {
-            borderColor: COLOR,
+            borderColor: theme.palette.primary.main,
             borderWidth: 2,
           },
         },
@@ -70,7 +64,7 @@ export const CalendarComponent: React.FC<FieldAttributes<{}>> = ({
       MuiFormLabel: {
         root: {
           "&$focused": {
-            color: COLOR,
+            color: theme.palette.primary.main,
           },
         },
       },

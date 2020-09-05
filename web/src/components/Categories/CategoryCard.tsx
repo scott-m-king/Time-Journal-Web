@@ -17,7 +17,6 @@ import {
   Collapse,
 } from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import { Colours } from "../../styles/Colours";
 import clsx from "clsx";
 import { Category } from "../../redux/types";
 import { DeleteCategoryDialog } from "./DeleteCategoryDialog";
@@ -116,7 +115,7 @@ export const CategoryCard = (category: CategoryCardProps) => {
           }}
           avatar={
             <Avatar
-              aria-label="recipe"
+              aria-label={category.description}
               style={{ backgroundColor: theme.palette.secondary.main }}
             >
               <b>{category.description.charAt(0).toUpperCase()}</b>
