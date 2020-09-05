@@ -37,7 +37,7 @@ export class User extends BaseEntity {
   tokenVersion: number;
 
   @Field()
-  @Column()
+  @Column("text", { default: "light" })
   theme: string;
 
   @Field(() => [Category])

@@ -72,7 +72,7 @@ export type Mutation = {
   login: LoginResponse;
   logout: Scalars['Boolean'];
   registerUser: User;
-  deleteAllUsers: Scalars['Boolean'];
+  updateUserTheme: User;
   createEntry: JournalCategoryResponse;
   batchUploadJournalEntry: JournalCategoryResponse;
   deleteEntry: JournalCategoryResponse;
@@ -94,6 +94,11 @@ export type MutationRegisterUserArgs = {
   email: Scalars['String'];
   lastName?: Maybe<Scalars['String']>;
   firstName: Scalars['String'];
+};
+
+
+export type MutationUpdateUserThemeArgs = {
+  theme: Scalars['String'];
 };
 
 
@@ -373,6 +378,19 @@ export type RegisterUserMutation = (
   & { registerUser: (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'firstName' | 'lastName' | 'email'>
+  ) }
+);
+
+export type UpdateUserThemeMutationVariables = Exact<{
+  theme: Scalars['String'];
+}>;
+
+
+export type UpdateUserThemeMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUserTheme: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'email' | 'firstName' | 'lastName' | 'theme'>
   ) }
 );
 
@@ -911,6 +929,42 @@ export function useRegisterUserMutation(baseOptions?: Apollo.MutationHookOptions
 export type RegisterUserMutationHookResult = ReturnType<typeof useRegisterUserMutation>;
 export type RegisterUserMutationResult = Apollo.MutationResult<RegisterUserMutation>;
 export type RegisterUserMutationOptions = Apollo.BaseMutationOptions<RegisterUserMutation, RegisterUserMutationVariables>;
+export const UpdateUserThemeDocument = gql`
+    mutation updateUserTheme($theme: String!) {
+  updateUserTheme(theme: $theme) {
+    id
+    email
+    firstName
+    lastName
+    theme
+  }
+}
+    `;
+export type UpdateUserThemeMutationFn = Apollo.MutationFunction<UpdateUserThemeMutation, UpdateUserThemeMutationVariables>;
+
+/**
+ * __useUpdateUserThemeMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserThemeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserThemeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserThemeMutation, { data, loading, error }] = useUpdateUserThemeMutation({
+ *   variables: {
+ *      theme: // value for 'theme'
+ *   },
+ * });
+ */
+export function useUpdateUserThemeMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserThemeMutation, UpdateUserThemeMutationVariables>) {
+        return Apollo.useMutation<UpdateUserThemeMutation, UpdateUserThemeMutationVariables>(UpdateUserThemeDocument, baseOptions);
+      }
+export type UpdateUserThemeMutationHookResult = ReturnType<typeof useUpdateUserThemeMutation>;
+export type UpdateUserThemeMutationResult = Apollo.MutationResult<UpdateUserThemeMutation>;
+export type UpdateUserThemeMutationOptions = Apollo.BaseMutationOptions<UpdateUserThemeMutation, UpdateUserThemeMutationVariables>;
 export const UsersDocument = gql`
     query Users {
   users {

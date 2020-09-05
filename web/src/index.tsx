@@ -8,7 +8,6 @@ import {
   ApolloLink,
   HttpLink,
   Observable,
-  NormalizedCacheObject,
 } from "@apollo/client";
 import { getAccessToken, setAccessToken } from "./accessToken";
 import { onError } from "@apollo/client/link/error";
@@ -55,8 +54,6 @@ const client = new ApolloClient({
       accessTokenField: "accessToken",
       isTokenValidOrUndefined: () => {
         const token = getAccessToken();
-        console.log(token);
-
         if (!token) {
           return true;
         }
