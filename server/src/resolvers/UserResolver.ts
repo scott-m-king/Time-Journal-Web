@@ -41,8 +41,7 @@ export class UserResolver {
       const user = await getUserInfo(context);
       return user;
     } catch (err) {
-      console.log(err);
-      return null;
+      throw new Error(err);
     }
   }
 
@@ -52,24 +51,28 @@ export class UserResolver {
     @Arg("password") password: string,
     @Ctx() { res }: MyContext
   ): Promise<LoginResponse> {
-    const user = await User.findOne({ where: { email } });
+    try {
+      const user = await User.findOne({ where: { email } });
 
-    if (!user) {
-      throw new Error("could not find user");
+      if (!user) {
+        throw new Error("could not find user");
+      }
+
+      const valid = await compare(password, user.password);
+
+      if (!valid) {
+        throw new Error("bad password");
+      }
+
+      sendRefreshToken(res, createRefreshToken(user));
+
+      return {
+        accessToken: createAccessToken(user),
+        user,
+      };
+    } catch (err) {
+      throw new Error(err);
     }
-
-    const valid = await compare(password, user.password);
-
-    if (!valid) {
-      throw new Error("bad password");
-    }
-
-    sendRefreshToken(res, createRefreshToken(user));
-
-    return {
-      accessToken: createAccessToken(user),
-      user,
-    };
   }
 
   @Mutation(() => Boolean)

@@ -14,8 +14,7 @@ export class CategoryResolver {
       const categories = await Category.find({ where: { userId: user!.id } });
       return categories;
     } catch (err) {
-      console.log(err);
-      return null;
+      throw new Error(err);
     }
   }
 

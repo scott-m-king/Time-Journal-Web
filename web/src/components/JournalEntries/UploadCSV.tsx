@@ -13,6 +13,7 @@ import {
   GetAllUserEntriesDocument,
 } from "../../generated/graphql";
 import { getCurrentDayTimestamp } from "../../Functions/dataProcessing";
+import GetAppIcon from "@material-ui/icons/GetApp";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -131,8 +132,24 @@ export const UploadCSV = () => {
     }
   };
 
+  const downloadTemplate = () => {
+    window.open(
+      "https://drive.google.com/file/d/1dIkm_CguJ2GwPK9yekfVuJ85wpd_B06E/view?usp=sharing"
+    );
+  };
+
   return (
     <div className={classes.root}>
+      <Button
+        variant="outlined"
+        color="inherit"
+        className={classes.button}
+        startIcon={<GetAppIcon />}
+        component="span"
+        onClick={downloadTemplate}
+      >
+        Open Template
+      </Button>
       <input
         accept=".csv"
         className={classes.input}

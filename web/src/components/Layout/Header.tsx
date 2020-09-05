@@ -11,8 +11,8 @@ import {
   useUpdateUserThemeMutation,
   MeQuery,
   MeDocument,
-} from "../generated/graphql";
-import { setAccessToken } from "../accessToken";
+} from "../../generated/graphql";
+import { setAccessToken } from "../../accessToken";
 import HistoryIcon from "@material-ui/icons/History";
 import { Switch } from "@material-ui/core";
 import BrightnessHighIcon from "@material-ui/icons/BrightnessHigh";

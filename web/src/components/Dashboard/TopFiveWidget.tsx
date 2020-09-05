@@ -82,6 +82,7 @@ export const TopFiveWidget: React.FC<TopFiveWidgetProps> = ({
         <List className={classes.root}>
           {topFive.map((category) => (
             <Link
+              key={category.id}
               to="/ok/category_list"
               style={{ textDecoration: "none" }}
               onClick={() => handleClick(category.id)}

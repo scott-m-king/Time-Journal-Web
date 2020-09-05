@@ -52,6 +52,7 @@ export const CategoryCalendar: React.FC<CategoryCalendarProps> = ({
   }, [activeCategory, entries]);
 
   const light = ["#61cdbb", "#97e3d5", "#e8c1a0", "#f47560"];
+  const dark = ["#277534", "#50D473", "#70E18E", "#9BE8B3", "#0F1114"];
 
   return (
     <div style={{ height: maxHeight }}>

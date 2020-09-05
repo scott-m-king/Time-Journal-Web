@@ -129,6 +129,7 @@ export const CategoryCard = (category: CategoryCardProps) => {
                     aria-label="more"
                     aria-controls="simple-menu"
                     aria-haspopup="true"
+                    color="secondary"
                     onClick={handleClick}
                   >
                     <MoreVertIcon />

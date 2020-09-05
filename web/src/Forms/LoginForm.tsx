@@ -8,7 +8,6 @@ import {
   makeStyles,
   createStyles,
   Theme,
-  Typography,
 } from "@material-ui/core";
 import * as yup from "yup";
 import { Link } from "react-router-dom";

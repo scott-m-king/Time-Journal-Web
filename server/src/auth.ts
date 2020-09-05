@@ -18,11 +18,13 @@ export const createRefreshToken = (user: User) => {
   );
 };
 
+export default class UnauthorizedError extends Error {}
+
 export const getUserInfo = async (context: MyContext) => {
   const authentication = context.req.headers["authorization"];
 
   if (!authentication) {
-    throw new Error("not authenticated");
+    throw new UnauthorizedError("UNAUTHENTICATED");
   }
 
   try {

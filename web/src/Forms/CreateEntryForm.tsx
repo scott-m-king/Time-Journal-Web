@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
       width: "25ch",
     },
     cssOutlinedInput: {
-      "&$cssFocused $notchedOutline": {
+      "&$notchedOutline": {
         borderColor: `${theme.palette.primary.main}`,
       },
     },

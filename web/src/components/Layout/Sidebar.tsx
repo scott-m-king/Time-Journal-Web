@@ -12,9 +12,8 @@ import DashboardIcon from "@material-ui/icons/Dashboard";
 import MenuBookIcon from "@material-ui/icons/MenuBook";
 import ListIcon from "@material-ui/icons/List";
 import SettingsIcon from "@material-ui/icons/Settings";
-import { useMeQuery } from "../generated/graphql";
+import { useMeQuery } from "../../generated/graphql";
 import { Link } from "react-router-dom";
-import { Colours } from "../styles/Colours";
 
 const drawerWidth = 240;
 

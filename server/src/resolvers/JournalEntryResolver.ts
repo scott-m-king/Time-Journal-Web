@@ -30,8 +30,7 @@ export class JournalEntryResolver {
       const entries = await JournalEntry.find({ where: { userId: user!.id } });
       return entries;
     } catch (err) {
-      console.log(err);
-      return null;
+      throw new Error(err);
     }
   }
 
@@ -46,8 +45,7 @@ export class JournalEntryResolver {
       });
       return entries;
     } catch (err) {
-      console.log(err);
-      return null;
+      throw new Error(err);
     }
   }
 
@@ -95,8 +93,7 @@ export class JournalEntryResolver {
         categories: categories,
       };
     } catch (err) {
-      console.log(err);
-      return [];
+      throw new Error(err);
     }
   }
 

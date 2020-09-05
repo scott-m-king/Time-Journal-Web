@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { dashboardStyles } from "../../App/Dashboard";
-import {
-  Card,
-  CardContent,
-  Typography,
-  Button,
-} from "@material-ui/core";
+import { Card, CardContent, Typography, Button } from "@material-ui/core";
 
 interface WeeklyEntriesCardProps {}
 

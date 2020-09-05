@@ -9,9 +9,7 @@ import {
   Theme,
   createStyles,
 } from "@material-ui/core";
-import { Link } from "react-router-dom";
 import * as yup from "yup";
-import { signupStyles } from "./SignupForm";
 
 interface UserSettingsFormProps {
   onSubmit: (data: any) => void;

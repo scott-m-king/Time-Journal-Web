@@ -24,16 +24,6 @@ export const CategoryTable: React.FC<CategoryTableProps> = ({
   const MAX_HEIGHT = windowHeight - 683;
   const [rows, setRows] = useState<Array<any>>([]);
 
-  useEffect(() => {
-    window.addEventListener("resize", updateWindowDimensions);
-    updateWindowDimensions();
-    loadData();
-  }, []);
-
-  useEffect(() => {
-    loadData();
-  }, [activeCategory, categories, entries]);
-
   const loadData = () => {
     if (categories && entries) {
       if (activeCategory === undefined) {
@@ -67,6 +57,16 @@ export const CategoryTable: React.FC<CategoryTableProps> = ({
       }
     }
   };
+
+  useEffect(() => {
+    window.addEventListener("resize", updateWindowDimensions);
+    updateWindowDimensions();
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    loadData();
+  }, [activeCategory, categories, entries]);
 
   const updateWindowDimensions = () => {
     setWindowHeight(window.innerHeight);

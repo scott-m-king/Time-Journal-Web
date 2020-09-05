@@ -9,7 +9,7 @@ import {
   Theme,
   createStyles,
 } from "@material-ui/core";
-import { Header } from "../components/Header";
+import { Header } from "../components/Layout/Header";
 import android_stock from "../media/android_stock.jpg";
 
 const Root = styled.div`
