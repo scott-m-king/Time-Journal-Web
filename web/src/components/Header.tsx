@@ -15,6 +15,8 @@ import {
 import { setAccessToken } from "../accessToken";
 import HistoryIcon from "@material-ui/icons/History";
 import { Switch } from "@material-ui/core";
+import BrightnessHighIcon from "@material-ui/icons/BrightnessHigh";
+import BrightnessLowIcon from "@material-ui/icons/BrightnessLow";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -125,11 +127,12 @@ export const Header: React.FC = () => {
           </Typography>
           {body !== undefined ? (
             <>
-              <Switch
-                checked={checked}
-                onChange={handleChange}
-                color="primary"
-              />
+              {checked ? (
+                <BrightnessLowIcon color="secondary" />
+              ) : (
+                <BrightnessHighIcon color="inherit" />
+              )}
+              <Switch checked={checked} onChange={handleChange} />
               <Button
                 variant="contained"
                 onClick={async () => {
