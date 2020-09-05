@@ -10,7 +10,6 @@ import {
 } from "type-graphql";
 import { User } from "../entity/User";
 import { hash, compare } from "bcryptjs";
-import { getRepository, getConnection } from "typeorm";
 import { MyContext } from "../MyContext";
 import { sendRefreshToken } from "../sendRefreshToken";
 import { createRefreshToken, createAccessToken, getUserInfo } from "../auth";
@@ -98,6 +97,7 @@ export class UserResolver {
       lastName,
       email,
       password: hashedPassword,
+      theme: "light",
     };
 
     try {
@@ -116,31 +116,18 @@ export class UserResolver {
     }
   }
 
-  // don't use this route unless absolutely needed!
-  @Mutation(() => Boolean)
-  async deleteAllUsers() {
-    const { max } = await getRepository(User)
-      .createQueryBuilder("users")
-      .select("MAX(users.id)", "max")
-      .getRawOne();
-
-    const { min } = await getRepository(User)
-      .createQueryBuilder("users")
-      .select("MIN(users.id)", "min")
-      .getRawOne();
-
-    for (let i = min; i <= max; i++) {
-      try {
-        await getConnection()
-          .createQueryBuilder()
-          .delete()
-          .from(User)
-          .where("id = :id", { id: i })
-          .execute();
-      } catch {
-        // skip over this one
-      }
+  @Mutation(() => User)
+  async updateUserTheme(
+    @Ctx() context: MyContext,
+    @Arg("theme") theme: string
+  ): Promise<User> {
+    try {
+      const user = await getUserInfo(context);
+      await User.update({ id: user!.id }, { theme: theme });
+      return user!;
+    } catch (err) {
+      console.log(err);
+      throw new Error("Unable to change theme.");
     }
-    return true;
   }
 }

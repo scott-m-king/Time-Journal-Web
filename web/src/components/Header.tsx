@@ -5,12 +5,16 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
-import { useMeQuery, useLogoutMutation } from "../generated/graphql";
+import {
+  useMeQuery,
+  useLogoutMutation,
+  useUpdateUserThemeMutation,
+  MeQuery,
+  MeDocument,
+} from "../generated/graphql";
 import { setAccessToken } from "../accessToken";
 import HistoryIcon from "@material-ui/icons/History";
 import { Switch } from "@material-ui/core";
-import { useDispatch } from "react-redux";
-import { setTheme } from "../redux/actions";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -37,7 +41,7 @@ export const Header: React.FC = () => {
   const [logout, { client }] = useLogoutMutation();
   const classes = useStyles();
   const [checked, setChecked] = useState(false);
-  const dispatch = useDispatch();
+  const [updateTheme] = useUpdateUserThemeMutation();
 
   let body: any = undefined;
 
@@ -45,13 +49,58 @@ export const Header: React.FC = () => {
     body = data.me;
   }
 
-  const handleChange = () => {
-    setChecked(!checked);
+  const handleChange = async () => {
+    try {
+      checked ? await changeTheme("light") : await changeTheme("dark");
+      setChecked(!checked);
+    } catch (err) {
+      alert(err);
+    }
   };
 
   useEffect(() => {
-    dispatch(setTheme(checked));
-  }, [checked]);
+    if (!loading && data && data.me !== undefined && data.me !== null) {
+      if (data.me.theme === "light") {
+        setChecked(false);
+      }
+
+      if (data.me.theme === "dark") {
+        setChecked(true);
+      }
+    }
+  }, [loading]);
+
+  const changeTheme = async (theme: string) => {
+    try {
+      await updateTheme({
+        variables: {
+          theme: theme,
+        },
+        update: (store, { data }) => {
+          if (!data) {
+            return null;
+          }
+
+          let hack = {
+            id: data.updateUserTheme.id,
+            email: data.updateUserTheme.email,
+            firstName: data.updateUserTheme.firstName,
+            lastName: data.updateUserTheme.lastName,
+            theme: data.updateUserTheme.theme === "light" ? "dark" : "light",
+          };
+
+          store.writeQuery<MeQuery>({
+            query: MeDocument,
+            data: {
+              me: hack,
+            },
+          });
+        },
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div className={classes.root}>

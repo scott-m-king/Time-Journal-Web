@@ -77,6 +77,7 @@ export const EntryTable = () => {
           return (
             <Link to="/ok/category_list" style={{ textDecoration: "none" }}>
               <Chip
+                color="primary"
                 variant="outlined"
                 size="small"
                 label={

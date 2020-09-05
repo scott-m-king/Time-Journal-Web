@@ -126,8 +126,6 @@ export const Dashboard = () => {
           categoryId: 0,
           duration: acc.duration + cur.duration,
         })).duration;
-        console.log(num);
-
         setTotalMinutes(num);
         setNumEntries(entryData.getAllUserEntries.length);
       }

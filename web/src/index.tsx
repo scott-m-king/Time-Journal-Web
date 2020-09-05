@@ -42,7 +42,6 @@ const requestLink = new ApolloLink(
           });
         })
         .catch(observer.error.bind(observer));
-
       return () => {
         if (handle) handle.unsubscribe();
       };
@@ -55,7 +54,6 @@ const client = new ApolloClient({
       accessTokenField: "accessToken",
       isTokenValidOrUndefined: () => {
         const token = getAccessToken();
-
         if (!token) {
           return true;
         }
@@ -71,8 +69,8 @@ const client = new ApolloClient({
           return false;
         }
       },
-      fetchAccessToken: () => {
-        return fetch("http://localhost:4000/refresh_token", {
+      fetchAccessToken: async () => {
+        return await fetch("http://localhost:4000/refresh_token", {
           method: "POST",
           credentials: "include",
         });
