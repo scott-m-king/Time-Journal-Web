@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { ResponsiveCalendar } from "@nivo/calendar";
 import { Category } from "../../redux/types";
-import { JournalEntry } from "../../generated/graphql";
+import { JournalEntry, useMeQuery } from "../../generated/graphql";
+import { populateCalendar } from "../../Functions/dataProcessing";
+import { useTheme, Card } from "@material-ui/core";
+import { blueGrey } from "@material-ui/core/colors";
+import Brightness1Icon from "@material-ui/icons/Brightness1";
+import { CATEGORY_PAGE_CALENDAR_HEIGHT } from "../../App/CategoryList";
 
 interface CategoryCalendarProps {
   activeCategory: Category | undefined;
@@ -9,11 +14,6 @@ interface CategoryCalendarProps {
   maxHeight: number;
   start: string;
   end: string;
-}
-
-interface CalendarDataProps {
-  day: string;
-  value: number;
 }
 
 export const CategoryCalendar: React.FC<CategoryCalendarProps> = ({
@@ -24,69 +24,64 @@ export const CategoryCalendar: React.FC<CategoryCalendarProps> = ({
   end,
 }) => {
   const [data, setData] = useState<Array<any>>([]);
+  const { loading, data: meData } = useMeQuery();
+  const muiTheme = useTheme();
+
+  const isLightTheme = () => {
+    return meData && meData.me && meData?.me.theme === "light";
+  };
+
+  const theme = {
+    textColor: muiTheme.palette.text.primary,
+    tooltip: {
+      container: {
+        background: isLightTheme() ? "white" : blueGrey[800],
+      },
+    },
+  };
 
   useEffect(() => {
     if (activeCategory !== undefined && entries) {
       const filteredEntries = entries.filter(
         (entry) => entry.categoryId === activeCategory.id
       );
-
-      populateCalendar(filteredEntries);
+      setData(populateCalendar(filteredEntries));
     } else if (entries) {
-      populateCalendar(entries);
+      setData(populateCalendar(entries));
     }
   }, [activeCategory, entries]);
 
-  const populateCalendar = (data: JournalEntry[]) => {
-    let result: CalendarDataProps[] = [];
-    let days = new Map();
-
-    for (let i = 0; i < data.length; i++) {
-      if (days.has(data[i].date!)) {
-        days.set(data[i].date!, days.get(data[i].date!) + data[i].duration);
-      } else {
-        days.set(data[i].date!, data[i].duration);
-      }
-    }
-
-    days.forEach((value, key) => {
-      result.push({
-        day: getCurrentDayTimestamp(new Date(key)),
-        value: value,
-      });
-    });
-
-    setData(result);
-  };
-
-  const getCurrentDayTimestamp = (d: Date) => {
-    return new Date(
-      Date.UTC(
-        d.getFullYear(),
-        d.getMonth(),
-        d.getDate(),
-        d.getHours(),
-        d.getMinutes(),
-        d.getSeconds()
-      )
-    )
-      .toISOString()
-      .slice(0, 10);
-  };
+  const light = ["#61cdbb", "#97e3d5", "#e8c1a0", "#f47560"];
 
   return (
     <div style={{ height: maxHeight }}>
       <ResponsiveCalendar
         data={data}
+        theme={theme as any}
         from={start}
         to={end}
-        emptyColor="#eeeeee"
-        colors={["#61cdbb", "#97e3d5", "#e8c1a0", "#f47560"]}
+        emptyColor={isLightTheme() ? "#eeeeee" : blueGrey[700]}
+        colors={light}
         margin={{ top: 40, right: 40, bottom: 40, left: 40 }}
         yearSpacing={40}
-        monthBorderColor="#ffffff"
+        monthBorderColor={
+          isLightTheme()
+            ? "white"
+            : maxHeight === CATEGORY_PAGE_CALENDAR_HEIGHT
+            ? muiTheme.palette.background.default
+            : muiTheme.palette.background.paper
+        }
         dayBorderWidth={2}
-        dayBorderColor="#ffffff"
+        dayBorderColor={
+          isLightTheme()
+            ? "white"
+            : maxHeight === CATEGORY_PAGE_CALENDAR_HEIGHT
+            ? muiTheme.palette.background.default
+            : muiTheme.palette.background.paper
+        }
+        onClick={({ value }) => {
+          return;
+        }}
         legends={[
           {
             anchor: "bottom-right",
@@ -97,8 +92,22 @@ export const CategoryCalendar: React.FC<CategoryCalendarProps> = ({
             itemHeight: 36,
             itemsSpacing: 14,
             itemDirection: "right-to-left",
+            itemTextColor: muiTheme.palette.text.primary,
           },
         ]}
+        tooltip={({ color, day, value }) => (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <Brightness1Icon style={{ fontSize: 12, color: color }} />
+            {"\u00A0\u00A0"}
+            {day}:{"\u00A0"}
+            <b>{value} mins</b>
+          </div>
+        )}
       />
     </div>
   );

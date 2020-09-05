@@ -41,6 +41,7 @@ export const dashboardStyles = makeStyles((theme: Theme) =>
     cards: {
       textAlign: "center",
       height: 115,
+      whiteSpace: "nowrap",
     },
     bullet: {
       display: "inline-block",

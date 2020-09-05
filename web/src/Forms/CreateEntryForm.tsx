@@ -22,6 +22,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../redux/reducers";
 import { setEntryToEdit } from "../redux/actions";
 import { NewCategoryDialog } from "../components/Categories/NewCategoryDialog";
+import { createGlobalStyle } from "styled-components";
 
 interface Category {
   id: number;
@@ -50,8 +51,30 @@ const useStyles = makeStyles((theme: Theme) =>
     textField: {
       width: "25ch",
     },
+    cssOutlinedInput: {
+      "&$cssFocused $notchedOutline": {
+        borderColor: `${theme.palette.primary.main}`,
+      },
+    },
+    notchedOutline: {
+      borderWidth: "1px",
+      borderColor: `${theme.palette.primary.main}`,
+    },
+    selectBorder: {
+      "& .MuiOutlinedInput-notchedOutline": {
+        borderColor: `${theme.palette.primary.main}`,
+      },
+    },
   })
 );
+
+const SelectStyle = createGlobalStyle`
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+`;
 
 export const CreateEntryForm: React.FC<Props> = ({ onSubmit, onEdit }) => {
   const classes = useStyles();
@@ -59,7 +82,7 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit, onEdit }) => {
   const { data, loading } = useGetUserCategoriesQuery();
   const [vals, setVals] = React.useState<JournalEntry>({
     date: new Date().toDateString(),
-    categoryId: 0,
+    categoryId: Infinity,
     duration: 0,
     title: "",
     notes: "",
@@ -77,7 +100,11 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit, onEdit }) => {
 
       setVals({
         date: new Date().toDateString(),
-        categoryId: data.getUserCategories[0].id,
+        categoryId: data.getUserCategories.reduce((arr, curr) => ({
+          description: "",
+          duration: 0,
+          id: Math.max(arr.id, curr.id),
+        })).id,
         duration: 0,
         title: "",
         notes: "",
@@ -147,7 +174,6 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit, onEdit }) => {
                     <Field
                       name="categoryId"
                       label="Category"
-                      as={Select}
                       onChange={(e: any) => {
                         if (e.target.value === Infinity) {
                           setAddCategory(true);
@@ -159,6 +185,8 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit, onEdit }) => {
                           setFieldValue("categoryId", e.target.value);
                         }
                       }}
+                      className={classes.selectBorder}
+                      as={Select}
                     >
                       {categories.map((category, index) => {
                         return (
@@ -183,6 +211,10 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit, onEdit }) => {
                       endAdornment: (
                         <InputAdornment position="start">mins</InputAdornment>
                       ),
+                      classes: {
+                        root: classes.cssOutlinedInput,
+                        notchedOutline: classes.notchedOutline,
+                      },
                     }}
                     fullWidth
                     variant="outlined"
@@ -197,6 +229,12 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit, onEdit }) => {
                     name="title"
                     fullWidth
                     variant="outlined"
+                    InputProps={{
+                      classes: {
+                        root: classes.cssOutlinedInput,
+                        notchedOutline: classes.notchedOutline,
+                      },
+                    }}
                     as={TextField}
                   />
                 </Grid>
@@ -210,6 +248,12 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit, onEdit }) => {
                     fullWidth
                     rows={7}
                     variant="outlined"
+                    InputProps={{
+                      classes: {
+                        root: classes.cssOutlinedInput,
+                        notchedOutline: classes.notchedOutline,
+                      },
+                    }}
                     as={TextField}
                   />
                 </Grid>

@@ -36,6 +36,8 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+export const CATEGORY_PAGE_CALENDAR_HEIGHT = 450;
+
 export const CategoryList = () => {
   const classes = useStyles();
   const activeCategory = useSelector(
@@ -83,6 +85,7 @@ export const CategoryList = () => {
           <Button
             variant="outlined"
             className={classes.button}
+            color="inherit"
             startIcon={<AddCircleIcon />}
             onClick={() => setAddCategory(true)}
           >
@@ -108,7 +111,7 @@ export const CategoryList = () => {
             <CategoryCalendar
               activeCategory={activeCategory}
               entries={entryData?.getAllUserEntries}
-              maxHeight={450}
+              maxHeight={CATEGORY_PAGE_CALENDAR_HEIGHT}
               start="2020-02-01"
               end="2021-12-31"
             />

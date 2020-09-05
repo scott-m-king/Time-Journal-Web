@@ -41,6 +41,7 @@ const darkTheme = createMuiTheme({
     },
     text: {
       primary: "#ffffff",
+      secondary: blueGrey[200],
     },
   },
 });

@@ -105,12 +105,7 @@ export const CategoryCard = (category: CategoryCardProps) => {
 
   return (
     <>
-      <Card
-        variant={expanded ? undefined : "outlined"}
-        elevation={4}
-        className={classes.root}
-        id="card"
-      >
+      <Card variant="outlined" className={classes.root} id="card">
         <CardHeader
           style={{
             background: `linear-gradient(90deg, ${
@@ -122,9 +117,9 @@ export const CategoryCard = (category: CategoryCardProps) => {
           avatar={
             <Avatar
               aria-label="recipe"
-              style={{ backgroundColor: Colours.secondary }}
+              style={{ backgroundColor: theme.palette.secondary.main }}
             >
-              {category.description.charAt(0).toUpperCase()}
+              <b>{category.description.charAt(0).toUpperCase()}</b>
             </Avatar>
           }
           action={

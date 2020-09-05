@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ResponsivePie, PieDatum } from "@nivo/pie";
 import { Category } from "../../redux/types";
+import { useTheme } from "@material-ui/core";
 
 interface CategoryDataProps {
   activeCategory: Category | undefined;
@@ -23,6 +24,7 @@ export const CategoryPieChart: React.FC<CategoryDataProps> = ({
   const [fill, setFill] = useState<Array<DefProps>>([]);
   const [chartData, setChartData] = useState<Array<PieDatum>>([]);
   const [categories, setCategories] = useState<Array<Category>>([]);
+  const muiTheme = useTheme();
 
   useEffect(() => {
     if (categoryList) {
@@ -91,7 +93,7 @@ export const CategoryPieChart: React.FC<CategoryDataProps> = ({
         borderColor={{ from: "color", modifiers: [["darker", 0.2]] }}
         radialLabelsSkipAngle={5}
         radialLabelsTextXOffset={6}
-        radialLabelsTextColor="#FFFFFF"
+        radialLabelsTextColor={muiTheme.palette.text.primary}
         radialLabelsLinkOffset={0}
         radialLabelsLinkDiagonalLength={16}
         radialLabelsLinkHorizontalLength={24}

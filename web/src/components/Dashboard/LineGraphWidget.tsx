@@ -20,6 +20,10 @@ export const LineGraphWidget: React.FC<LineGraphProps> = ({ data }) => {
     textColor: muiTheme.palette.text.primary,
   };
 
+  const isLightTheme = () => {
+    return meData && meData.me && meData?.me.theme === "light";
+  };
+
   return (
     <>
       {data ? (
@@ -61,10 +65,7 @@ export const LineGraphWidget: React.FC<LineGraphProps> = ({ data }) => {
             active
               ? colors
               : {
-                  scheme:
-                    meData && meData.me && meData?.me.theme === "light"
-                      ? "category10"
-                      : "nivo",
+                  scheme: isLightTheme() ? "category10" : "nivo",
                 }
           }
           pointSize={10}
@@ -75,10 +76,7 @@ export const LineGraphWidget: React.FC<LineGraphProps> = ({ data }) => {
             <Card
               style={{
                 padding: 6,
-                backgroundColor:
-                  meData && meData.me && meData?.me.theme === "light"
-                    ? "white"
-                    : blueGrey[800],
+                backgroundColor: isLightTheme() ? "white" : blueGrey[800],
               }}
             >
               {slice.points.map((point, index) => (
@@ -86,10 +84,7 @@ export const LineGraphWidget: React.FC<LineGraphProps> = ({ data }) => {
                   key={index}
                   style={{
                     padding: 2,
-                    backgroundColor:
-                      meData && meData.me && meData?.me.theme === "light"
-                        ? "white"
-                        : blueGrey[800],
+                    backgroundColor: isLightTheme() ? "white" : blueGrey[800],
                     display: "flex",
                     alignItems: "center",
                   }}
@@ -128,9 +123,9 @@ export const LineGraphWidget: React.FC<LineGraphProps> = ({ data }) => {
                   const colorList = data.map((series) =>
                     series.id === d.id
                       ? d.color
-                      : meData && meData.me && meData?.me.theme === "light"
-                      ? blueGrey[100]
-                      : blueGrey[800]
+                      : isLightTheme()
+                      ? "rgba(207, 216, 220, 0.4)"
+                      : "rgba(144, 166, 178, 0.2)"
                   );
                   setColors(colorList);
                   setActive(true);

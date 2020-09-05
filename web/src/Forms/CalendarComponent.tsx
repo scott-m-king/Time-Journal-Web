@@ -1,5 +1,11 @@
 import React from "react";
-import { createMuiTheme } from "@material-ui/core";
+import {
+  createMuiTheme,
+  useTheme,
+  makeStyles,
+  Theme,
+  createStyles,
+} from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
 import {
   MuiPickersUtilsProvider,
@@ -8,7 +14,6 @@ import {
 import { useField, useFormikContext, FieldAttributes } from "formik";
 import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersOverrides } from "@material-ui/pickers/typings/overrides";
-import { Colours } from "../styles/Colours";
 
 type overridesNameToClassKey = {
   [P in keyof MuiPickersOverrides]: keyof MuiPickersOverrides[P];
@@ -18,26 +23,74 @@ declare module "@material-ui/core/styles/overrides" {
   export interface ComponentNameToClassKey extends overridesNameToClassKey {}
 }
 
-const defaultMaterialTheme = createMuiTheme({
-  overrides: {
-    MuiPickersToolbar: {
-      toolbar: {
-        backgroundColor: Colours.primary,
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    cssOutlinedInput: {
+      color: theme.palette.text.primary,
+      "&:hover:not($disabled):not($error) $notchedOutline": {
+        borderColor: `${theme.palette.text.primary} !important`,
+      },
+      "&$focused $notchedOutline": {
+        borderColor: `${theme.palette.text.primary} !important`,
       },
     },
-    MuiPickersDay: {
-      daySelected: {
-        backgroundColor: Colours.secondary,
-      },
+    notchedOutline: {
+      borderWidth: "1px",
+      borderColor: `${theme.palette.primary.main}`,
     },
-  },
-});
+  })
+);
 
 export const CalendarComponent: React.FC<FieldAttributes<{}>> = ({
   ...props
 }) => {
   const [field] = useField<{}>(props);
   const { setFieldValue } = useFormikContext();
+
+  const classes = useStyles();
+  const theme = useTheme();
+
+  const COLOR = theme.palette.text.primary;
+
+  // https://stackoverflow.com/questions/53764626/how-to-change-outline-color-of-material-ui-react-input-component
+  const defaultMaterialTheme = createMuiTheme({
+    overrides: {
+      MuiOutlinedInput: {
+        root: {
+          position: "relative",
+          "&:hover:not($disabled):not($focused):not($error) $notchedOutline": {
+            borderColor: COLOR,
+          },
+          "&$focused $notchedOutline": {
+            borderColor: COLOR,
+            borderWidth: 2,
+          },
+        },
+      },
+      MuiFormLabel: {
+        root: {
+          "&$focused": {
+            color: COLOR,
+          },
+        },
+      },
+      MuiPickersToolbar: {
+        toolbar: {
+          backgroundColor: theme.palette.secondary.light,
+        },
+      },
+      MuiPickersDay: {
+        daySelected: {
+          backgroundColor: theme.palette.secondary.main,
+        },
+      },
+      MuiSvgIcon: {
+        root: {
+          fill: COLOR,
+        },
+      },
+    },
+  });
 
   return (
     <ThemeProvider theme={defaultMaterialTheme}>
@@ -51,6 +104,15 @@ export const CalendarComponent: React.FC<FieldAttributes<{}>> = ({
           format="MM/dd/yyyy"
           fullWidth
           label="Date"
+          InputProps={{
+            classes: {
+              root: classes.cssOutlinedInput,
+              notchedOutline: classes.notchedOutline,
+            },
+          }}
+          InputLabelProps={{
+            style: { color: theme.palette.text.secondary },
+          }}
           onChange={(val) => setFieldValue(field.name, val)}
           margin="normal"
           KeyboardButtonProps={{

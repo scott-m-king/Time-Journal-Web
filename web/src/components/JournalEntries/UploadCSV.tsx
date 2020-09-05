@@ -144,7 +144,7 @@ export const UploadCSV = () => {
       <label htmlFor="contained-button-file">
         <Button
           variant="outlined"
-          color="default"
+          color="inherit"
           className={classes.button}
           startIcon={<PublishIcon />}
           component="span"

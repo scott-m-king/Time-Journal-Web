@@ -15,7 +15,12 @@ import {
   useGetUserCategoriesQuery,
 } from "../../generated/graphql";
 import { Link } from "react-router-dom";
-import { Chip, IconButton, CircularProgress } from "@material-ui/core";
+import {
+  Chip,
+  IconButton,
+  CircularProgress,
+  useTheme,
+} from "@material-ui/core";
 import { Category, JournalEntry } from "../../redux/types";
 import { setSelectedCategory } from "../../redux/actions";
 import { setEntryToEdit } from "../../redux/actions";
@@ -41,6 +46,7 @@ export const EntryTable = () => {
   const editEntry = useSelector(
     (state: RootState) => state.editEntry.editEntry
   );
+  const theme = useTheme();
 
   useEffect(() => {
     setEdit(editEntry);
@@ -78,6 +84,7 @@ export const EntryTable = () => {
             <Link to="/ok/category_list" style={{ textDecoration: "none" }}>
               <Chip
                 color="primary"
+                style={{ color: theme.palette.text.primary }}
                 variant="outlined"
                 size="small"
                 label={
@@ -123,7 +130,7 @@ export const EntryTable = () => {
                   size="small"
                   onClick={handleClick}
                 >
-                  <CreateIcon />
+                  <CreateIcon style={{ color: theme.palette.text.secondary }} />
                 </IconButton>
               )}
             </div>
