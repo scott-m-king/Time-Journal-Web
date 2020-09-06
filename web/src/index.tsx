@@ -86,14 +86,14 @@ const client = new ApolloClient({
     onError(({ graphQLErrors, networkError }) => {
       console.log(graphQLErrors);
       console.log(networkError);
-      if (
-        graphQLErrors &&
-        graphQLErrors[0].message === "Error: UNAUTHENTICATED" &&
-        window.location.href !== "http://localhost:3000/login" &&
-        window.location.href !== "http://localhost:3000/signup"
-      ) {
-        window.location.href = "http://localhost:3000/login";
-      }
+      // if (
+      //   graphQLErrors &&
+      //   graphQLErrors[0].message === "Error: UNAUTHENTICATED" &&
+      //   window.location.href !== "http://localhost:3000/login" &&
+      //   window.location.href !== "http://localhost:3000/signup"
+      // ) {
+      //   window.location.href = "http://localhost:3000/login";
+      // }
     }),
     requestLink,
     new HttpLink({
