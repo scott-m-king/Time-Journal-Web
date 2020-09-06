@@ -15,7 +15,7 @@ import { CategoryResolver } from "./resolvers/CategoryResolver";
 import { JournalEntryResolver } from "./resolvers/JournalEntryResolver";
 import path from "path";
 
-const port = process.env.port || 4000;
+const port = process.env.PORT || 4000;
 
 (async () => {
   const app = express();
