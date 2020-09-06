@@ -73,7 +73,7 @@ const port = process.env.port || 4000;
   apolloServer.applyMiddleware({ app, cors: false });
 
   app.use(express.static(path.join(__dirname, "public")));
-  
+
   app.get("*", (_, res) => {
     res.sendFile(path.resolve(__dirname, "public", "index.html"));
   });
