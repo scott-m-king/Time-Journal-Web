@@ -6,7 +6,7 @@ export const App = () => {
   const [loadPage, setLoadPage] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:4000/refresh_token", {
+    fetch("/refresh_token", {
       method: "POST",
       credentials: "include",
     }).then(async (x) => {

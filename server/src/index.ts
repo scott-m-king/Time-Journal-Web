@@ -13,6 +13,9 @@ import { createAccessToken, createRefreshToken } from "./auth";
 import { User } from "./entity/User";
 import { CategoryResolver } from "./resolvers/CategoryResolver";
 import { JournalEntryResolver } from "./resolvers/JournalEntryResolver";
+import path from "path";
+
+const port = process.env.port || 4000;
 
 (async () => {
   const app = express();
@@ -69,7 +72,13 @@ import { JournalEntryResolver } from "./resolvers/JournalEntryResolver";
 
   apolloServer.applyMiddleware({ app, cors: false });
 
-  app.listen(4000, () => {
-    console.log(`server started at http://localhost:4000/graphql`);
+  app.use(express.static("public"));
+  
+  app.get("*", (_, res) => {
+    res.sendFile(path.resolve(__dirname, "public", "index.html"));
+  });
+
+  app.listen(port, () => {
+    console.log(`server started at ${port}`);
   });
 })();

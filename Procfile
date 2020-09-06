@@ -1,0 +1,1 @@
+web: cd server && yarn && yarn start && cd ../web && yarn && yarn build
