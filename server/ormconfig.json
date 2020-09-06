@@ -1,10 +1,10 @@
 {
    "type": "postgres",
-   "host": "localhost",
+   "host": "ec2-35-153-12-59.compute-1.amazonaws.com",
    "port": 5432,
-   "username": "scottking",
-   "password": "password",
-   "database": "time-journal",
+   "username": "dlvqvsebjiohjk",
+   "password": "9d2939f5025e18bfa80e036fd8a43ff274684bc2ad8b312d135963693bfc022d",
+   "database": "d1481b91tenjev",
    "synchronize": true,
    "logging": false,
    "entities": [
