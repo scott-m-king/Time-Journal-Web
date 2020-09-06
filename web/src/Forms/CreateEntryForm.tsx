@@ -268,6 +268,7 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit, onEdit }) => {
                           type="submit"
                           variant="outlined"
                           fullWidth
+                          color="primary"
                           style={{ whiteSpace: "nowrap" }}
                         >
                           Edit Entry
@@ -278,6 +279,7 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit, onEdit }) => {
                           disabled={isSubmitting}
                           onClick={handleCancel}
                           variant="outlined"
+                          color="primary"
                           fullWidth
                         >
                           Cancel
@@ -289,6 +291,7 @@ export const CreateEntryForm: React.FC<Props> = ({ onSubmit, onEdit }) => {
                       disabled={isSubmitting}
                       type="submit"
                       variant="outlined"
+                      color="primary"
                     >
                       Add Entry
                     </Button>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ResponsivePie, PieDatum } from "@nivo/pie";
 import { Category } from "../../redux/types";
 import { useTheme } from "@material-ui/core";
+import { useMeQuery } from "../../generated/graphql";
 
 interface CategoryDataProps {
   activeCategory: Category | undefined;

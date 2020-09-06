@@ -78,7 +78,11 @@ export const TopFiveWidget: React.FC<TopFiveWidgetProps> = ({
 
   return (
     <div style={{ textAlign: "center" }}>
-      {categoryList ? (
+      {totalDuration === 0 ? (
+        <Typography variant="body1" style={{ paddingTop: 30 }}>
+          Log your first entry!
+        </Typography>
+      ) : categoryList ? (
         <List className={classes.root}>
           {topFive.map((category) => (
             <Link
@@ -136,8 +140,7 @@ const TopFiveItem: React.FC<ItemProps> = ({ category, totalDuration }) => {
                 {category.duration % 60} mins
               </Typography>
               <b>
-                {" - " + ((category.duration / totalDuration) * 100).toFixed(2)}
-                %
+                {" - " + Math.round((category.duration / totalDuration) * 100)}%
               </b>{" "}
               of total time spent in this category
             </React.Fragment>
