@@ -72,7 +72,7 @@ const port = process.env.port || 4000;
 
   apolloServer.applyMiddleware({ app, cors: false });
 
-  app.use(express.static("public"));
+  app.use(express.static(path.join(__dirname, "public")));
   
   app.get("*", (_, res) => {
     res.sendFile(path.resolve(__dirname, "public", "index.html"));
@@ -82,3 +82,6 @@ const port = process.env.port || 4000;
     console.log(`server started at ${port}`);
   });
 })();
+
+// https://stackoverflow.com/questions/41461517/deploy-two-separate-heroku-apps-from-same-git-repo
+// https://elements.heroku.com/buildpacks/heroku/heroku-buildpack-multi-procfile#buildpack-instructions
