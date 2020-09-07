@@ -1,24 +1,18 @@
 {
   "type": "postgres",
-  "host": "ec2-35-153-12-59.compute-1.amazonaws.com",
+  "host": "localhost",
   "port": 5432,
-  "username": "dlvqvsebjiohjk",
-  "password": "9d2939f5025e18bfa80e036fd8a43ff274684bc2ad8b312d135963693bfc022d",
-  "database": "d1481b91tenjev",
+  "username": "scottking",
+  "password": "password",
+  "database": "time-journal",
   "synchronize": true,
   "logging": false,
-  "entities": [
-     "src/entity/**/*.ts"
-  ],
-  "migrations": [
-     "src/migration/**/*.ts"
-  ],
-  "subscribers": [
-     "src/subscriber/**/*.ts"
-  ],
+  "entities": ["src/entity/**/*.ts"],
+  "migrations": ["src/migration/**/*.ts"],
+  "subscribers": ["src/subscriber/**/*.ts"],
   "cli": {
-     "entitiesDir": "src/entity",
-     "migrationsDir": "src/migration",
-     "subscribersDir": "src/subscriber"
+    "entitiesDir": "src/entity",
+    "migrationsDir": "src/migration",
+    "subscribersDir": "src/subscriber"
   }
 }

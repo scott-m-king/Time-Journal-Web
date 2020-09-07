@@ -169,11 +169,30 @@ export const EntryTable = () => {
             const dateB = new Date(b.data[dataIndex]).getTime();
             return (dateA < dateB ? -1 : 1) * (rowIndex === "desc" ? 1 : -1);
           });
+        case 2:
+          return data.sort((a, b) => {
+            const timeA = a.data[dataIndex]
+            const timeB = b.data[dataIndex]
+            return (timeA < timeB ? -1 : 1) * (rowIndex === "desc" ? 1 : -1);
+          });
         case 3:
           return data.sort((a, b) => {
             const catA = a.data[dataIndex];
             const catB = b.data[dataIndex];
-            return (catA > catB ? -1 : 1) * (rowIndex === "desc" ? 1 : -1);
+            return (
+              (categories
+                .find((cat) => cat.id === catA)!
+                .description.charAt(0)
+                .toUpperCase()
+                .charCodeAt(0) <
+              categories
+                .find((cat) => cat.id === catB)!
+                .description.charAt(0)
+                .toUpperCase()
+                .charCodeAt(0)
+                ? -1
+                : 1) * (rowIndex === "desc" ? 1 : -1)
+            );
           });
         default:
           return data.sort((a, b) => {

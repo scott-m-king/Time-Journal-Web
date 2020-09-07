@@ -28,7 +28,7 @@ export const CategoryTable: React.FC<CategoryTableProps> = ({
     if (categories && entries) {
       if (activeCategory === undefined) {
         let allRows: any[] = [];
-        entries.map((entry) => {
+        entries.forEach((entry) => {
           allRows.push({
             title: entry.title,
             date: entry.date,
@@ -45,7 +45,7 @@ export const CategoryTable: React.FC<CategoryTableProps> = ({
           .filter((entry) => {
             return entry.categoryId === activeCategory.id;
           })
-          .map((filteredEntry) => {
+          .forEach((filteredEntry) => {
             filteredRows.push({
               title: filteredEntry.title,
               date: filteredEntry.date,
