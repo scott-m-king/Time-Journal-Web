@@ -13,7 +13,7 @@ import { User } from "./entity/User";
 import { CategoryResolver } from "./resolvers/CategoryResolver";
 import { JournalEntryResolver } from "./resolvers/JournalEntryResolver";
 import path from "path";
-import { connectTypeorm } from "../ormConfiguration";
+import { createConnection } from "typeorm";
 
 const port = process.env.PORT || 4000;
 
@@ -61,7 +61,7 @@ const port = process.env.PORT || 4000;
     return res.send({ ok: true, accessToken: createAccessToken(user) });
   });
 
-  await connectTypeorm();
+  await createConnection();
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
