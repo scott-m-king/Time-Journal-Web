@@ -78,6 +78,8 @@ const port = process.env.PORT || 4000;
     res.sendFile(path.resolve(__dirname, "public", "index.html"));
   });
 
+  console.log(process.env.DATABASE_USERNAME);
+
   app.listen(port, () => {
     console.log(`server started at ${port}`);
   });
