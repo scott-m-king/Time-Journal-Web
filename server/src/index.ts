@@ -1,6 +1,5 @@
 import "dotenv/config";
 import "reflect-metadata";
-import { createConnection } from "typeorm";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
@@ -14,6 +13,7 @@ import { User } from "./entity/User";
 import { CategoryResolver } from "./resolvers/CategoryResolver";
 import { JournalEntryResolver } from "./resolvers/JournalEntryResolver";
 import path from "path";
+import { connectTypeorm } from "../ormConfiguration";
 
 const port = process.env.PORT || 4000;
 
@@ -61,7 +61,7 @@ const port = process.env.PORT || 4000;
     return res.send({ ok: true, accessToken: createAccessToken(user) });
   });
 
-  await createConnection();
+  await connectTypeorm();
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
@@ -77,8 +77,6 @@ const port = process.env.PORT || 4000;
   app.get("*", (_, res) => {
     res.sendFile(path.resolve(__dirname, "public", "index.html"));
   });
-
-  console.log(process.env.DATABASE_USERNAME);
 
   app.listen(port, () => {
     console.log(`server started at ${port}`);
