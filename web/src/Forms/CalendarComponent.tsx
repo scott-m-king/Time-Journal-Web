@@ -44,7 +44,7 @@ export const CalendarComponent: React.FC<FieldAttributes<{}>> = ({
   const classes = useStyles();
   const theme = useTheme();
 
-  const COLOR = theme.palette.text.primary;
+  const COLOR = theme.palette.text.secondary;
 
   // https://stackoverflow.com/questions/53764626/how-to-change-outline-color-of-material-ui-react-input-component
   const defaultMaterialTheme = createMuiTheme({

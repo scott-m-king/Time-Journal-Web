@@ -1,6 +1,5 @@
 import "dotenv/config";
 import "reflect-metadata";
-import { createConnection } from "typeorm";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
@@ -14,8 +13,9 @@ import { User } from "./entity/User";
 import { CategoryResolver } from "./resolvers/CategoryResolver";
 import { JournalEntryResolver } from "./resolvers/JournalEntryResolver";
 import path from "path";
+import { createConnection } from "typeorm";
 
-const port = process.env.port || 4000;
+const port = process.env.PORT || 4000;
 
 (async () => {
   const app = express();
