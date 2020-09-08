@@ -86,8 +86,14 @@ const client = new ApolloClient({
     onError(({ graphQLErrors, networkError }) => {
       console.log(graphQLErrors);
       console.log(networkError);
-      if (graphQLErrors && graphQLErrors[0].message === "Error: UNAUTHENTICATED") {
-        if (window.location.pathname !== "/login" && window.location.pathname !== "/signup") {
+      if (
+        graphQLErrors &&
+        graphQLErrors[0].message === "Error: UNAUTHENTICATED"
+      ) {
+        if (
+          window.location.pathname !== "/login" &&
+          window.location.pathname !== "/signup"
+        ) {
           window.location.pathname = "/";
         }
       }

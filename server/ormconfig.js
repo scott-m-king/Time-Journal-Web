@@ -6,7 +6,7 @@ if (process.env.DATABASE_URL) {
   options = {
     type: "postgres",
     url: process.env.DATABASE_URL,
-    synchronize: false,
+    synchronize: true,
     logging: false,
   };
 } else {
