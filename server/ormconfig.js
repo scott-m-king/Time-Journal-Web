@@ -11,7 +11,7 @@ if (process.env.DATABASE_URL) {
     extra: {
       ssl: true,
     },
-    entities: ["dist/entity/*.*"],
+    entities: ["src/entity/**/*.ts"],
   };
 } else {
   options = {
