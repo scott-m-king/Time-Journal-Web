@@ -16,10 +16,9 @@ import path from "path";
 import { createConnection } from "typeorm";
 
 const port = process.env.PORT || 4000;
+export const app = express();
 
 (async () => {
-  const app = express();
-
   app.use(
     cors({
       origin: "http://localhost:3000",
@@ -82,6 +81,3 @@ const port = process.env.PORT || 4000;
     console.log(`server started at ${port}`);
   });
 })();
-
-// https://stackoverflow.com/questions/41461517/deploy-two-separate-heroku-apps-from-same-git-repo
-// https://elements.heroku.com/buildpacks/heroku/heroku-buildpack-multi-procfile#buildpack-instructions
