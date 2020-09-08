@@ -8,9 +8,6 @@ if (process.env.DATABASE_URL) {
     url: process.env.DATABASE_URL,
     synchronize: true,
     logging: false,
-    extra: {
-      ssl: true,
-    },
     entities: ["src/entity/**/*.ts"],
   };
 } else {
