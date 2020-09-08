@@ -134,7 +134,7 @@ export const UploadCSV = () => {
 
   const downloadTemplate = () => {
     window.open(
-      "https://drive.google.com/file/d/1dIkm_CguJ2GwPK9yekfVuJ85wpd_B06E/view?usp=sharing"
+      "https://drive.google.com/file/d/1AagfH70NXsyHZxFGfpxu2TMcC4wT-s9Y/view?usp=sharing"
     );
   };
 

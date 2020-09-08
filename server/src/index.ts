@@ -76,7 +76,7 @@ export const app = express();
   app.get("*", (_, res) => {
     res.sendFile(path.resolve(__dirname, "public", "index.html"));
   });
-
+  
   app.listen(port, () => {
     console.log(`server started at ${port}`);
   });

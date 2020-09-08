@@ -163,6 +163,18 @@ export const EntryTable = () => {
     },
     customSort: (data: any[], dataIndex: number, rowIndex: string) => {
       switch (dataIndex) {
+        case 0:
+          return data.sort((a, b) => {
+            const titleA = a.data[dataIndex]
+              .charAt(0)
+              .toUpperCase()
+              .charCodeAt(0);
+            const titleB = b.data[dataIndex]
+              .charAt(0)
+              .toUpperCase()
+              .charCodeAt(0);
+            return (titleA < titleB ? -1 : 1) * (rowIndex === "desc" ? 1 : -1);
+          });
         case 1:
           return data.sort((a, b) => {
             const dateA = new Date(a.data[dataIndex]).getTime();
@@ -171,8 +183,8 @@ export const EntryTable = () => {
           });
         case 2:
           return data.sort((a, b) => {
-            const timeA = a.data[dataIndex]
-            const timeB = b.data[dataIndex]
+            const timeA = a.data[dataIndex];
+            const timeB = b.data[dataIndex];
             return (timeA < timeB ? -1 : 1) * (rowIndex === "desc" ? 1 : -1);
           });
         case 3:
@@ -203,7 +215,6 @@ export const EntryTable = () => {
           });
       }
     },
-    // selectableRows: "none" as any,
   };
 
   const handleDelete = async (idArray: number[]) => {

@@ -18,6 +18,10 @@ const Root = styled.div`
   padding-top: 20px;
   overflow-x: hidden;
   overflow-y: hidden;
+  ::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+  }
 `;
 
 const useStyles = makeStyles((theme: Theme) =>
