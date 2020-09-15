@@ -14,7 +14,7 @@ Stuff I used:
 - [MaterialUI](https://material-ui.com/)
 - [TypeScript](https://www.typescriptlang.org/)
 
-![alt text](https://raw.githubusercontent.com/scott-m-king/Time-Journal-Web/blob/master/media/login.png)
+![alt text](https://raw.githubusercontent.com/scott-m-king/Time-Journal-Web/master/media/login.png)
 ![alt text](https://raw.githubusercontent.com/scott-m-king/Time-Journal-Web/blob/master/media/home-light.png)
 ![alt text](https://raw.githubusercontent.com/scott-m-king/Time-Journal-Web/blob/master/media/home-dark.png)
 ![alt text](https://raw.githubusercontent.com/scott-m-king/Time-Journal-Web/blob/master/media/dashboard-line.png)
