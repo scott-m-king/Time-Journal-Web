@@ -6,6 +6,7 @@ Stuff I used:
 - [React](https://reactjs.org/)
 - [GraphQL](https://graphql.org/)
 - [Apollo (Client & Server)](https://www.apollographql.com/)
+- [Redux](https://redux.js.org/)
 - [TypeORM](https://typeorm.io/#/)
 - [type-graphql](https://typegraphql.com/)
 - [PostgreSQL](https://www.postgresql.org/)
