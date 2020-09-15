@@ -19,8 +19,7 @@ const Root = styled.div`
   overflow-x: hidden;
   overflow-y: hidden;
   ::-webkit-scrollbar {
-    width: 0px;
-    background: transparent;
+    display: none;
   }
 `;
 
@@ -118,101 +117,7 @@ export const Auth: React.FC<any> = ({ children, page }) => {
                     application will combine common approaches to journaling and
                     budgeting to create visibility into where your time goes.
                     <br />
-                    Have you ever had a week go by and by the end of it, realize
-                    that you have no idea what you did that week? By keeping
-                    track of how we spend our time, we can take control of our
-                    actions to live more productive and well-balanced lives.
                     <br />
-                    <br />
-                    <i>
-                      <b>Why Journaling?</b>
-                    </i>
-                    <br /> Research has shown that journaling can have powerful
-                    mental health benefits and act as a documentation tool for
-                    everyday life. Time Journal takes journaling a step further
-                    by allowing you to record how much time you spend on the
-                    activities and organize them into meaningful categories.{" "}
-                    <br />
-                    <br />
-                    <i>
-                      <b>How does it work?</b>
-                    </i>
-                    <br /> You will be able to create categories for your
-                    activities and see how much time you spend on each one. This
-                    application will combine common approaches to journaling and
-                    budgeting to create visibility into where your time goes.
-                    <br />
-                    Have you ever had a week go by and by the end of it, realize
-                    that you have no idea what you did that week? By keeping
-                    track of how we spend our time, we can take control of our
-                    actions to live more productive and well-balanced lives.
-                    <br />
-                    <br />
-                    <i>
-                      <b>Why Journaling?</b>
-                    </i>
-                    <br /> Research has shown that journaling can have powerful
-                    mental health benefits and act as a documentation tool for
-                    everyday life. Time Journal takes journaling a step further
-                    by allowing you to record how much time you spend on the
-                    activities and organize them into meaningful categories.{" "}
-                    <br />
-                    <br />
-                    <i>
-                      <b>How does it work?</b>
-                    </i>
-                    <br /> You will be able to create categories for your
-                    activities and see how much time you spend on each one. This
-                    application will combine common approaches to journaling and
-                    budgeting to create visibility into where your time goes.
-                    <br />
-                    Have you ever had a week go by and by the end of it, realize
-                    that you have no idea what you did that week? By keeping
-                    track of how we spend our time, we can take control of our
-                    actions to live more productive and well-balanced lives.
-                    <br />
-                    <br />
-                    <i>
-                      <b>Why Journaling?</b>
-                    </i>
-                    <br /> Research has shown that journaling can have powerful
-                    mental health benefits and act as a documentation tool for
-                    everyday life. Time Journal takes journaling a step further
-                    by allowing you to record how much time you spend on the
-                    activities and organize them into meaningful categories.{" "}
-                    <br />
-                    <br />
-                    <i>
-                      <b>How does it work?</b>
-                    </i>
-                    <br /> You will be able to create categories for your
-                    activities and see how much time you spend on each one. This
-                    application will combine common approaches to journaling and
-                    budgeting to create visibility into where your time goes.
-                    <br />
-                    Have you ever had a week go by and by the end of it, realize
-                    that you have no idea what you did that week? By keeping
-                    track of how we spend our time, we can take control of our
-                    actions to live more productive and well-balanced lives.
-                    <br />
-                    <br />
-                    <i>
-                      <b>Why Journaling?</b>
-                    </i>
-                    <br /> Research has shown that journaling can have powerful
-                    mental health benefits and act as a documentation tool for
-                    everyday life. Time Journal takes journaling a step further
-                    by allowing you to record how much time you spend on the
-                    activities and organize them into meaningful categories.{" "}
-                    <br />
-                    <br />
-                    <i>
-                      <b>How does it work?</b>
-                    </i>
-                    <br /> You will be able to create categories for your
-                    activities and see how much time you spend on each one. This
-                    application will combine common approaches to journaling and
-                    budgeting to create visibility into where your time goes.
                   </Typography>
                 </Grid>
               </Grid>
