@@ -1,6 +1,6 @@
 # Time-Journal-Web
 
-A re-creation of my [Time-Journal](https://github.com/scott-m-king/Time-Journal) project in the web: https://time-journal-web.herokuapp.com/ (still a WIP!)
+A re-creation of my [Time-Journal](https://github.com/scott-m-king/Time-Journal) project in the web: https://time-journal-web.herokuapp.com/ (still a WIP)
 
 Stuff I used:
 - [React](https://reactjs.org/)
