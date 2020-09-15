@@ -98,7 +98,7 @@ export const Sidebar = () => {
               </List>
               <Divider />
               <List>
-                {["Journal Entries", "Categories", "Account Settings"].map(
+                {["Journal Entries", "Categories"].map(
                   (text, index) => (
                     <Link
                       to={routes2[index]}

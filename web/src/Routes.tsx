@@ -104,14 +104,14 @@ export const Routes: React.FC = () => {
               </Body>
             )}
           />
-          <Route
+          {/* <Route
             path="/ok/settings"
             render={() => (
               <Body>
                 <Settings />
               </Body>
             )}
-          />
+          /> */}
         </Switch>
       </BrowserRouter>
     </ThemeProvider>
