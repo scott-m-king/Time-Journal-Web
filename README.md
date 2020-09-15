@@ -5,7 +5,7 @@ A re-creation of my [Time-Journal](https://github.com/scott-m-king/Time-Journal)
 Stuff I used:
 - [React](https://reactjs.org/)
 - [GraphQL](https://graphql.org/)
-- [Postgres](https://www.postgresql.org/)
+- [PostgreSQL](https://www.postgresql.org/)
 - [JWT](https://jwt.io/)
 - [Apollo (Client & Server)](https://www.apollographql.com/)
 - [TypeORM](https://typeorm.io/#/)
